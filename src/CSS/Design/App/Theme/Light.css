@@ -1,0 +1,37 @@
+body[data-theme="Light-Theme"] {
+    color: black;
+    border-color: black;
+}
+
+body[data-theme="Light-Theme"] > header > nav > div > div > div > div > div > div > div > a {
+    color: black;
+}
+
+body[data-theme="Light-Theme"] > header > nav > div > div > div > div > div > div > div > a.nav-link:hover {
+    color: rgba(182, 255, 182, .9);
+}
+
+body[data-theme="Light-Theme"] > div > main > div > div > div > div > div > div > div > ul.nav-tabs > li.nav-item > button.nav-link {
+    color: black;
+}
+
+body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div.card,
+body[data-theme="Light-Theme"] > main > div > div > div > div.card,
+body[data-theme="Light-Theme"] > div > div > div > div > div > div.card {
+    background: linear-gradient(45deg, rgb(255, 255, 255) 10%, rgba(255, 255, 255, 0.5) 62%, rgb(255, 255, 255));
+    box-shadow: none;
+    color: black;
+    border-color: black;
+}
+
+body[data-theme="Light-Theme"] > div > div > div.modal-content, 
+body[data-theme="Light-Theme"] > div > div > div > div.modal-header > .btn-close, 
+body[data-theme="Light-Theme"] > div > div > div > div.modal-header, 
+body[data-theme="Light-Theme"] > div > div > div > div.modal-footer {
+    background-color: white;
+    border-color: black;
+}
+
+body[data-theme="Light-Theme"] > #app > header > nav > div > span > img {
+    border: 1px solid black;
+}

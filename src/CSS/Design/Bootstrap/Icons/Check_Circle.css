@@ -1,0 +1,22 @@
+
+@media screen and (min-width: 128px) {
+    body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > div > div > div.list-group-item-success > div > div > div.password-register-check-password-icon {
+        background-image: url(../../../../Image/Icons/Check_Circle_Night.svg) !important;
+        background-repeat: no-repeat;
+    }
+
+    body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div > div > div > div > div > div.list-group-item-success > div > div > div.password-register-check-password-icon {
+        background-image: url(../../../../Image/Icons/Check_Circle_Light.svg) !important;
+        background-repeat: no-repeat;
+    }
+
+    body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > div > div > div.list-group-item-danger > div > div > div.password-register-check-password-icon {
+        background-image: url(../../../../Image/Icons/X_Octagon_Night.svg) !important;
+        background-repeat: no-repeat;
+    }
+
+    body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div > div > div > div > div > div.list-group-item-danger > div > div > div.password-register-check-password-icon {
+        background-image: url(../../../../Image/Icons/X_Octagon_Light.svg) !important;
+        background-repeat: no-repeat;
+    }
+}

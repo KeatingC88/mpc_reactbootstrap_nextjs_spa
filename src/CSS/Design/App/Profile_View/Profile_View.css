@@ -1,0 +1,11 @@
+body[data-theme="Light-Theme"] > #Profile_View > div > div > div > div > div > div > div > div > div.list-group-item {
+    background-color: transparent !important;
+    color: black !important;
+    border: none !important;
+}
+
+body[data-theme="Night-Theme"] > #Profile_View > div > div > div > div > div > div > div > div > div.list-group-item {
+    background-color: transparent !important;
+    color: #b6ffb6 !important;
+    border: none !important;
+}

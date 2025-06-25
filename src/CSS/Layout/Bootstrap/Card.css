@@ -1,0 +1,96 @@
+@media screen and (min-width: 128px) {
+
+    .card {
+        max-width: 400px;
+        min-width: 100%;
+        clip-path: polygon(0 0%, 0% 0, 88% 0, 100% 13%, 100% 100%, 100% 100%, 12% 100%, 0% 94%);
+    }
+
+    .card-header {
+        border: none;
+        font-family: Geneva, Verdana, sans-serif;
+    }
+
+    .card-body {
+        padding: 8px;
+        font-family: Geneva, Verdana, sans-serif;
+    }
+
+    .card-footer {
+        font-family: Geneva, Verdana, sans-serif;
+    }
+}
+
+@media screen and (min-width: 135px) {
+}
+
+@media screen and (min-width: 150px) {
+}
+
+@media screen and (min-width: 151px) {
+}
+
+@media screen and (min-width: 157px) {
+}
+
+@media screen and (min-width: 200px) {
+}
+
+@media screen and (min-width: 226px) {
+}
+
+@media screen and (min-width: 279px) {
+}
+
+@media screen and (min-width: 300px) {
+    .card-header {
+        font-size: 26px;
+    }
+
+}
+
+@media screen and (min-width: 339px) {
+
+}
+
+@media screen and (min-width: 420px) {
+    .card {
+        min-width: 400px;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .card-header {
+        font-size: 48px;
+        font-weight: 900;
+    }
+}
+
+@media screen and (min-width: 575px) {
+}
+
+@media screen and (min-width: 600px) {
+}
+
+@media screen and (min-width: 700px) {
+}
+
+@media screen and (min-width: 800px) {
+}
+
+@media screen and (min-width: 900px) {
+}
+
+@media screen and (min-width: 999px) {
+
+}
+
+@media screen and (min-width: 1000px) {
+
+}
+
+@media screen and (min-width: 1200px) {
+}
+
+@media screen and (min-width: 2000px) {
+}

@@ -1,0 +1,14 @@
+
+@media screen and (min-width: 128px) {
+
+    body[data-theme="Night-Theme"] > #app > main > div > div > div > div > div > div > div > div > div > div > div > div > div.list-group-item-danger > div > div > div.password-register-check-password-icon {
+        background-image: url(../../../../Image/Icons/X_Octagon_Night.svg) !important;
+        background-repeat: no-repeat;
+    }
+
+    body[data-theme="Light-Theme"] > #app > main > div > div > div > div > div > div > div > div > div > div > div > div > div.list-group-item-danger > div > div > div.password-register-check-password-icon {
+        background-image: url(../../../../Image/Icons/X_Octagon_Light.svg) !important;
+        background-repeat: no-repeat;
+    }
+
+}

@@ -1,0 +1,9 @@
+@media screen and (min-width: 128px) {
+    .default-user-chat-icon {
+        background-image: url(../../../../Image/WebSocket/Default_Chat_Icon.svg) !important;
+        background-repeat: no-repeat;
+        min-height: 64px;
+        min-width: 64px;
+        display: none;
+    }
+}
