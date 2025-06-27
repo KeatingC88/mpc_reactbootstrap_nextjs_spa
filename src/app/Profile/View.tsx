@@ -9,13 +9,8 @@ import { Load_Profile_Viewer_Data } from '@Redux_Thunk/Actions/Load'
 import { useRouter, usePathname } from 'next/navigation'
 
 import { useSelector } from 'react-redux'
-import { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
-
-import { Application_Props } from '@Interfaces/Application_Props'
-import { End_User_Props } from '@Interfaces/End_User_Props'
-import { Error_Props } from '@Interfaces/Error_Props'
-import { Third_Party_Api_Props } from '@Interfaces/Third_Party_Api_Props'
+import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 
 import {
     Send_WebSocket_Chat_Message,
@@ -29,126 +24,16 @@ import {
 
 import { Delay_Execution } from '@Redux_Thunk/Actions/Misc'
 
-interface Profile_View_Props {
-    application: Application_Props
-    end_user: End_User_Props
-    error: Error_Props
-    api: Third_Party_Api_Props
-}
-
 const Profile_View = () => {
 
-    const {
-        application,
-        end_user,
-        error,
-        api
-    }: Profile_View_Props = useSelector((state: Current_Redux_State) => ({
-        application: {
-            community: {
-                users: state.Application_Community_State_Reducer.users,
-            },
-            language_dictionaries: state.Application_Language_State_Reducer.language_dictionaries,
-            profile_viewer: {
-                id: state.Application_Profile_Viewer_State_Reducer.id,
-                name: state.Application_Profile_Viewer_State_Reducer.name,
-                created_on: state.Application_Profile_Viewer_State_Reducer.created_on,
-                logout_on: state.Application_Profile_Viewer_State_Reducer.logout_on,
-            },
-            settings: {
-                current_language: state.Application_Language_State_Reducer.current_language,
-                theme: state.Application_Settings_State_Reducer.theme,
-                alignment: state.Application_Settings_State_Reducer.alignment,
-                text_alignment: state.Application_Settings_State_Reducer.text_alignment,
-                flag: state.Application_Settings_State_Reducer.flag,
-                nav_lock: state.Application_Settings_State_Reducer.nav_lock,
-                gmt_time: state.Application_Settings_State_Reducer.gmt_time,
-                local_time: state.Application_Settings_State_Reducer.local_time,
-                date: state.Application_Settings_State_Reducer.date,
-                location: state.Application_Settings_State_Reducer.location,
-                grid_type: state.Application_Settings_State_Reducer.grid_type,
-                navbar_css_display_value: state.Application_Settings_State_Reducer.navbar_css_display_value,
-            },
-            websocket: {
-                chat_conversations: state.Application_WebSocket_State_Reducer.chat_conversations,
-                conversation_sent_requests: state.Application_WebSocket_State_Reducer.conversation_sent_requests,
-                conversation_received_approvals: state.Application_WebSocket_State_Reducer.conversation_received_approvals,
-                conversation_received_requests: state.Application_WebSocket_State_Reducer.conversation_received_requests,
-                conversation_sent_approvals: state.Application_WebSocket_State_Reducer.conversation_sent_approvals,
-                conversation_sent_blocks: state.Application_WebSocket_State_Reducer.conversation_sent_blocks,
-                conversation_received_blocks: state.Application_WebSocket_State_Reducer.conversation_received_blocks,
-            }
-        },
-        end_user: {
-            account: {
-                id: state.End_User_Account_State_Reducer.id,
-                public_id: state.End_User_Account_State_Reducer.public_id,
-                token: state.End_User_Account_State_Reducer.token,
-                token_expire: state.End_User_Account_State_Reducer.token_expire,
-                account_type: state.End_User_Account_State_Reducer.account_type,
-                roles: state.End_User_Account_State_Reducer.roles,
-                email_address: state.End_User_Account_State_Reducer.email_address,
-                name: state.End_User_Account_State_Reducer.name,
-                online_status: state.End_User_Account_State_Reducer.online_status,
-                custom_lbl: state.End_User_Account_State_Reducer.custom_lbl,
-                avatar_url_path: state.End_User_Account_State_Reducer.avatar_url_path,
-                avatar_title: state.End_User_Account_State_Reducer.avatar_title,
-                login_on: state.End_User_Account_State_Reducer.login_on,
-                logout_on: state.End_User_Account_State_Reducer.logout_on,
-                created_on: state.End_User_Account_State_Reducer.created_on,
-                phone_country_code: state.End_User_Account_State_Reducer.phone_country_code,
-                phone_carrier: state.End_User_Account_State_Reducer.phone_carrier,
-                telephone: state.End_User_Account_State_Reducer.telephone,
-            },
-            notification: {
-                alert_color: ``,
-                alert_text: ``,
-            },
-            discord: {
-                id: state.End_User_Discord_Account_State_Reducer.id,
-            },
-            twitch: {
-                id: state.End_User_Twitch_Account_State_Reducer.id,
-            },
-            profile: {
-                first_name: state.End_User_Profile_State_Reducer.first_name,
-                last_name: state.End_User_Profile_State_Reducer.last_name,
-                middle_name: state.End_User_Profile_State_Reducer.middle_name,
-                maiden_name: state.End_User_Profile_State_Reducer.maiden_name,
-                gender: state.End_User_Profile_State_Reducer.gender,
-                birth_month: state.End_User_Profile_State_Reducer.birth_month,
-                birth_day: state.End_User_Profile_State_Reducer.birth_day,
-                birth_year: state.End_User_Profile_State_Reducer.birth_year,
-                ethnicity: state.End_User_Profile_State_Reducer.ethnicity,
-                avatar_url_path: state.End_User_Account_State_Reducer.avatar_url_path,
-                avatar_title: state.End_User_Account_State_Reducer.avatar_title,
-            },
-            custom_design: state.End_User_Custom_CSSDesign_State_Reducer.custom_design_obj,
-        },
-        error: {
-            host: {
-                id: state.Host_Error_State_Reducer.id,
-            },
-            network: {
-                id: state.Network_Error_State_Reducer.id,
-            },
-        },
-        api: {
-            discord: {
-                online_status: true,
-            },
-            twitch: {
-                online_status: true,
-            },
-        },
-    }))
+    const props = useSelector(Redux_Thunk_Core)
 
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
 
-    const [language, region] = application.settings.current_language.split(`-`)
-    const lbl = application.language_dictionaries[language][region]
+    const [language, region] = props.application.settings.current_language.split(`-`)
+    const lbl = props.application.language_dictionaries[language][region]
 
     const [profile_id, set_profile_id] = useState<BigInt>(BigInt(0))
 
@@ -239,6 +124,7 @@ const Profile_View = () => {
                             if (participant_id_from_url) {
                                 const participant_id = BigInt(participant_id_from_url)
                                 Dispatch(Get_End_User_Chat_History_With_Other_User_ID(participant_id))
+                                obj.id = obj.id.toString()
                                 WebSocket_Direct_Chat_Connection(JSON.stringify(obj))
                                 set_chat_modal_visibility_value(true)
                             }
@@ -360,7 +246,7 @@ const Profile_View = () => {
 
         Load_Profile_Viewer_Data(profile_id)
 
-        if (profile_id === end_user.account.id) {
+        if (profile_id === props.end_user.account.id) {
             set_disable_end_user_profile_button(true)
         }
 
@@ -372,40 +258,40 @@ const Profile_View = () => {
 
     return (
         <Container fluid>
-            <Row className={`${application.settings.alignment}`}>
-                <Col className={`${application.settings.grid_type === 1 ? "col-xs-12 col-sm-12 col-md-12 col-lg-12" : ""}`}>
-                    <Card className={`moveable ${application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
+            <Row className={`${props.application.settings.alignment}`}>
+                <Col className={`${props.application.settings.grid_type === 1 ? "col-xs-12 col-sm-12 col-md-12 col-lg-12" : ""}`}>
+                    <Card className={`moveable ${props.application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
                         style={{
-                            float: application.settings.alignment === `justify-content-end` ? `right` : `none`,
-                            borderColor: `${end_user.custom_design.card_border_color}`
+                            float: props.application.settings.alignment === `justify-content-end` ? `right` : `none`,
+                            borderColor: `${props.end_user.custom_design.card_border_color}`
                         }}
                     >
-                        <Card.Header className={`${application.settings.text_alignment} p-4`}
+                        <Card.Header className={`${props.application.settings.text_alignment} p-4`}
                             style={{
-                                backgroundColor: `${end_user.custom_design.card_header_background_color}`,
-                                color: `${end_user.custom_design.card_header_font_color}`,
-                                fontFamily: `${end_user.custom_design.card_header_font}`
+                                backgroundColor: `${props.end_user.custom_design.card_header_background_color}`,
+                                color: `${props.end_user.custom_design.card_header_font_color}`,
+                                fontFamily: `${props.end_user.custom_design.card_header_font}`
                             }}
                         >
-                            <h1>{application.profile_viewer.name}</h1>
+                            <h1>{props.application.profile_viewer.name}</h1>
                         </Card.Header>
                         <Card.Body
                             style={{
-                                backgroundColor: `${end_user.custom_design.card_body_background_color}`,
-                                color: `${end_user.custom_design.card_body_font_color}`,
-                                fontFamily: `${end_user.custom_design.card_body_font}`
+                                backgroundColor: `${props.end_user.custom_design.card_body_background_color}`,
+                                color: `${props.end_user.custom_design.card_body_font_color}`,
+                                fontFamily: `${props.end_user.custom_design.card_body_font}`
                             }}
                         >
                             <Row>
                                 <Col style={{ margin: `auto` }}>
-                                    {end_user.account.avatar_url_path &&
+                                    {props.end_user.account.avatar_url_path &&
                                         <center>
-                                            <Image src={`${end_user.account.avatar_url_path}`} thumbnail height="124" width="124" />
+                                            <Image src={`${props.end_user.account.avatar_url_path}`} thumbnail height="124" width="124" />
                                         </center>
                                     }
-                                    {!end_user.account.avatar_url_path &&
+                                    {!props.end_user.account.avatar_url_path &&
                                         <center>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="124" height="124" fill="currentColor" className="bi-person-circle" viewBox="0 0 16 16">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="124" height="124" fill="currentColor" className="bi-person-circle d-inline-block align-top mt-2 rounded-circle" viewBox="0 0 16 16">
                                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                                                 <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
                                             </svg>
@@ -424,10 +310,10 @@ const Profile_View = () => {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{application.profile_viewer.id?.toString()}</td>
-                                                <td>{application.profile_viewer.name}</td>
-                                                <td>{application.profile_viewer.created_on?.toString()}</td>
-                                                <td>{application.profile_viewer.logout_on?.toString()}</td>
+                                                <td>{props.application.profile_viewer.id?.toString()}</td>
+                                                <td>{props.application.profile_viewer.name}</td>
+                                                <td>{props.application.profile_viewer.created_on?.toString()}</td>
+                                                <td>{props.application.profile_viewer.logout_on?.toString()}</td>
                                             </tr>
                                         </tbody>
                                     </Table>
@@ -441,7 +327,7 @@ const Profile_View = () => {
                                             <tr>
                                                 <td>
                                                     <Button variant="success" onClick={() => { show_the_end_user_the_profile_chat_modal() }} disabled={disable_end_user_profile_button}>
-                                                        {application.settings.theme === 0 ? (
+                                                        {props.application.settings.theme === 0 ? (
                                                             <>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-chat-fill" viewBox="0 0 16 16">
                                                                     <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9 9 0 0 0 8 15" />
@@ -515,7 +401,7 @@ const Profile_View = () => {
             </Modal>
             <Modal show={chat_modal_visibility_value} onHide={() => { close_end_user_chat_modal() }}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{lbl.ChatWithUser} ({application.profile_viewer.name})</Modal.Title>
+                    <Modal.Title>{lbl.ChatWithUser} ({props.application.profile_viewer.name})</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Row>

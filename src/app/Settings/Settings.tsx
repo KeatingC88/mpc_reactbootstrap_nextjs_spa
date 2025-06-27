@@ -41,134 +41,19 @@ import {
 } from '@Redux_Thunk/Actions/Selected'
 
 import { useSelector } from 'react-redux'
-import { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
+import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
-
-import { Application_Props } from '@Interfaces/Application_Props'
-import { End_User_Props } from '@Interfaces/End_User_Props'
-import { Error_Props } from '@Interfaces/Error_Props'
-import { Third_Party_Api_Props } from '@Interfaces/Third_Party_Api_Props'
-
-interface Settings_Props {
-    application: Application_Props
-    end_user: End_User_Props
-    error: Error_Props
-    api: Third_Party_Api_Props
-}
 
 const Settings = () => {
 
-    const {
-        application,
-        end_user,
-        error,
-        api
-    }: Settings_Props = useSelector((state: Current_Redux_State) => ({
-        application: {
-            community: {
-                users: state.Application_Community_State_Reducer.users,
-            },
-            language_dictionaries: state.Application_Language_State_Reducer.language_dictionaries,
-            profile_viewer: {
-                id: state.Application_Profile_Viewer_State_Reducer.id,
-                name: state.Application_Profile_Viewer_State_Reducer.name,
-                created_on: state.Application_Profile_Viewer_State_Reducer.created_on,
-                logout_on: state.Application_Profile_Viewer_State_Reducer.logout_on,
-            },
-            settings: {
-                current_language: state.Application_Language_State_Reducer.current_language,
-                theme: state.Application_Settings_State_Reducer.theme,
-                alignment: state.Application_Settings_State_Reducer.alignment,
-                text_alignment: state.Application_Settings_State_Reducer.text_alignment,
-                flag: state.Application_Settings_State_Reducer.flag,
-                nav_lock: state.Application_Settings_State_Reducer.nav_lock,
-                gmt_time: state.Application_Settings_State_Reducer.gmt_time,
-                local_time: state.Application_Settings_State_Reducer.local_time,
-                date: state.Application_Settings_State_Reducer.date,
-                location: state.Application_Settings_State_Reducer.location,
-                grid_type: state.Application_Settings_State_Reducer.grid_type,
-                navbar_css_display_value: state.Application_Settings_State_Reducer.navbar_css_display_value,
-            },
-            websocket: {
-                chat_conversations: state.Application_WebSocket_State_Reducer.chat_conversations,
-                conversation_sent_requests: state.Application_WebSocket_State_Reducer.conversation_sent_requests,
-                conversation_received_approvals: state.Application_WebSocket_State_Reducer.conversation_received_approvals,
-                conversation_received_requests: state.Application_WebSocket_State_Reducer.conversation_received_requests,
-                conversation_sent_approvals: state.Application_WebSocket_State_Reducer.conversation_sent_approvals,
-                conversation_sent_blocks: state.Application_WebSocket_State_Reducer.conversation_sent_blocks,
-                conversation_received_blocks: state.Application_WebSocket_State_Reducer.conversation_received_blocks,
-            }
-        },
-        end_user: {
-            account: {
-                id: state.End_User_Account_State_Reducer.id,
-                public_id: state.End_User_Account_State_Reducer.public_id,
-                token: state.End_User_Account_State_Reducer.token,
-                token_expire: state.End_User_Account_State_Reducer.token_expire,
-                account_type: state.End_User_Account_State_Reducer.account_type,
-                roles: state.End_User_Account_State_Reducer.roles,
-                email_address: state.End_User_Account_State_Reducer.email_address,
-                name: state.End_User_Account_State_Reducer.name,
-                online_status: state.End_User_Account_State_Reducer.online_status,
-                custom_lbl: state.End_User_Account_State_Reducer.custom_lbl,
-                avatar_url_path: state.End_User_Account_State_Reducer.avatar_url_path,
-                avatar_title: state.End_User_Account_State_Reducer.avatar_title,
-                login_on: state.End_User_Account_State_Reducer.login_on,
-                logout_on: state.End_User_Account_State_Reducer.logout_on,
-                created_on: state.End_User_Account_State_Reducer.created_on,
-                phone_country_code: state.End_User_Account_State_Reducer.phone_country_code,
-                phone_carrier: state.End_User_Account_State_Reducer.phone_carrier,
-                telephone: state.End_User_Account_State_Reducer.telephone,
-            },
-            notification: {
-                alert_color: ``,
-                alert_text: ``,
-            },
-            discord: {
-                id: state.End_User_Discord_Account_State_Reducer.id,
-            },
-            twitch: {
-                id: state.End_User_Twitch_Account_State_Reducer.id,
-            },
-            profile: {
-                first_name: state.End_User_Profile_State_Reducer.first_name,
-                last_name: state.End_User_Profile_State_Reducer.last_name,
-                middle_name: state.End_User_Profile_State_Reducer.middle_name,
-                maiden_name: state.End_User_Profile_State_Reducer.maiden_name,
-                gender: state.End_User_Profile_State_Reducer.gender,
-                birth_month: state.End_User_Profile_State_Reducer.birth_month,
-                birth_day: state.End_User_Profile_State_Reducer.birth_day,
-                birth_year: state.End_User_Profile_State_Reducer.birth_year,
-                ethnicity: state.End_User_Profile_State_Reducer.ethnicity,
-                avatar_url_path: state.End_User_Account_State_Reducer.avatar_url_path,
-                avatar_title: state.End_User_Account_State_Reducer.avatar_title,
-            },
-            custom_design: state.End_User_Custom_CSSDesign_State_Reducer.custom_design_obj,
-        },
-        error: {
-            host: {
-                id: state.Host_Error_State_Reducer.id,
-            },
-            network: {
-                id: state.Network_Error_State_Reducer.id,
-            },
-        },
-        api: {
-            discord: {
-                online_status: true,
-            },
-            twitch: {
-                online_status: true,
-            },
-        },
-    }))
+    const props = useSelector(Redux_Thunk_Core)
 
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
 
-    const [language, region] = application.settings.current_language.split(`-`)
-    const lbl = application.language_dictionaries[language][region]
+    const [language, region] = props.application.settings.current_language.split(`-`)
+    const lbl = props.application.language_dictionaries[language][region]
 
     //Error Handling Properties
     const [submit_button_color, set_submit_button_color] = useState<string>(`primary`)
@@ -183,11 +68,11 @@ const Settings = () => {
     }
 
     //Radio Properties
-    const [status_radio_value, set_status_radio_value] = useState(end_user.account.online_status)
-    const [custom_label, set_custom_label] = useState<string | null>(end_user.account.custom_lbl)
-    const [navigation_lock_radio_value, set_navigation_lock_radio_value] = useState(application.settings.nav_lock)
-    const [align_radio_value, set_alignment_radio_value] = useState(application.settings.alignment)
-    const [theme_radio_value, set_application_theme_radio_value] = useState<number>(application.settings.theme)
+    const [status_radio_value, set_status_radio_value] = useState(props.end_user.account.online_status)
+    const [custom_label, set_custom_label] = useState<string | null>(props.end_user.account.custom_lbl)
+    const [navigation_lock_radio_value, set_navigation_lock_radio_value] = useState<boolean>(props.application.settings.nav_lock)
+    const [align_radio_value, set_alignment_radio_value] = useState<string>(props.application.settings.alignment)
+    const [theme_radio_value, set_application_theme_radio_value] = useState<number>(props.application.settings.theme)
 
     const [custom_theme_default_value, set_custom_theme_default_value] = useState<string>("#b6ffb6")
 
@@ -203,27 +88,27 @@ const Settings = () => {
         `Brush Script MT`,
     ])
 
-    const [card_header_font_color_value, set_card_header_font_color_value] = useState<string>(end_user.custom_design.card_header_font_color)
-    const [card_body_font_color_value, set_card_body_font_color_value] = useState<string>(end_user.custom_design.card_body_font_color)
-    const [card_footer_font_color_value, set_card_footer_font_color_value] = useState<string>(end_user.custom_design.card_footer_font_color)
+    const [card_header_font_color_value, set_card_header_font_color_value] = useState<string>(props.end_user.custom_design.card_header_font_color)
+    const [card_body_font_color_value, set_card_body_font_color_value] = useState<string>(props.end_user.custom_design.card_body_font_color)
+    const [card_footer_font_color_value, set_card_footer_font_color_value] = useState<string>(props.end_user.custom_design.card_footer_font_color)
 
-    const [card_header_background_color_value, set_card_header_background_color_value] = useState<string>(end_user.custom_design.card_header_background_color)
-    const [card_body_background_color_value, set_card_body_background_color_value] = useState<string>(end_user.custom_design.card_body_background_color)
-    const [card_footer_background_color_value, set_card_footer_background_color_value] = useState<string>(end_user.custom_design.card_footer_background_color)
+    const [card_header_background_color_value, set_card_header_background_color_value] = useState<string>(props.end_user.custom_design.card_header_background_color)
+    const [card_body_background_color_value, set_card_body_background_color_value] = useState<string>(props.end_user.custom_design.card_body_background_color)
+    const [card_footer_background_color_value, set_card_footer_background_color_value] = useState<string>(props.end_user.custom_design.card_footer_background_color)
 
-    const [card_header_font_value, set_card_header_font_value] = useState<string>(end_user.custom_design.card_header_font)
-    const [card_body_font_value, set_card_body_font_value] = useState<string>(end_user.custom_design.card_body_font)
-    const [card_footer_font_value, set_card_footer_font_value] = useState<string>(end_user.custom_design.card_footer_font)
+    const [card_header_font_value, set_card_header_font_value] = useState<string>(props.end_user.custom_design.card_header_font)
+    const [card_body_font_value, set_card_body_font_value] = useState<string>(props.end_user.custom_design.card_body_font)
+    const [card_footer_font_value, set_card_footer_font_value] = useState<string>(props.end_user.custom_design.card_footer_font)
 
-    const [button_font_color_value, set_button_font_color_value] = useState<string>(end_user.custom_design.button_font_color)
-    const [button_font_value, set_button_font_value] = useState<string>(end_user.custom_design.button_font)
-    const [button_background_color_value, set_button_background_color_value] = useState<string>(end_user.custom_design.button_background_color)
+    const [button_font_color_value, set_button_font_color_value] = useState<string>(props.end_user.custom_design.button_font_color)
+    const [button_font_value, set_button_font_value] = useState<string>(props.end_user.custom_design.button_font)
+    const [button_background_color_value, set_button_background_color_value] = useState<string>(props.end_user.custom_design.button_background_color)
 
-    const [navigation_menu_font_color_value, set_navigation_menu_font_color_value] = useState<string>(end_user.custom_design.navigation_menu_font_color)
-    const [navigation_menu_font_value, set_navigation_menu_font_value] = useState<string>(end_user.custom_design.navigation_menu_font)
-    const [navigation_menu_background_color_value, set_navigation_menu_background_color_value] = useState<string>(end_user.custom_design.navigation_menu_background_color)
+    const [navigation_menu_font_color_value, set_navigation_menu_font_color_value] = useState<string>(props.end_user.custom_design.navigation_menu_font_color)
+    const [navigation_menu_font_value, set_navigation_menu_font_value] = useState<string>(props.end_user.custom_design.navigation_menu_font)
+    const [navigation_menu_background_color_value, set_navigation_menu_background_color_value] = useState<string>(props.end_user.custom_design.navigation_menu_background_color)
 
-    const [card_border_color_value, set_card_border_color_value] = useState<string>(end_user.custom_design.card_border_color)
+    const [card_border_color_value, set_card_border_color_value] = useState<string>(props.end_user.custom_design.card_border_color)
 
     const [html_card_header_font_list, set_html_card_header_font_list] = useState<React.JSX.Element[]>([])
     const [html_card_body_font_list, set_html_card_body_font_list] = useState<React.JSX.Element[]>([])
@@ -233,9 +118,9 @@ const Settings = () => {
 
     const [card_width, set_card_width] = useState<string>(`100%`)
 
-    const [display_name, set_display_name] = useState(end_user.account.name)
-    const [avatar_path, set_avatar_path] = useState(end_user.account.avatar_url_path)
-    const [avatar_title, set_avatar_title] = useState(end_user.account.avatar_title)
+    const [display_name, set_display_name] = useState<string | null>(props.end_user.account.name)
+    const [avatar_path, set_avatar_path] = useState<string | null | undefined>(props.end_user.account.avatar_url_path)
+    const [avatar_title, set_avatar_title] = useState<string | null>(props.end_user.account.avatar_title)
     const [avatar_file_name, set_avatar_file_name] = useState<string>(``)
     const [avatar_collapse_value, set_avatar_collapse_value] = useState<boolean>(false)
     const [password_collapse_value, set_password_collapse_value] = useState<boolean>(false)
@@ -321,7 +206,7 @@ const Settings = () => {
                 set_application_theme_radio_value(theme)
                 Dispatch(Alternate_Application_Theme_Value(0))
                 setTimeout(() => {
-                    if (error.network.id) {
+                    if (props.error.network.id) {
                         create_settings_error_notification(`${lbl.SaveFailed}`)
                         setTimeout(() => {
                             set_alert_color(``)
@@ -336,7 +221,7 @@ const Settings = () => {
                 set_application_theme_radio_value(theme)
                 Dispatch(Alternate_Application_Theme_Value(1))
                 setTimeout(() => {
-                    if (error.network.id) {
+                    if (props.error.network.id) {
                         create_settings_error_notification(`${lbl.SaveFailed}`)
                         setTimeout(() => {
                             set_alert_color(``)
@@ -520,10 +405,10 @@ const Settings = () => {
     const change_password = () => {
         if (new_password === confirm_password) {
             Dispatch(Change_Password({
-                id: end_user.account.id,
-                language: application.settings.current_language.split(`-`)[0],
-                region: application.settings.current_language.split(`-`)[1],
-                token: end_user.account.token,
+                id: props.end_user.account.id,
+                language: props.application.settings.current_language.split(`-`)[0],
+                region: props.application.settings.current_language.split(`-`)[1],
+                token: props.end_user.account.token,
                 password: old_password,
                 new_password: new_password
             }))
@@ -533,7 +418,7 @@ const Settings = () => {
     const deactivate_current_user = () => {
 
         Dispatch(Delete_User({
-            target_user: end_user.account.id,
+            target_user: props.end_user.account.id,
             password: final_password
         }))
 
@@ -545,33 +430,33 @@ const Settings = () => {
             set_card_width(``)
         }
 
-        set_avatar_path(end_user.account?.avatar_url_path)
+        set_avatar_path(props.end_user.account?.avatar_url_path)
         
-        set_avatar_title(end_user.account?.avatar_title)
+        set_avatar_title(props.end_user.account?.avatar_title)
         
     },[])
 
     return (
         <Container fluid>
-            <Row className={`${application.settings.alignment}`}>
-                <Col className={`${application.settings.grid_type === 1 ? "col-xs-12 col-sm-12 col-md-12 col-lg-12" : ""}`}>
-                    <Card className={`moveable ${application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
+            <Row className={`${props.application.settings.alignment}`}>
+                <Col className={`${props.application.settings.grid_type === 1 ? "col-xs-12 col-sm-12 col-md-12 col-lg-12" : ""}`}>
+                    <Card className={`moveable ${props.application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
                         style={{
-                            float: application.settings.alignment === `justify-content-end` ? `right` : `none`,
-                            borderColor: `${end_user.custom_design?.card_border_color}`,
+                            float: props.application.settings.alignment === `justify-content-end` ? `right` : `none`,
+                            borderColor: `${props.end_user.custom_design?.card_border_color}`,
                             minWidth: `${card_width}`
                         }}
                     >
-                        <Card.Header className={`${application.settings.text_alignment} p-4`}
+                        <Card.Header className={`${props.application.settings.text_alignment} p-4`}
                             style={{
-                                backgroundColor: `${end_user.custom_design?.card_header_background_color}`,
-                                color: `${end_user.custom_design?.card_header_font_color}`,
-                                fontFamily: `${end_user.custom_design?.card_header_font}`
+                                backgroundColor: `${props.end_user.custom_design?.card_header_background_color}`,
+                                color: `${props.end_user.custom_design?.card_header_font_color}`,
+                                fontFamily: `${props.end_user.custom_design?.card_header_font}`
                             }}
                         >
-                            {application.settings.theme === 0 ? (
+                            {props.application.settings.theme === 0 ? (
                                 <>
-                                    <svg onClick={() => { Navigate.push(`/Settings`) }} xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" className="bi bi-gear-fill" viewBox="0 0 16 16">
+                                    <svg onClick={() => { Navigate.push(`/Settings`) }} xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" className="bi bi-gear-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
                                         <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z" />
                                     </svg>
                                     <br />
@@ -579,7 +464,7 @@ const Settings = () => {
                                 </>
                             ) : (
                                 <>
-                                    <svg onClick={() => { Navigate.push(`/Settings`) }} xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" className="bi bi-gear" viewBox="0 0 16 16">
+                                    <svg onClick={() => { Navigate.push(`/Settings`) }} xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" className="bi bi-gear d-inline-block align-top mt-2" viewBox="0 0 16 16">
                                         <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
                                         <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
                                     </svg>
@@ -590,22 +475,22 @@ const Settings = () => {
                         </Card.Header>
                         <Card.Body
                             style={{
-                                backgroundColor: `${end_user.custom_design?.card_body_background_color}`,
-                                color: `${end_user.custom_design?.card_body_font_color}`,
-                                fontFamily: `${end_user.custom_design?.card_body_font}`
+                                backgroundColor: `${props.end_user.custom_design?.card_body_background_color}`,
+                                color: `${props.end_user.custom_design?.card_body_font_color}`,
+                                fontFamily: `${props.end_user.custom_design?.card_body_font}`
                             }}
                         >
                             <Table striped bordered hover variant="dark" style={{
-                                backgroundColor: `${end_user.custom_design?.card_body_background_color}`,
-                                color: `${end_user.custom_design?.card_body_font_color}`,
-                                fontFamily: `${end_user.custom_design?.card_body_font}`
+                                backgroundColor: `${props.end_user.custom_design?.card_body_background_color}`,
+                                color: `${props.end_user.custom_design?.card_body_font_color}`,
+                                fontFamily: `${props.end_user.custom_design?.card_body_font}`
                             }}>
                                 <tbody>
                                     <tr>
                                         <td>{lbl._1}</td>
                                         <td>
                                             {lbl.Theme}
-                                            {error.host.id === `Selected-Theme-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
+                                            {props.error.host.id === `Selected-Theme-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
                                         </td>
                                         <td>
                                             {application_theme_radios.map((radio, idx) => (
@@ -628,7 +513,7 @@ const Settings = () => {
                                         <td>{lbl._2}</td>
                                         <td>
                                             {lbl.Status}
-                                            {error.host.id === `Selected-Status-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
+                                            {props.error.host.id === `Selected-Status-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
                                         </td>
                                         <td>
                                             <>
@@ -658,7 +543,7 @@ const Settings = () => {
                                         <td>{lbl._3}</td>
                                         <td>
                                             {lbl.LockNavigationMenu}
-                                            {error.host.id === `Selected-NavLock-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
+                                            {props.error.host.id === `Selected-NavLock-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
                                         </td>
                                         <td>{application_navigation_lock_radios.map((radio, idx) => (
                                             <ToggleButton
@@ -679,7 +564,7 @@ const Settings = () => {
                                         <td>{lbl._4}</td>
                                         <td>
                                             {lbl.Alignment}
-                                            {error.host.id === `Selected-Alignment-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
+                                            {props.error.host.id === `Selected-Alignment-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
                                         </td>
                                         <td>
                                             {application_navigation_alignment_radios.map((radio, idx) => (
@@ -702,7 +587,7 @@ const Settings = () => {
                                         <td>{lbl._5}</td>
                                         <td>
                                             {lbl.DisplayName}:<br />{display_name}
-                                            {error.host.id === `Selected-DisplayName-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
+                                            {props.error.host.id === `Selected-DisplayName-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
                                         </td>
                                         <td>
                                             <InputGroup className="mb-3 mx-auto" style={{ maxWidth: 200, zIndex: 0 }}>
@@ -723,7 +608,7 @@ const Settings = () => {
                                                     <br /><span>{lbl.Title}:&nbsp;{avatar_title}</span>
                                                 </>
                                             }
-                                            {error.host.id === `Selected-Avatar-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
+                                            {props.error.host.id === `Selected-Avatar-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
                                         </td>
                                         <td>
                                             <Button onClick={() => handleAvatarModalShow()} aria-controls="display name edit" aria-expanded={avatar_collapse_value} className="mb-3">{lbl.Edit}</Button>
@@ -733,7 +618,7 @@ const Settings = () => {
                                         <td>{lbl._7}</td>
                                         <td>
                                             {lbl.PasswordChange}
-                                            {error.host.id === `Selected-Password-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
+                                            {props.error.host.id === `Selected-Password-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
                                         </td>
                                         <td>
                                             <Button onClick={(e) => handlePasswordModalShow()} aria-controls="display name edit" aria-expanded={password_collapse_value} className="mb-3">{lbl.Change}</Button>
@@ -743,7 +628,7 @@ const Settings = () => {
                                         <td>{lbl._8}</td>
                                         <td>
                                             {lbl.DisableAccount}
-                                            {error.host.id === `Delete-User-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
+                                            {props.error.host.id === `Delete-User-Failed` ? <Alert variant="danger">{lbl.SaveToServerFailed}.</Alert> : null}
                                         </td>
                                         <td>
                                             <Button variant="outline-danger" id="button-addon2" onClick={handleDeactivateModalShow}>
@@ -1178,105 +1063,5 @@ const Settings = () => {
         </Container>
     )
 }
-
-const mapStateToProps = (state: Current_Redux_State): Settings_Props => ({
-    application: {
-        community: {
-            users: state.Application_Community_State_Reducer.users,
-        },
-        language_dictionaries: state.Application_Language_State_Reducer.language_dictionaries,
-        profile_viewer: {
-            id: state.Application_Profile_Viewer_State_Reducer.id,
-            name: state.Application_Profile_Viewer_State_Reducer.name,
-            created_on: state.Application_Profile_Viewer_State_Reducer.created_on,
-            logout_on: state.Application_Profile_Viewer_State_Reducer.logout_on,
-        },
-        settings: {
-            current_language: state.Application_Language_State_Reducer.current_language,
-            theme: state.Application_Settings_State_Reducer.theme,
-            alignment: state.Application_Settings_State_Reducer.alignment,
-            text_alignment: state.Application_Settings_State_Reducer.text_alignment,
-            flag: state.Application_Settings_State_Reducer.flag,
-            nav_lock: state.Application_Settings_State_Reducer.nav_lock,
-            gmt_time: state.Application_Settings_State_Reducer.gmt_time,
-            local_time: state.Application_Settings_State_Reducer.local_time,
-            date: state.Application_Settings_State_Reducer.date,
-            location: state.Application_Settings_State_Reducer.location,
-            grid_type: state.Application_Settings_State_Reducer.grid_type,
-            navbar_css_display_value: state.Application_Settings_State_Reducer.navbar_css_display_value,
-        },
-        websocket: {
-            chat_conversations: state.Application_WebSocket_State_Reducer.chat_conversations,
-            conversation_sent_requests: state.Application_WebSocket_State_Reducer.conversation_sent_requests,
-            conversation_received_approvals: state.Application_WebSocket_State_Reducer.conversation_received_approvals,
-            conversation_received_requests: state.Application_WebSocket_State_Reducer.conversation_received_requests,
-            conversation_sent_approvals: state.Application_WebSocket_State_Reducer.conversation_sent_approvals,
-            conversation_sent_blocks: state.Application_WebSocket_State_Reducer.conversation_sent_blocks,
-            conversation_received_blocks: state.Application_WebSocket_State_Reducer.conversation_received_blocks,
-        }
-    },
-    end_user: {
-        account: {
-            id: state.End_User_Account_State_Reducer.id,
-            public_id: state.End_User_Account_State_Reducer.public_id,
-            token: state.End_User_Account_State_Reducer.token,
-            token_expire: state.End_User_Account_State_Reducer.token_expire,
-            account_type: state.End_User_Account_State_Reducer.account_type,
-            roles: state.End_User_Account_State_Reducer.roles,
-            email_address: state.End_User_Account_State_Reducer.email_address,
-            name: state.End_User_Account_State_Reducer.name,
-            online_status: state.End_User_Account_State_Reducer.online_status,
-            custom_lbl: state.End_User_Account_State_Reducer.custom_lbl,
-            avatar_url_path: state.End_User_Account_State_Reducer.avatar_url_path,
-            avatar_title: state.End_User_Account_State_Reducer.avatar_title,
-            login_on: state.End_User_Account_State_Reducer.login_on,
-            logout_on: state.End_User_Account_State_Reducer.logout_on,
-            created_on: state.End_User_Account_State_Reducer.created_on,
-            phone_country_code: state.End_User_Account_State_Reducer.phone_country_code,
-            phone_carrier: state.End_User_Account_State_Reducer.phone_carrier,
-            telephone: state.End_User_Account_State_Reducer.telephone,
-        },
-        notification: {
-            alert_color: ``,
-            alert_text: ``,
-        },
-        discord: {
-            id: state.End_User_Discord_Account_State_Reducer.id,
-        },
-        twitch: {
-            id: state.End_User_Twitch_Account_State_Reducer.id,
-        },
-        profile: {
-            first_name: state.End_User_Profile_State_Reducer.first_name,
-            last_name: state.End_User_Profile_State_Reducer.last_name,
-            middle_name: state.End_User_Profile_State_Reducer.middle_name,
-            maiden_name: state.End_User_Profile_State_Reducer.maiden_name,
-            gender: state.End_User_Profile_State_Reducer.gender,
-            birth_month: state.End_User_Profile_State_Reducer.birth_month,
-            birth_day: state.End_User_Profile_State_Reducer.birth_day,
-            birth_year: state.End_User_Profile_State_Reducer.birth_year,
-            ethnicity: state.End_User_Profile_State_Reducer.ethnicity,
-            avatar_url_path: state.End_User_Account_State_Reducer.avatar_url_path,
-            avatar_title: state.End_User_Account_State_Reducer.avatar_title,
-        },
-        custom_design: state.End_User_Custom_CSSDesign_State_Reducer.custom_design_obj,
-    },
-    error: {
-        host: {
-            id: state.Host_Error_State_Reducer.id,
-        },
-        network: {
-            id: state.Network_Error_State_Reducer.id,
-        },
-    },
-    api: {
-        discord: {
-            online_status: true,
-        },
-        twitch: {
-            online_status: true,
-        },
-    },
-})
 
 export default Settings

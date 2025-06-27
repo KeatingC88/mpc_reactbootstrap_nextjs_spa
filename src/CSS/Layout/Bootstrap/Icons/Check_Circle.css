@@ -1,22 +1,8 @@
 @media screen and (min-width: 128px) {
 
-    body[data-theme="Night-Theme"] > #app > main > div > div > div > div > div > div > div > div > div > div > div > div > div.list-group-item-success > div > div > div.password-register-check-password-icon {
+    body > #app > main > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div.password-register-check-password-icon {
         min-height: 32px;
         min-width: 32px;
     }
 
-    body[data-theme="Light-Theme"] > #app > main > div > div > div > div > div > div > div > div > div > div > div > div > div.list-group-item-success > div > div > div.password-register-check-password-icon {
-        min-height: 32px;
-        min-width: 32px;
-    }
-
-    body[data-theme="Night-Theme"] > #app > main > div > div > div > div > div > div > div > div > div > div > div > div > div.list-group-item-danger > div > div > div.password-register-check-password-icon {
-        min-height: 32px;
-        min-width: 32px;
-    }
-
-    body[data-theme="Light-Theme"] > #app > main > div > div > div > div > div > div > div > div > div > div > div > div > div.list-group-item-danger > div > div > div.password-register-check-password-icon {
-        min-height: 32px;
-        min-width: 32px;
-    }
 }

@@ -106,7 +106,7 @@
       "@Language/*": [ "src/Language/*" ],
       "@Shared_Components/*": [ "src/Shared_Components/*" ],
       "@Constants": [ "src/Constants.ts" ],
-      "@Interfaces/*": [ "src/app/Interfaces/*" ]
+      "@Interfaces/*": [ "src/Redux_Thunk/Reducers/Interfaces/*" ]
     },
     "jsx": "preserve",
     "moduleResolution": "node",

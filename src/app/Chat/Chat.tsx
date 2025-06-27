@@ -2,16 +2,9 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-
 import { useSelector } from 'react-redux'
-import { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
-
-import { Application_Props } from '@Interfaces/Application_Props'
-import { End_User_Props } from '@Interfaces/End_User_Props'
-import { Error_Props } from '@Interfaces/Error_Props'
-import { Third_Party_Api_Props } from '@Interfaces/Third_Party_Api_Props'
-
+import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import {
     Alert, Container, Row, Col, Card, Form, Button, Image,
     ListGroup, InputGroup, Tabs, Tab, Modal, ListGroupItem, DropdownButton, Dropdown, Accordion
@@ -42,126 +35,16 @@ import {
     Delay_Execution
 } from '@Redux_Thunk/Actions/Misc'
 
-interface WebSocket_Chat_Props {
-    application: Application_Props
-    end_user: End_User_Props
-    error: Error_Props
-    api: Third_Party_Api_Props
-}
-
 const WebSocket_Chat = () => {
 
-    const {
-        application,
-        end_user,
-        error,
-        api
-    }: WebSocket_Chat_Props = useSelector((state: Current_Redux_State) => ({
-        application: {
-            community: {
-                users: state.Application_Community_State_Reducer.users,
-            },
-            language_dictionaries: state.Application_Language_State_Reducer.language_dictionaries,
-            profile_viewer: {
-                id: state.Application_Profile_Viewer_State_Reducer.id,
-                name: state.Application_Profile_Viewer_State_Reducer.name,
-                created_on: state.Application_Profile_Viewer_State_Reducer.created_on,
-                logout_on: state.Application_Profile_Viewer_State_Reducer.logout_on,
-            },
-            settings: {
-                current_language: state.Application_Language_State_Reducer.current_language,
-                theme: state.Application_Settings_State_Reducer.theme,
-                alignment: state.Application_Settings_State_Reducer.alignment,
-                text_alignment: state.Application_Settings_State_Reducer.text_alignment,
-                flag: state.Application_Settings_State_Reducer.flag,
-                nav_lock: state.Application_Settings_State_Reducer.nav_lock,
-                gmt_time: state.Application_Settings_State_Reducer.gmt_time,
-                local_time: state.Application_Settings_State_Reducer.local_time,
-                date: state.Application_Settings_State_Reducer.date,
-                location: state.Application_Settings_State_Reducer.location,
-                grid_type: state.Application_Settings_State_Reducer.grid_type,
-                navbar_css_display_value: state.Application_Settings_State_Reducer.navbar_css_display_value,
-            },
-            websocket: {
-                chat_conversations: state.Application_WebSocket_State_Reducer.chat_conversations,
-                conversation_sent_requests: state.Application_WebSocket_State_Reducer.conversation_sent_requests,
-                conversation_received_approvals: state.Application_WebSocket_State_Reducer.conversation_received_approvals,
-                conversation_received_requests: state.Application_WebSocket_State_Reducer.conversation_received_requests,
-                conversation_sent_approvals: state.Application_WebSocket_State_Reducer.conversation_sent_approvals,
-                conversation_sent_blocks: state.Application_WebSocket_State_Reducer.conversation_sent_blocks,
-                conversation_received_blocks: state.Application_WebSocket_State_Reducer.conversation_received_blocks,
-            }
-        },
-        end_user: {
-            account: {
-                id: state.End_User_Account_State_Reducer.id,
-                public_id: state.End_User_Account_State_Reducer.public_id,
-                token: state.End_User_Account_State_Reducer.token,
-                token_expire: state.End_User_Account_State_Reducer.token_expire,
-                account_type: state.End_User_Account_State_Reducer.account_type,
-                roles: state.End_User_Account_State_Reducer.roles,
-                email_address: state.End_User_Account_State_Reducer.email_address,
-                name: state.End_User_Account_State_Reducer.name,
-                online_status: state.End_User_Account_State_Reducer.online_status,
-                custom_lbl: state.End_User_Account_State_Reducer.custom_lbl,
-                avatar_url_path: state.End_User_Account_State_Reducer.avatar_url_path,
-                avatar_title: state.End_User_Account_State_Reducer.avatar_title,
-                login_on: state.End_User_Account_State_Reducer.login_on,
-                logout_on: state.End_User_Account_State_Reducer.logout_on,
-                created_on: state.End_User_Account_State_Reducer.created_on,
-                phone_country_code: state.End_User_Account_State_Reducer.phone_country_code,
-                phone_carrier: state.End_User_Account_State_Reducer.phone_carrier,
-                telephone: state.End_User_Account_State_Reducer.telephone,
-            },
-            notification: {
-                alert_color: ``,
-                alert_text: ``,
-            },
-            discord: {
-                id: state.End_User_Discord_Account_State_Reducer.id,
-            },
-            twitch: {
-                id: state.End_User_Twitch_Account_State_Reducer.id,
-            },
-            profile: {
-                first_name: state.End_User_Profile_State_Reducer.first_name,
-                last_name: state.End_User_Profile_State_Reducer.last_name,
-                middle_name: state.End_User_Profile_State_Reducer.middle_name,
-                maiden_name: state.End_User_Profile_State_Reducer.maiden_name,
-                gender: state.End_User_Profile_State_Reducer.gender,
-                birth_month: state.End_User_Profile_State_Reducer.birth_month,
-                birth_day: state.End_User_Profile_State_Reducer.birth_day,
-                birth_year: state.End_User_Profile_State_Reducer.birth_year,
-                ethnicity: state.End_User_Profile_State_Reducer.ethnicity,
-                avatar_url_path: state.End_User_Account_State_Reducer.avatar_url_path,
-                avatar_title: state.End_User_Account_State_Reducer.avatar_title,
-            },
-            custom_design: state.End_User_Custom_CSSDesign_State_Reducer.custom_design_obj,
-        },
-        error: {
-            host: {
-                id: state.Host_Error_State_Reducer.id,
-            },
-            network: {
-                id: state.Network_Error_State_Reducer.id,
-            },
-        },
-        api: {
-            discord: {
-                online_status: true,
-            },
-            twitch: {
-                online_status: true,
-            },
-        },
-    }))
+    const props = useSelector(Redux_Thunk_Core)
 
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
 
-    const [language, region] = application.settings.current_language.split(`-`)
-    const lbl = application.language_dictionaries[language][region]
+    const [language, region] = props.application.settings.current_language.split(`-`)
+    const lbl = props.application.language_dictionaries[language][region]
 
     const [chat_tab_key, set_chat_tab_key] = useState<string | null>('')
     const [accordion_key, set_accordion_key] = useState<string | null | string[]>(null)
@@ -232,24 +115,22 @@ const WebSocket_Chat = () => {
     }
 
     const handle_accordion = (key: string | null | string[]) => {
-
-        if (key === null && accordion_key && typeof accordion_key  === "string") {
+        if (key === null && accordion_key && typeof accordion_key === "string") {
 
             set_accordion_key(null)
             chat_accordion_close(BigInt(accordion_key.split(`-`)[2]))
 
-        } 
+        } else {
 
-        if (typeof key === "string") {
-
-            set_accordion_key(key)
-            Chat_Accordion_Show(BigInt(key.split(`-`)[2]))
+            if (typeof key === "string") {
+                set_accordion_key(key)
+                chat_accordion_show(BigInt(key.split(`-`)[2]))
+            }
 
         }
     }
 
-    const Chat_Accordion_Show = async (id: BigInt) => {
-
+    const chat_accordion_show = async (id: BigInt) => {
         set_end_user_message_input(``)
 
         await Dispatch(Authenticate_End_Users_Permissions({
@@ -390,9 +271,9 @@ const WebSocket_Chat = () => {
 
     (() => {
 
-        if (error.network.id === "Validate-With-Email-Server-Failed") {
+        if (props.error.network.id === "Validate-With-Email-Server-Failed") {
             setTimeout(() => {
-                create_error_alert(error.network.id)
+                create_error_alert(props.error.network.id)
             }, 1)
         }
 
@@ -411,29 +292,29 @@ const WebSocket_Chat = () => {
 
     return (
         <Container fluid>
-            <Row className={`${application.settings.alignment}`}>
-                <Col className={`${application.settings.grid_type === 1 ? "col-xs-12 col-sm-12 col-md-12 col-lg-12" : ""}`}>
-                    <Card className={`moveable ${application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
+            <Row className={`${props.application.settings.alignment}`}>
+                <Col className={`${props.application.settings.grid_type === 1 ? "col-xs-12 col-sm-12 col-md-12 col-lg-12" : ""}`}>
+                    <Card className={`moveable ${props.application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
                         style={{
-                            float: application.settings.alignment === `justify-content-end` ? `right` : `none`,
-                            borderColor: `${end_user.custom_design.card_border_color}`,
+                            float: props.application.settings.alignment === `justify-content-end` ? `right` : `none`,
+                            borderColor: `${props.end_user.custom_design.card_border_color}`,
                             minWidth: `${card_width}`
                         }}
                     >
-                        <Card.Header className={`${application.settings.text_alignment} p-4`}
+                        <Card.Header className={`${props.application.settings.text_alignment} p-4`}
                             style={{
-                                backgroundColor: `${end_user.custom_design.card_header_background_color}`,
-                                color: `${end_user.custom_design.card_header_font_color}`,
-                                fontFamily: `${end_user.custom_design.card_header_font}`
+                                backgroundColor: `${props.end_user.custom_design.card_header_background_color}`,
+                                color: `${props.end_user.custom_design.card_header_font_color}`,
+                                fontFamily: `${props.end_user.custom_design.card_header_font}`
                             }}
                         >
                             <h1> {lbl.Messenger}</h1>
                         </Card.Header>
                         <Card.Body
                             style={{
-                                backgroundColor: `${end_user.custom_design.card_body_background_color}`,
-                                color: `${end_user.custom_design.card_body_font_color}`,
-                                fontFamily: `${end_user.custom_design.card_body_font}`
+                                backgroundColor: `${props.end_user.custom_design.card_body_background_color}`,
+                                color: `${props.end_user.custom_design.card_body_font_color}`,
+                                fontFamily: `${props.end_user.custom_design.card_body_font}`
                             }}
                         >
                             <Row className="justify-content-center text-center">
@@ -449,10 +330,10 @@ const WebSocket_Chat = () => {
                                             justify
                                         >
 
-                                            {application.websocket.conversation_sent_requests &&
-                                                <Tab eventKey="chat_sent_requests" title={`${lbl.Invitation} ${application.websocket.conversation_sent_requests.length}`}>
+                                            {props.application.websocket.conversation_sent_requests &&
+                                                <Tab eventKey="chat_sent_requests" title={`${lbl.Invitation} ${props.application.websocket.conversation_sent_requests.length}`}>
                                                     <ListGroup key="chat_sent_requests">
-                                                        {application.websocket.conversation_sent_requests.map((x) => (
+                                                        {props.application.websocket.conversation_sent_requests.map((x) => (
                                                             <ListGroupItem key={`outbound-chat-listgroup-${x.User_ID}`}>
                                                                 {lbl.ChatInvitationSentTo} {x.name.split(`#`)[0]}
                                                                 <br />
@@ -462,10 +343,10 @@ const WebSocket_Chat = () => {
                                                 </Tab>
                                             }
 
-                                            {application.websocket.conversation_received_requests &&
-                                                <Tab eventKey="chat_received_requests" title={`${lbl.Requests} ${application.websocket.conversation_received_requests.length}`}>
+                                            {props.application.websocket.conversation_received_requests &&
+                                                <Tab eventKey="chat_received_requests" title={`${lbl.Requests} ${props.application.websocket.conversation_received_requests.length}`}>
                                                     <ListGroup key="chat_received_requests">
-                                                        {application.websocket.conversation_received_requests.map((x) => (                                                       
+                                                        {props.application.websocket.conversation_received_requests.map((x) => (                                                       
                                                             <ListGroupItem key={`inbound-chat-listgroup-${x.User_ID}`}>
                                                                 <h4>{lbl.ChatInvitationFrom} {x.name.split(`#`)[0]}</h4>
                                                                 <br />
@@ -498,8 +379,8 @@ const WebSocket_Chat = () => {
                                                 </Tab>
                                             }
 
-                                            {application.websocket.conversation_sent_approvals &&
-                                                    <Tab eventKey={`chat_sent_approvals`} title={`${lbl.Chat} ${(application.websocket.conversation_sent_approvals.length + application.websocket.conversation_received_approvals.length)}`}>
+                                            {props.application.websocket.conversation_sent_approvals &&
+                                                    <Tab eventKey={`chat_sent_approvals`} title={`${lbl.Chat} ${(props.application.websocket.conversation_sent_approvals.length + props.application.websocket.conversation_received_approvals.length)}`}>
                                                         <Accordion activeKey={accordion_key} onSelect={(selected_key) => {
                                                             if (selected_key) {
                                                                 handle_accordion(selected_key)
@@ -508,8 +389,8 @@ const WebSocket_Chat = () => {
                                                             }
                                                         }}>
 
-                                                            {application.websocket.conversation_sent_approvals.map((x) => (
-                                                                <Accordion.Item eventKey={`wschat-eventkey-${x.Participant_ID}`} key={`wschat-key-${x.Participant_ID}`}>
+                                                        {props.application.websocket.conversation_sent_approvals.map((x) => (
+                                                            <Accordion.Item eventKey={`wschat-eventkey-${x.Participant_ID}`} key={`wschat-key-${x.Participant_ID}`}>
                                                                 <Accordion.Header>
                                                                     {`${x.name.split(`#`)[0].toUpperCase()} ID: ${x.Participant_ID}`}
                                                                 </Accordion.Header>
@@ -535,7 +416,7 @@ const WebSocket_Chat = () => {
                                                                     <Row>
                                                                         <Col lg={12} md={12} sm={12} xs={12}>
                                                                            
-                                                                            {application.websocket.chat_conversations[parseInt(x.Participant_ID.toString())] &&
+                                                                            {props.application.websocket.chat_conversations[parseInt(x.Participant_ID.toString())] &&
                                                                                 <ListGroup className={`pb-5 pt-1 pl-1 pr-1 ws-viewer-chatbox-${x.Participant_ID}`} style={{ maxHeight: 300, overflow: `auto` }}>
                                                                                     <ListGroupItem>{lbl.Loading}</ListGroupItem>
                                                                                 </ListGroup>
@@ -578,7 +459,7 @@ const WebSocket_Chat = () => {
                                                             </Accordion.Item>
                                                             ))}
 
-                                                            {application.websocket.conversation_received_approvals.map((x) => (
+                                                            {props.application.websocket.conversation_received_approvals.map((x) => (
                                                                 <Accordion.Item eventKey={`wschat-eventkey-${x.User_ID}`} key={`wschat-key-${x.User_ID}`}>
                                                                     <Accordion.Header>
                                                                         {x.name.split(`#`)[0].toUpperCase()}
@@ -605,7 +486,7 @@ const WebSocket_Chat = () => {
                                                                         <Row>
                                                                             <Col lg={12} md={12} sm={12} xs={12}>
 
-                                                                                {application.websocket.chat_conversations[parseInt(x.User_ID.toString())] &&
+                                                                                {props.application.websocket.chat_conversations[parseInt(x.User_ID.toString())] &&
                                                                                     <ListGroup className={`pb-5 pt-1 pl-1 pr-1 ws-viewer-chatbox-${x.User_ID}`} style={{ maxHeight: 300, overflow: `auto` }}>
                                                                                         <ListGroupItem>{lbl.Loading}</ListGroupItem>
                                                                                     </ListGroup>
@@ -658,10 +539,10 @@ const WebSocket_Chat = () => {
                                                 </Tab>
                                             }
 
-                                            {application.websocket.conversation_sent_blocks &&
-                                                <Tab eventKey="chat_sent_blocked" title={`${lbl.BlockedBy} ${application.websocket.conversation_sent_blocks.length}`}>
+                                            {props.application.websocket.conversation_sent_blocks &&
+                                                <Tab eventKey="chat_sent_blocked" title={`${lbl.BlockedBy} ${props.application.websocket.conversation_sent_blocks.length}`}>
                                                     <ListGroup key="chat_sent_blocked">
-                                                        {application.websocket.conversation_sent_blocks.map((x) => (
+                                                        {props.application.websocket.conversation_sent_blocks.map((x) => (
                                                             <ListGroupItem key={`blocked-chat-listgroup-${x.Participant_ID}`}>
                                                                 {x.name}
                                                             </ListGroupItem>
@@ -670,10 +551,10 @@ const WebSocket_Chat = () => {
                                                 </Tab>
                                             }
 
-                                            {application.websocket.conversation_received_blocks &&
-                                                <Tab eventKey="chat_received_blocked" title={`${lbl.Blocking} ${application.websocket.conversation_received_blocks.length}`}>
+                                            {props.application.websocket.conversation_received_blocks &&
+                                                <Tab eventKey="chat_received_blocked" title={`${lbl.Blocking} ${props.application.websocket.conversation_received_blocks.length}`}>
                                                     <ListGroup key="chat_received_blocked">
-                                                        {application.websocket.conversation_received_blocks.map((x) => (
+                                                        {props.application.websocket.conversation_received_blocks.map((x) => (
                                                             <ListGroupItem key={`blocked-chat-listgroup-${x.User_ID}`}>
                                                                 {x.name}
                                                             </ListGroupItem>

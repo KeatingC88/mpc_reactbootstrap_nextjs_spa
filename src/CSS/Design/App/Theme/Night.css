@@ -71,3 +71,8 @@ body[data-theme="Night-Theme"] > div > div > div.modal-footer {
     color: rgba(182, 255, 182, .9) !important;
 }
 
+body[data-theme="Night-Theme"] > #Profile_View > div > div > div > div > div > div > div > div > div.list-group-item {
+    background-color: transparent !important;
+    color: #b6ffb6 !important;
+    border: none !important;
+}

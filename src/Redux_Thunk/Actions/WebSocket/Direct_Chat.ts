@@ -741,7 +741,7 @@ export const Send_WebSocket_Chat_Message = (obj:{
         let user = obj.user.toString()
 
         let current_language_state = state.Application_Language_State_Reducer
-        
+
         WebSocket_Direct_Chat_Connection(JSON.stringify({
             id: end_user_id,
             send_to: user,
@@ -874,17 +874,17 @@ export const Authenticate_End_Users_Permissions = (dto: {
 }
 
 type ConversationEntry = [
-    string, // id
-    any,    // unused or unknown field
-    string, // decrypted field
-    string, // timestamp or number (used for sorting)
+    string,
+    any,   
+    string,
+    string, 
     string,
     string,
     string,
     string,
     string,
     string,
-    string | undefined // will be set to 'primary' or 'secondary'
+    string | undefined 
 ]
 
 export const Get_End_User_Chat_History_With_Other_User_ID = (participant_id: BigInt) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
@@ -1817,8 +1817,6 @@ export const WebSocket_Direct_Chat_Connection = (obj: any) => {
 
     ws.onopen = () => {
         if (JSON.parse(obj).message && Decrypt(`${JSON.parse(obj).message}`) !== "") {
-            console.log(`onOpen`)
-            console.log(obj)
             ws.send(obj)
         }
         send = ws.send.bind(ws)

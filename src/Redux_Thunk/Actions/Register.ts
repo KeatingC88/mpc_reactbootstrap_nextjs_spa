@@ -96,8 +96,6 @@ export const Attempt_To_Register_The_End_User_An_Email_Account = (email_address:
 
 export const Notify_Attempted_Registration_To_Same_Email_Account_By_Email_Message = (email_address: string) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
 
-    console.log(getState())
-
     dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
     dispatch({ type: DEFAULT_HOST_ERROR_STATE })
 
