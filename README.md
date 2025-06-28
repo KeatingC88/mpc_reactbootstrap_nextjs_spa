@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Configure the application by editting .env and .env.local.
+Should only have to change the ports and ip_addresses to the designated server(s) information.
 
-## Getting Started
+SERVER_NETWORK_SOCKET_PORT=(port)
+SERVER_NETWORK_HOST_IP=(ip_address_of_machine)
 
-First, run the development server:
+NEXT_PUBLIC_META_CLIENT_SERVER_URL=http://(ip_address_of_machine):(port)
+NEXT_PUBLIC_META_MAIL_SERVER_URL=http://(ip_address_of_machine):(port)
+NEXT_PUBLIC_META_USER_SERVER_URL=http://(ip_address_of_machine):(port)
+NEXT_PUBLIC_META_CHAT_SERVER_URL=http://(ip_address_of_machine):(port)
+NEXT_PUBLIC_META_CHAT_SOCKET_URL=ws://(ip_address_of_machine):(port)
 
-```bash
+
+# Manual CLI build command: 
+1) Navigate CLI to folder and use
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+npm run build
+npm run start
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Docker Setup Option 1) for CLI command:
+1) Navigate CLI to folder and use 
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+docker-compose up --build
+docker compose -f mpc_reactbootstrap_nextjs_spa.yaml up -d
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Docker Setup Option 2) startup for CLI command:
+1) Navigate CLI to folder and use
+docker build -t mpc_dotnetc_user_server_rom .
+docker run -d -p {SERVER_NETWORK_PORT_NUMBER}:{DOCKER_CONTAINER_PORT_NUMBER} --name mpc_reactbootstrap_nextjs_spa mpc_reactbootstrap_nextjs_spa_rom
 
-## Learn More
+# Accessing the Application
+Once the app is running, access it from a browser on any device within the same network:
 
-To learn more about Next.js, take a look at the following resources:
+1) Launch the SPA
+2) Open your browser
+3) Navigate to ip address that is being used to host the application -- it should match the configured ip_address_ in your .env file and your .env.local. file.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Package.json Notes
+The package.json has been configured to expose the application on all network interfaces (0.0.0.0) for LAN access and should be removed if used on the internet:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  "scripts": {
+    "dev": "next dev -H 0.0.0.0 -p 3000",
+    "build": "next build -H 0.0.0.0 -p 3000",
+    "start": "next start -H 0.0.0.0 -p 3000"
+  },

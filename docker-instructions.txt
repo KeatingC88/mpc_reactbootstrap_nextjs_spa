@@ -1,3 +1,0 @@
-# From inside mpc_reactbootstrap_nextjs_spa/
-docker-compose up --build
-docker compose -f mpc_reactbootstrap_nextjs_spa.yaml up -d
