@@ -1007,7 +1007,7 @@ const Navigation_Menu = () => {
                 </Modal.Footer>
             </Modal>
 
-            <Offcanvas show={overlay_display_value} onHide={() => set_offcanvas_display_value(false)} placement="top" id="offcanvas-menu" className={props.application.settings.theme === 1 ? `Night-Canvas`:``}>
+            <Offcanvas show={overlay_display_value} onHide={() => set_offcanvas_display_value(false)} placement="top" className={`offcanvas-menu ${props.application.settings.theme === 1 ? `Night-Canvas` : ''}` }>
                 <Offcanvas.Header className="text-center" closeButton>
                     <Offcanvas.Title style={{ fontSize: 54, color: "rgba(182, 255, 182, .9)"}}>{lbl.SiteMap}</Offcanvas.Title>
                 </Offcanvas.Header>

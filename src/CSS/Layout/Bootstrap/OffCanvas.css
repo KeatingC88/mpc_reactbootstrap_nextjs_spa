@@ -3,14 +3,14 @@
         margin-left: 10px;
     }
     body > div > div > div > div > div > div.card {
-        min-width: 300px !important;
+        min-width: 300px;
     }
 
-    #offcanvas-menu {
-        min-height: 1600px !important;
+    .offcanvas-menu {
+        min-height: 5000px !important;
     }
 
-    #offcanvas-menu > .offcanvas-body > .container-fluid > div > div > .card > .card-header {
+    .offcanvas-menu > .offcanvas-body > .container-fluid > div > div > .card > .card-header {
         font-size: 15px;
         padding-left: 0px;
         padding-right: 0px;

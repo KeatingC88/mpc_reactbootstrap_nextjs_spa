@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 
 import {
     Row, Col, Card, ToggleButton, Table, Form, Image,
-    InputGroup, Accordion, Alert, Button, Collapse, Modal, Container
+    InputGroup, Accordion, Alert, Button, Offcanvas, Modal, Container
 } from 'react-bootstrap'
 
 import {
@@ -68,7 +68,7 @@ const Settings = () => {
     }
 
     //Radio Properties
-    const [status_radio_value, set_status_radio_value] = useState(props.end_user.account.online_status)
+    const [status_radio_value, set_status_radio_value] = useState<number | string | null>(props.end_user.account.online_status)
     const [custom_label, set_custom_label] = useState<string | null>(props.end_user.account.custom_lbl)
     const [navigation_lock_radio_value, set_navigation_lock_radio_value] = useState<boolean>(props.application.settings.nav_lock)
     const [align_radio_value, set_alignment_radio_value] = useState<string>(props.application.settings.alignment)
@@ -819,231 +819,232 @@ const Settings = () => {
                     </Container>
                 </Modal.Footer>
             </Modal>
-            <Modal show={show_theme_color_picker_modal} onHide={close_theme_color_picker_modal} size="lg">
-                <Modal.Header closeButton>
-                    <Modal.Title>{lbl.ThemeColorPickerChangeMenu}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Row>
-                        <Col>
-                            <Row className="text-center">
-                                <Col>
-                                    <Form.Label htmlFor="Settings-Theme-Header-Background-Color-Picker">{lbl.ChooseYourCardHeaderBackgroundColor}</Form.Label>
-                                    <Form.Control
-                                        id="Settings-Theme-Header-Background-Color-Picker"
-                                        className="mx-auto"
-                                        type="color"
-                                        defaultValue={custom_theme_default_value}
-                                        title={lbl.ChooseYourCardHeaderBackgroundColor}
-                                        onChange={(e) => set_card_header_background_color_value(e.target.value)}
-                                    />
-                                </Col>
-                            </Row>
-                            <Row className="text-center">
-                                <Col>
-                                    <Form.Label htmlFor="Settings-Theme-Header-Font-Color-Picker">{lbl.ChooseYourCardHeaderFontColor}</Form.Label>
-                                    <Form.Control
-                                        id="Settings-Theme-Header-Font-Color-Picker"
-                                        className="mx-auto"
-                                        type="color"
-                                        defaultValue={custom_theme_default_value}
-                                        title={lbl.ChooseYourCardHeaderFontColor}
-                                        onChange={(e) => set_card_header_font_color_value(e.target.value)}
-                                    />
-                                </Col>
-                            </Row>
-                            <Row className="text-center">
-                                <Col>
-                                    <Form.Label htmlFor="Settings-Theme-Body-Background-Color-Picker">{lbl.ChooseYourBodyBackgroundColor}</Form.Label>
-                                    <Form.Control
-                                        id="Settings-Theme-Body-Background-Color-Picker"
-                                        className="mx-auto"
-                                        type="color"
-                                        defaultValue={custom_theme_default_value}
-                                        title={lbl.ChooseYourBodyBackgroundColor}
-                                        onChange={(e) => set_card_body_background_color_value(e.target.value)}
-                                    />
-                                </Col>
-                            </Row>
-                            <Row className="text-center">
-                                <Col>
-                                    <Form.Label htmlFor="Settings-Theme-Body-Font-Color-Picker">{lbl.ChooseYourBodyFontColor}</Form.Label>
-                                    <Form.Control
-                                        className="mx-auto"
-                                        type="color"
-                                        id="Settings-Theme-Body-Font-Color-Picker"
-                                        defaultValue={custom_theme_default_value}
-                                        title={lbl.ChooseYourBodyFontColor}
-                                        onChange={(e) => set_card_body_font_color_value(e.target.value)}
-                                    />
-                                </Col>
-                            </Row>
-                            <Row className="text-center">
-                                <Col>
-                                    <Form.Label htmlFor="Settings-Theme-Footer-Background-Color-Picker">{lbl.ChooseYourFooterBackgroundColor}</Form.Label>
-                                    <Form.Control
-                                        className="mx-auto"
-                                        type="color"
-                                        id="Settings-Theme-Footer-Background-Color-Picker"
-                                        defaultValue={custom_theme_default_value}
-                                        title={lbl.ChooseYourFooterBackgroundColor}
-                                        onChange={(e) => set_card_footer_background_color_value(e.target.value)}
-                                    />
-                                </Col>
-                            </Row>
-                            <Row className="text-center">
-                                <Col>
-                                    <Form.Label htmlFor="Settings-Theme-Footer-Font-Color-Picker">{lbl.ChooseYourFooterFontColor}</Form.Label>
-                                    <Form.Control
-                                        className="mx-auto"
-                                        type="color"
-                                        id="Settings-Theme-Footer-Font-Color-Picker"
-                                        defaultValue={custom_theme_default_value}
-                                        title={lbl.ChooseYourFooterFontColor}
-                                        onChange={(e) => set_card_footer_font_color_value(e.target.value)}
-                                    />
-                                </Col>
-                            </Row>
-                            <Row className="text-center">
-                                <Col>
-                                    <Form.Label htmlFor="Settings-Theme-Border-Color-Picker">{lbl.ChooseYourBorderColor}</Form.Label>
-                                    <Form.Control
-                                        className="mx-auto"
-                                        type="color"
-                                        id="Settings-Theme-Border-Color-Picker"
-                                        defaultValue={custom_theme_default_value}
-                                        title={lbl.ChooseYourBorderColor}
-                                        onChange={(e) => (set_card_border_color_value(e.target.value))}
-                                    />
-                                </Col>
-                            </Row>
 
-                            <Row className="text-center">
-                                <Col>
-                                    <Form.Label htmlFor="Settings-Theme-Card-Header-Font-Picker">{lbl.ChooseYourCardHeaderFontStyle}</Form.Label>
-                                    <Form.Select aria-label="Card Header Font Selection Menu" id="Settings-Theme-Card-Header-Font-Picker"
-                                        onChange={(event) => { set_card_header_font_value(event.target.value) }}
-                                        defaultValue={card_header_font_value}
-                                        className="mx-auto w-25"
-                                        title={lbl.ChooseYourCardHeaderFontStyle}>
-                                        {
-                                            html_card_header_font_list.map((html_select_font_options) => (
-                                                html_select_font_options
-                                            ))
-                                        }
-                                    </Form.Select>
-                                </Col>
-                            </Row>
+            <Offcanvas show={show_theme_color_picker_modal} onHide={close_theme_color_picker_modal} placement="top" className={`offcanvas-menu ${props.application.settings.theme === 1 ? `Night-Canvas` : ''}`}>
+                <Offcanvas.Header className="text-center" closeButton>
+                    <Offcanvas.Title
+                        style={{
+                            backgroundColor: `${navigation_menu_background_color_value}`,
+                            color: `${navigation_menu_font_color_value ? navigation_menu_font_color_value : "rgba(182, 255, 182, .9)" }`,
+                            fontFamily: `${navigation_menu_font_value}`
+                        }}
+                    >{lbl.ThemeColorPickerChangeMenu}</Offcanvas.Title>
 
-                            <Row className="text-center">
-                                <Col>
-                                    <Form.Label htmlFor="Settings-Theme-Card-Body-Font-Picker">{lbl.ChooseYourCardBodyFontStyle}</Form.Label>
-                                    <Form.Select aria-label="Card Body Font Selection Menu" id="Settings-Theme-Card-Body-Font-Picker"
-                                        onChange={(event) => { set_card_body_font_value(event.target.value) }}
-                                        defaultValue={card_body_font_value}
-                                        className="mx-auto w-25"
-                                        title={lbl.ChooseYourCardBodyFontStyle}>
-                                        {
-                                            html_card_body_font_list.map((html_select_font_options) => (
-                                                html_select_font_options
-                                            ))
-                                        }
-                                    </Form.Select>
-                                </Col>
-                            </Row>
+                    <Form.Select aria-label="Navigation Font Selection Menu" id="Settings-Theme-Navigation-Font-Picker"
+                        onChange={(event) => { set_navigation_menu_font_value(event.target.value) }}
+                        value={navigation_menu_font_value}
+                        className="mx-auto w-25"
+                        title={lbl.ChooseYourNavigationMenuFontStyle}>
+                        {
+                            html_navigation_menu_font_list.map((html_select_font_options) => (
+                                html_select_font_options
+                            ))
+                        }
+                    </Form.Select>
+                    <Form.Control
+                        className="mx-auto"
+                        type="color"
+                        id="Settings-Theme-Footer-Background-Color-Picker"
+                        defaultValue={custom_theme_default_value}
+                        title={lbl.ChooseYourNavigationMenuBackgroundColor}
+                        onChange={(e) => set_navigation_menu_background_color_value(e.target.value)}
+                    />
+                    <Form.Control
+                        className="mx-auto"
+                        type="color"
+                        id="Settings-Theme-Footer-Font-Color-Picker"
+                        defaultValue={custom_theme_default_value}
+                        title={lbl.ChooseYourNavigationMenuFontColor}
+                        onChange={(e) => set_navigation_menu_font_color_value(e.target.value)}
+                    />
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    <Container fluid>
 
-                            <Row className="text-center">
-                                <Col>
-                                    <Form.Label htmlFor="Settings-Theme-Card-Footer-Font-Picker">{lbl.ChooseYourFooterFontStyle}</Form.Label>
-                                    <Form.Select aria-label="Card Footer Font Selection Menu" id="Settings-Theme-Card-Footer-Font-Picker"
-                                        onChange={(event) => { set_card_footer_font_value(event.target.value) }}
-                                        value={card_footer_font_value}
-                                        className="mx-auto w-25"
-                                        title={lbl.ChooseYourFooterFontStyle}>
-                                        {
-                                            html_card_footer_font_list.map((html_select_font_options) => (
-                                                html_select_font_options
-                                            ))
-                                        }
-                                    </Form.Select>
-                                </Col>
-                            </Row>
-
-                            <Row className="text-center">
-                                <Col>
-                                    <Form.Label htmlFor="Settings-Theme-Navigation-Font-Picker">{lbl.ChooseYourNavigationMenuFontStyle}</Form.Label>
-                                    <Form.Select aria-label="Navigation Font Selection Menu" id="Settings-Theme-Navigation-Font-Picker"
-                                        onChange={(event) => { set_navigation_menu_font_value(event.target.value) }}
-                                        value={navigation_menu_font_value}
-                                        className="mx-auto w-25"
-                                        title={lbl.ChooseYourNavigationMenuFontStyle}>
-                                        {
-                                            html_navigation_menu_font_list.map((html_select_font_options) => (
-                                                html_select_font_options
-                                            ))
-                                        }
-                                    </Form.Select>
-                                </Col>
-                            </Row>
-
-                            <Row className="text-center">
-                                <Col>
-                                    <Form.Label htmlFor="Settings-Theme-Button-Font-Picker">{lbl.ChooseYourButtonFontStyle}</Form.Label>
-                                    <Form.Select aria-label="Button Font Selection Menu" id="Settings-Theme-Button-Font-Picker"
-                                        onChange={(event) => { set_button_font_value(event.target.value) }}
-                                        value={button_font_value}
-                                        className="mx-auto w-25"
-                                        title={lbl.ChooseYourButtonFontStyle}>
-                                        {
-                                            html_button_font_list.map((html_select_font_options) => (
-                                                html_select_font_options
-                                            ))
-                                        }
-                                    </Form.Select>
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Col>
-                            <Card style={{ height: "800px" }}>
-                                <Card.Header style={{
-                                    backgroundColor: `${card_header_background_color_value}`,
-                                    color: `${card_header_font_color_value}`,
-                                    fontFamily: `${card_header_font_value}`
-                                }}>
-                                    Sample-Header
-                                </Card.Header>
-                                <Card.Body style={{
-                                    backgroundColor: `${card_body_background_color_value}`,
-                                    color: `${card_body_font_color_value}`,
-                                    fontFamily: `${card_body_font_value}`
-                                }}>
-                                    Sample-Body
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <Button className="btn" style={{
-                                        backgroundColor: `${button_background_color_value}`,
-                                        color: `${button_font_color_value}`,
-                                        fontFamily: `${button_font_value}`
+                        <Row>
+                            <Col>
+                                <Card className="text-center mx-auto" 
+                                    style={{
+                                        minWidth: `100%`,
+                                        borderWidth: 20,
+                                        borderColor: `${card_border_color_value}`
+                                    }}
+                                >
+                                    <Card.Header style={{
+                                        backgroundColor: `${card_header_background_color_value}`,
+                                        color: `${card_header_font_color_value}`,
+                                        fontFamily: `${card_header_font_value}`
                                     }}>
-                                        Button-Text
-                                    </Button>
-                                </Card.Body>
-                                <Card.Footer style={{
-                                    height: "200px",
-                                    backgroundColor: `${card_footer_background_color_value}`,
-                                    color: `${card_footer_font_color_value}`,
-                                    fontFamily: `${card_footer_font_value}`
-                                }}>
-                                    Sample-Footer
-                                </Card.Footer>
-                            </Card>
-                        </Col>
-                    </Row>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Container>
+                                        <Row>
+                                            <Col>
+                                                <Form.Label htmlFor="Settings-Theme-Header-Background-Color-Picker">{lbl.ChooseYourCardHeaderBackgroundColor}</Form.Label>
+                                                <Form.Control
+                                                    id="Settings-Theme-Header-Background-Color-Picker"
+                                                    className="mx-auto"
+                                                    type="color"
+                                                    defaultValue={custom_theme_default_value}
+                                                    title={lbl.ChooseYourCardHeaderBackgroundColor}
+                                                    onChange={(e) => set_card_header_background_color_value(e.target.value)}
+                                                />
+                                            </Col>
+                                            <Col>
+                                                <Form.Label htmlFor="Settings-Theme-Header-Font-Color-Picker">{lbl.ChooseYourCardHeaderFontColor}</Form.Label>
+                                                <Form.Control
+                                                    id="Settings-Theme-Header-Font-Color-Picker"
+                                                    className="mx-auto"
+                                                    type="color"
+                                                    defaultValue={custom_theme_default_value}
+                                                    title={lbl.ChooseYourCardHeaderFontColor}
+                                                    onChange={(e) => set_card_header_font_color_value(e.target.value)}
+                                                />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col>
+                                                <Form.Label htmlFor="Settings-Theme-Border-Color-Picker">{lbl.ChooseYourBorderColor}</Form.Label>
+                                                <Form.Control
+                                                    className="mx-auto"
+                                                    type="color"
+                                                    id="Settings-Theme-Border-Color-Picker"
+                                                    defaultValue={custom_theme_default_value}
+                                                    title={lbl.ChooseYourBorderColor}
+                                                    onChange={(e) => (set_card_border_color_value(e.target.value))}
+                                                />
+                                            </Col>
+                                            <Col>
+                                                <Form.Label htmlFor="Settings-Theme-Card-Header-Font-Picker">{lbl.ChooseYourCardHeaderFontStyle}</Form.Label>
+                                                <Form.Select aria-label="Card Header Font Selection Menu" id="Settings-Theme-Card-Header-Font-Picker"
+                                                    onChange={(event) => { set_card_header_font_value(event.target.value) }}
+                                                    defaultValue={card_header_font_value}
+                                                    className="mx-auto w-50"
+                                                    title={lbl.ChooseYourCardHeaderFontStyle}>
+                                                    {
+                                                        html_card_header_font_list.map((html_select_font_options) => (
+                                                            html_select_font_options
+                                                        ))
+                                                    }
+                                                </Form.Select>
+                                            </Col>
+                                        </Row>
+                                    </Card.Header>
+                                    <Card.Body style={{
+                                            backgroundColor: `${card_body_background_color_value}`,
+                                            color: `${card_body_font_color_value}`,
+                                            fontFamily: `${card_body_font_value}`
+                                    }}>
+                                        <Row>
+                                            <Col>
+                                                <Form.Label htmlFor="Settings-Theme-Body-Background-Color-Picker">{lbl.ChooseYourBodyBackgroundColor}</Form.Label>
+                                                <Form.Control
+                                                    id="Settings-Theme-Body-Background-Color-Picker"
+                                                    className="mx-auto"
+                                                    type="color"
+                                                    defaultValue={custom_theme_default_value}
+                                                    title={lbl.ChooseYourBodyBackgroundColor}
+                                                    onChange={(e) => set_card_body_background_color_value(e.target.value)}
+                                                />
+                                            </Col>
+                                            <Col>
+                                                <Form.Label htmlFor="Settings-Theme-Body-Font-Color-Picker">{lbl.ChooseYourBodyFontColor}</Form.Label>
+                                                <Form.Control
+                                                    className="mx-auto"
+                                                    type="color"
+                                                    id="Settings-Theme-Body-Font-Color-Picker"
+                                                    defaultValue={custom_theme_default_value}
+                                                    title={lbl.ChooseYourBodyFontColor}
+                                                    onChange={(e) => set_card_body_font_color_value(e.target.value)}
+                                                />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col>
+                                                <Form.Label htmlFor="Settings-Theme-Card-Body-Font-Picker">{lbl.ChooseYourCardBodyFontStyle}</Form.Label>
+                                                <Form.Select aria-label="Card Body Font Selection Menu" id="Settings-Theme-Card-Body-Font-Picker"
+                                                    onChange={(event) => { set_card_body_font_value(event.target.value) }}
+                                                    defaultValue={card_body_font_value}
+                                                    className="mx-auto w-50"
+                                                    title={lbl.ChooseYourCardBodyFontStyle}>
+                                                    {
+                                                        html_card_body_font_list.map((html_select_font_options) => (
+                                                            html_select_font_options
+                                                        ))
+                                                    }
+                                                </Form.Select>
+                                            </Col>
+                                            <Col>
+
+                                                <Button className="btn" style={{
+                                                    backgroundColor: `${button_background_color_value}`,
+                                                    color: `${button_font_color_value}`,
+                                                    fontFamily: `${button_font_value}`
+                                                }}>
+                                                    Button-Text
+                                                </Button>
+                                                <br />
+                                                <Form.Label htmlFor="Settings-Theme-Button-Font-Picker">{lbl.ChooseYourButtonFontStyle}</Form.Label>
+                                                <Form.Select aria-label="Button Font Selection Menu" id="Settings-Theme-Button-Font-Picker"
+                                                    onChange={(event) => { set_button_font_value(event.target.value) }}
+                                                    value={button_font_value}
+                                                    className="mx-auto w-50"
+                                                    title={lbl.ChooseYourButtonFontStyle}>
+                                                    {
+                                                        html_button_font_list.map((html_select_font_options) => (
+                                                            html_select_font_options
+                                                        ))
+                                                    }
+                                                </Form.Select>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col>
+                                                <Form.Label htmlFor="Settings-Theme-Footer-Background-Color-Picker">{lbl.ChooseYourFooterBackgroundColor}</Form.Label>
+                                                <Form.Control
+                                                    className="mx-auto"
+                                                    type="color"
+                                                    id="Settings-Theme-Footer-Background-Color-Picker"
+                                                    defaultValue={custom_theme_default_value}
+                                                    title={lbl.ChooseYourFooterBackgroundColor}
+                                                    onChange={(e) => set_card_footer_background_color_value(e.target.value)}
+                                                />
+                                            </Col>
+                                            <Col>
+                                                <Form.Label htmlFor="Settings-Theme-Footer-Font-Color-Picker">{lbl.ChooseYourFooterFontColor}</Form.Label>
+                                                <Form.Control
+                                                    className="mx-auto"
+                                                    type="color"
+                                                    id="Settings-Theme-Footer-Font-Color-Picker"
+                                                    defaultValue={custom_theme_default_value}
+                                                    title={lbl.ChooseYourFooterFontColor}
+                                                    onChange={(e) => set_card_footer_font_color_value(e.target.value)}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Card.Body>
+                                    <Card.Footer style={{
+                                        backgroundColor: `${card_footer_background_color_value}`,
+                                        color: `${card_footer_font_color_value}`,
+                                        fontFamily: `${card_footer_font_value}`
+                                    }}>
+                                        <Row>
+                                            <Col>
+                                                <Form.Label htmlFor="Settings-Theme-Card-Footer-Font-Picker">{lbl.ChooseYourFooterFontStyle}</Form.Label>
+                                                <Form.Select aria-label="Card Footer Font Selection Menu" id="Settings-Theme-Card-Footer-Font-Picker"
+                                                    onChange={(event) => { set_card_footer_font_value(event.target.value) }}
+                                                    value={card_footer_font_value}
+                                                    className="mx-auto w-50"
+                                                    title={lbl.ChooseYourFooterFontStyle}>
+                                                    {
+                                                        html_card_footer_font_list.map((html_select_font_options) => (
+                                                            html_select_font_options
+                                                        ))
+                                                    }
+                                                </Form.Select>
+                                            </Col>
+                                        </Row>
+                                    </Card.Footer>
+                                </Card>
+                            </Col>
+                        </Row>
                         <Row className="text-center">
                             <Col>
                                 <Button variant="danger" onClick={() => submit_theme_variables_that_were_changed()} disabled={disableThemeColorPickerModalBtns}>
@@ -1058,8 +1059,9 @@ const Settings = () => {
                             </Col>
                         </Row>
                     </Container>
-                </Modal.Footer>
-            </Modal>
+                </Offcanvas.Body>
+            </Offcanvas>
+
         </Container>
     )
 }
