@@ -18,6 +18,7 @@ import {
     JWT_ISSUER_KEY,
     JWT_CLIENT_KEY,
     CLIENT_ADDRESS,
+    USERS_CACHE_SERVER_ADDRESS,
     NULL_END_USER_ACCOUNT_STATE,
     DEFAULT_APPLICATION_SETTINGS_MAX_BOOTSTRAP_GRID_COLUMNS,
     DEFAULT_APPLICATION_LANGUAGE_CURRENT_VALUE,
@@ -47,7 +48,6 @@ import { Encrypt } from "@AES/Encryptor"
 
 import {
     Get_Device_Information,
-    Delay_Execution,
     Map_GUI_Values_For_Database_Storage,
     Get_Nation_Flag_Value
 } from '@Redux_Thunk/Actions/Misc'
@@ -1376,6 +1376,23 @@ export const Change_Application_Language = (value: string) => async (dispatch: A
                 }, 1000)
                 reject(error.id)
             })
+        }).then(async () => {
+            await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
+                token: end_user_account.token,
+                custom_lbl: await Encrypt(`${end_user_account.custom_lbl}`),
+                name: await Encrypt(`${end_user_account.name}`),
+                created_on: await Encrypt(`${end_user_account.created_on}`),
+                avatar_url_path: await Encrypt(`${end_user_account.avatar_url_path}`),
+                avatar_title: await Encrypt(`${end_user_account.avatar_title}`),
+                login_on: await Encrypt(`${end_user_account.login_on}`),
+                logout_on: await Encrypt(`${end_user_account.logout_on}`),
+                online_status: await Encrypt(`${end_user_account.online_status}`),
+                id: await Encrypt(`${end_user_account.id}`),
+                account_type: await Encrypt(`${end_user_account.account_type}`),
+                login_type: await Encrypt(`${end_user_account.login_type}`),
+                language_code: await Encrypt(`${dto.language}`),
+                region_code: await Encrypt(`${dto.region}`),
+            })
         })
     }
 
@@ -1612,6 +1629,23 @@ export const Update_Display_Name = (value: string) => async (dispatch: AppDispat
                 }, 1000)
                 reject(error)
             })
+        }).then(async () => {
+            await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
+                token: end_user_account.token,
+                custom_lbl: await Encrypt(`${end_user_account.custom_lbl}`),
+                name: await Encrypt(`${value}`),
+                created_on: await Encrypt(`${end_user_account.created_on}`),
+                avatar_title: await Encrypt(`${end_user_account.avatar_title}`),
+                avatar_url_path: await Encrypt(`${end_user_account.avatar_url_path}`),
+                login_on: await Encrypt(`${end_user_account.login_on}`),
+                logout_on: await Encrypt(`${end_user_account.logout_on}`),
+                online_status: await Encrypt(`${end_user_account.online_status}`),
+                id: await Encrypt(`${end_user_account.id}`),
+                account_type: await Encrypt(`${end_user_account.account_type}`),
+                login_type: await Encrypt(`${end_user_account.login_type}`),
+                language_code: await Encrypt(`${current_language_state.language}`),
+                region_code: await Encrypt(`${current_language_state.region}`),
+            })
         })
     }
 
@@ -1667,6 +1701,23 @@ export const Update_End_User_Avatar = (value: string) => async (dispatch: AppDis
                     dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
                 }, 1000)
                 reject(error)
+            })
+        }).then(async () => {
+            await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
+                token: end_user_account.token,
+                custom_lbl: await Encrypt(`${end_user_account.custom_lbl}`),
+                name: await Encrypt(`${end_user_account.name}`),
+                created_on: await Encrypt(`${end_user_account.created_on}`),
+                avatar_title: await Encrypt(`${end_user_account.avatar_title}`),
+                avatar_url_path: await Encrypt(`${value}`),
+                login_on: await Encrypt(`${end_user_account.login_on}`),
+                logout_on: await Encrypt(`${end_user_account.logout_on}`),
+                online_status: await Encrypt(`${end_user_account.online_status}`),
+                id: await Encrypt(`${end_user_account.id}`),
+                account_type: await Encrypt(`${end_user_account.account_type}`),
+                login_type: await Encrypt(`${end_user_account.login_type}`),
+                language_code: await Encrypt(`${current_language_state.language}`),
+                region_code: await Encrypt(`${current_language_state.region}`),
             })
         })
     }
@@ -1728,6 +1779,23 @@ export const Update_End_User_Avatar_Title = (value: string) => async (dispatch: 
                 }, 1000)
                 reject(error)
             })
+        }).then(async () => {
+            await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
+                token: end_user_account.token,
+                custom_lbl: await Encrypt(`${end_user_account.custom_lbl}`),
+                name: await Encrypt(`${end_user_account.name}`),
+                created_on: await Encrypt(`${end_user_account.created_on}`),
+                avatar_url_path: await Encrypt(`${end_user_account.avatar_url_path}`),
+                avatar_title: await Encrypt(`${value}`),
+                login_on: await Encrypt(`${end_user_account.login_on}`),
+                logout_on: await Encrypt(`${end_user_account.logout_on}`),
+                online_status: await Encrypt(`${end_user_account.online_status}`),
+                id: await Encrypt(`${end_user_account.id}`),
+                account_type: await Encrypt(`${end_user_account.account_type}`),
+                login_type: await Encrypt(`${end_user_account.login_type}`),
+                language_code: await Encrypt(`${current_language_state.language}`),
+                region_code: await Encrypt(`${current_language_state.region}`),
+            })
         })
     }
 
@@ -1746,6 +1814,7 @@ export const Update_End_User_Selected_Status = (value: number) => async (dispatc
     ) {
 
         let current_language_state = getState().Application_Language_State_Reducer
+        let current_settings_state = getState().Application_Settings_State_Reducer
 
         await axios.put(`${USERS_SERVER_ADDRESS}/Selected/Status`, {
             online_status: await Encrypt(`${value}`),
@@ -1782,6 +1851,25 @@ export const Update_End_User_Selected_Status = (value: number) => async (dispatc
                     dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
                 }, 1000)
             })
+        }).then(async () => {
+
+            await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
+                token: end_user_account.token,
+                custom_lbl: await Encrypt(`${end_user_account.custom_lbl}`),
+                name: await Encrypt(`${end_user_account.name}`),
+                created_on: await Encrypt(`${end_user_account.created_on}`),
+                avatar_url_path: await Encrypt(`${end_user_account.avatar_url_path}`),
+                avatar_title: await Encrypt(`${end_user_account.avatar_title}`),
+                login_on: await Encrypt(`${end_user_account.login_on}`),
+                logout_on: await Encrypt(`${end_user_account.logout_on}`),
+                online_status: await Encrypt(`${value}`),
+                id: await Encrypt(`${end_user_account.id}`),
+                account_type: await Encrypt(`${end_user_account.account_type}`),
+                login_type: await Encrypt(`${end_user_account.login_type}`),
+                language_code: await Encrypt(`${current_language_state.language}`),
+                region_code: await Encrypt(`${current_language_state.region}`),
+            })
+
         })
     }
 
@@ -1840,6 +1928,23 @@ export const Update_End_User_Selected_Custom_Label = (value: string | null) => a
                     dispatch({ type: DEFAULT_HOST_ERROR_STATE })
                     dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
                 }, 1000)
+            })
+        }).then(async() => {
+            await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
+                token: end_user_account.token,
+                custom_lbl: await Encrypt(`${value}`),
+                name: await Encrypt(`${end_user_account.name}`),
+                created_on: await Encrypt(`${end_user_account.created_on}`),
+                avatar_url_path: await Encrypt(`${end_user_account.avatar_url_path}`),
+                avatar_title: await Encrypt(`${end_user_account.avatar_title}`),
+                login_on: await Encrypt(`${end_user_account.login_on}`),
+                logout_on: await Encrypt(`${end_user_account.logout_on}`),
+                online_status: await Encrypt(`${end_user_account.online_status}`),
+                id: await Encrypt(`${end_user_account.id}`),
+                account_type: await Encrypt(`${end_user_account.account_type}`),
+                login_type: await Encrypt(`${end_user_account.login_type}`),
+                language_code: await Encrypt(`${current_language_state.language}`),
+                region_code: await Encrypt(`${current_language_state.region}`),
             })
         })
 

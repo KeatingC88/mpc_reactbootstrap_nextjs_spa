@@ -1,39 +1,57 @@
-import {
+﻿import {
     UPDATE_APPLICATION_PROFILE_VIEWER_STATE,
     NULL_APPLICATION_PROFILE_VIEWER_STATE,
 } from '@Constants'
 
 interface Application_Profile_Viewer_State {
-    id: BigInt | null
-    email_address: string | null
-    name: string | null
-    login_on: string | null
-    logout_on: BigInt | null
-    language: string | null
-    online_status: string | null
-    custom_lbl: string | null
-    created_on: BigInt | null
-    avatar_url_path: string | null
+    id: BigInt | number | null
+    birth_date: string | null
+    ethnicity: string | null
+    first_name: string | null
+    last_name: string | null
+    maiden_name: string | null
+    middle_name: string | null
+    account_type: string | null
     avatar_title: string | null
+    avatar_url_path: string | null
+    created_on: number | null
+    custom_lbl: string | null
+    language_code: string | null
+    region_code: string | null
+    online_status: number | null
+    gender: number | null
+    name: string | null
+    logout_on: number | null
+    login_type: string | null
+    login_on: number | null
 }
 
 interface Application_Profile_Viewer_Action {
     type: string
-    payload?: Partial<Application_Profile_Viewer_State>
+    payload: Partial<Application_Profile_Viewer_State>
 }
 
 const initial_state: Application_Profile_Viewer_State = {
     id: null,
-    email_address: null,
-    name: null,
-    login_on: null,
-    logout_on: null,
-    language: null,
-    online_status: null,
-    custom_lbl: null,
-    created_on: null,
-    avatar_url_path: null,
+    birth_date: null,
+    ethnicity: null,
+    first_name: null,
+    last_name: null,
+    maiden_name: null,
+    middle_name: null,
+    account_type: null,
     avatar_title: null,
+    avatar_url_path: null,
+    created_on: null,
+    custom_lbl: null,
+    language_code: null,
+    region_code: null,
+    online_status: null,
+    name: null,
+    logout_on: null,
+    login_type: null,
+    login_on: null,
+    gender: null,
 }
 
 const Application_Profile_Viewer_State_Reducer = (
@@ -43,19 +61,30 @@ const Application_Profile_Viewer_State_Reducer = (
     if (action.type.indexOf(`APPLICATION_PROFILE_VIEWER`) > -1) {
         switch (action.type) {
             case UPDATE_APPLICATION_PROFILE_VIEWER_STATE:
-                return {
-                    ...state,
-                    id: action.payload?.id ?? initial_state.id,
-                    email_address: action.payload?.email_address ?? initial_state.email_address,
-                    name: action.payload?.name ?? initial_state.name,
-                    login_on: action.payload?.login_on ?? initial_state.login_on,
-                    logout_on: action.payload?.logout_on ?? initial_state.logout_on,
-                    language: action.payload?.language ?? initial_state.language,
-                    online_status: action.payload?.online_status ?? initial_state.online_status,
-                    custom_lbl: action.payload?.custom_lbl ?? initial_state.custom_lbl,
-                    created_on: action.payload?.created_on ?? initial_state.created_on,
-                    avatar_url_path: action.payload?.avatar_url_path ?? initial_state.avatar_url_path,
-                    avatar_title: action.payload?.avatar_title ?? initial_state.avatar_title,
+                if (action.payload) {
+                    return {
+                        id: action.payload?.id ?? initial_state.id,
+                        birth_date: action.payload?.birth_date ?? initial_state.birth_date,
+                        ethnicity: action.payload?.ethnicity ?? initial_state.ethnicity,
+                        first_name: action.payload?.first_name ?? initial_state.first_name,
+                        last_name: action.payload?.last_name ?? initial_state.last_name,
+                        maiden_name: action.payload?.maiden_name ?? initial_state.maiden_name,
+                        middle_name: action.payload?.middle_name ?? initial_state.middle_name,
+                        gender: action.payload?.gender ?? initial_state.gender,
+                        account_type: action.payload?.account_type ?? initial_state.account_type,
+                        avatar_title: action.payload?.avatar_title ?? initial_state.avatar_title,
+                        avatar_url_path: action.payload?.avatar_url_path ?? initial_state.avatar_url_path,
+                        created_on: action.payload?.created_on ?? initial_state.created_on,
+                        custom_lbl: action.payload?.custom_lbl ?? initial_state.custom_lbl,
+                        language_code: action.payload?.language_code ?? initial_state.language_code,
+                        region_code: action.payload?.region_code ?? initial_state.region_code,
+                        online_status: action.payload?.online_status ?? initial_state.online_status,
+                        name: action.payload?.name ?? initial_state.name,
+                        logout_on: action.payload?.logout_on ?? initial_state.logout_on,
+                        login_type: action.payload?.login_type ?? initial_state.login_type,
+                        login_on: action.payload?.login_on ?? initial_state.login_on
+
+                    }
                 }
             case NULL_APPLICATION_PROFILE_VIEWER_STATE:
                 return {
@@ -69,16 +98,25 @@ const Application_Profile_Viewer_State_Reducer = (
     return {
         ...state,
         id: state.id ?? initial_state.id,
-        email_address: state.email_address ?? initial_state.email_address,
-        name: state.name ?? initial_state.name,
-        login_on: state.login_on ?? initial_state.login_on,
-        logout_on: state.logout_on ?? initial_state.logout_on,
-        language: state.language ?? initial_state.language,
-        online_status: state.online_status ?? initial_state.online_status,
-        custom_lbl: state.custom_lbl ?? initial_state.custom_lbl,
-        created_on: state.created_on ?? initial_state.created_on,
+        birth_date: state.birth_date ?? initial_state.birth_date,
+        gender: state.gender ?? initial_state.gender,
+        ethnicity: state.ethnicity ?? initial_state.ethnicity,
+        first_name: state.first_name ?? initial_state.first_name,
+        last_name: state.last_name ?? initial_state.last_name,
+        maiden_name: state.maiden_name ?? initial_state.maiden_name,
+        middle_name: state.middle_name ?? initial_state.middle_name,
+        account_type: state.account_type ?? initial_state.account_type,
+        avatar_title: state.avatar_title ?? initial_state.avatar_title,
         avatar_url_path: state.avatar_url_path ?? initial_state.avatar_url_path,
-        avatar_title: state.avatar_title ?? initial_state.avatar_title
+        created_on: state.created_on ?? initial_state.created_on,
+        custom_lbl: state.custom_lbl ?? initial_state.custom_lbl,
+        language_code: state.language_code ?? initial_state.language_code,
+        region_code: state.region_code ?? initial_state.region_code,
+        online_status: state.online_status ?? initial_state.online_status,
+        name: state.name ?? initial_state.name,
+        logout_on: state.logout_on ?? initial_state.logout_on,
+        login_type: state.login_type ?? initial_state.login_type,
+        login_on: state.login_on ?? initial_state.login_on
     }
 }
 

@@ -12,7 +12,9 @@ import {
     UPDATE_APPLICATION_SETTINGS_TEXT_ALIGNMENT, DEFAULT_NETWORK_ERROR_STATE,
     DEFAULT_HOST_ERROR_STATE,
     UPDATE_HOST_ERROR_STATE,
-    UPDATE_CSS_CUSTOM_DESIGN_STATE
+    UPDATE_CSS_CUSTOM_DESIGN_STATE,
+    USERS_CACHE_SERVER_ADDRESS,
+    USERS_PROFILE_CACHE_SERVER_ADDRESS
 } from '@Constants'
 
 import {
@@ -121,14 +123,16 @@ export const Login_Email_Password = (dto: {
          rtt: Encrypt(`${Get_Device_Information().rtt}`),
          data_saver: Encrypt(`${Get_Device_Information().saveData}`),
          device_ram_gb: Encrypt(`${Get_Device_Information().deviceMemory}`),
-    }).catch((error) => {
+     }).catch((error) => {
+
         error.id = `Email-Login-Failed`
         dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
         setTimeout(() => {
             dispatch({ type: DEFAULT_HOST_ERROR_STATE })
             dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
         }, 1)
-    }).then((response: any) => {
+
+    }).then( async (response: any) => {
 
         if (!state.Network_Error_State_Reducer.id) {
 
@@ -151,9 +155,12 @@ export const Login_Email_Password = (dto: {
                 dispatch({ type: UPDATE_APPLICATION_SETTINGS_DATE })
                 dispatch({ type: UPDATE_APPLICATION_SETTINGS_GLOBAL_TIME })
                 dispatch({ type: UPDATE_APPLICATION_SETTINGS_LOCATION })
+
+                let current_language = Decrypt(`${response.data.current_language}`)
+
                 dispatch({
                     type: UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, payload: {
-                        current_language: Decrypt(`${response.data.current_language}`)
+                        current_language: current_language
                     }
                 })
 
@@ -162,17 +169,17 @@ export const Login_Email_Password = (dto: {
                 dispatch({
                     type: UPDATE_END_USER_ACCOUNT_STATE, payload: {
                         token: response.data.token,
-                        token_expire: jwt_data[fetch_key[1]],
-                        account_type: (parseInt(Decrypt(`${jwt_data[fetch_key[0]]}`)) === parseInt(Decrypt(`${response.data.account_type}`))) ? parseInt(Decrypt(`${response.data.account_type}`)) : null,
+                        token_expire: parseInt(Decrypt(`${jwt_data[fetch_key[1]]}`)),
+                        account_type: (parseInt(Decrypt(`${jwt_data[fetch_key[0]]}`)) === parseInt(Decrypt(`${response.data.account_type}`))) ? parseInt(Decrypt(`${response.data.account_type}`)) : dispatch({ type: UPDATE_HOST_ERROR_STATE, payload: { id: `Client-Mismatch` } }),
                         created_on: parseInt(Decrypt(`${response.data.created_on}`)),
-                        email_address: (Decrypt(`${jwt_data[fetch_key[5]]}`) === Decrypt(`${response.data.email_address}`)) ? Decrypt(`${response.data.email_address}`) : null,
-                        id: (parseInt(Decrypt(`${jwt_data[fetch_key[1]]}`)) === parseInt(Decrypt(`${response.data.id}`))) ? parseInt(Decrypt(`${response.data.id}`)) : null,
+                        email_address: (Decrypt(`${jwt_data[fetch_key[5]]}`) === Decrypt(`${response.data.email_address}`)) ? Decrypt(`${response.data.email_address}`) : dispatch({ type: UPDATE_HOST_ERROR_STATE, payload: { id: `Client-Mismatch` } }),
+                        id: (parseInt(Decrypt(`${jwt_data[fetch_key[1]]}`)) === parseInt(Decrypt(`${response.data.id}`))) ? parseInt(Decrypt(`${response.data.id}`)) : dispatch({ type: UPDATE_HOST_ERROR_STATE, payload: { id: `Client-Mismatch` } }),
                         login_on: parseInt(Decrypt(`${response.data.login_on}`)),
                         name: name_public_id[0],
                         public_id: name_public_id[1],
-                        roles: (Decrypt(`${jwt_data[fetch_key[2]]}`) === Decrypt(`${response.data.roles}`)) ? Decrypt(`${response.data.roles}`) : null,
-                        client_address: (Decrypt(`${jwt_data[fetch_key[4]]}`) === CLIENT_ADDRESS) ? CLIENT_ADDRESS : null,
-                        groups: (Decrypt(`${jwt_data[fetch_key[3]]}`) === Decrypt(`${response.data.groups}`)) ? Decrypt(`${response.data.groups}`) : null,
+                        roles: (Decrypt(`${jwt_data[fetch_key[2]]}`) === Decrypt(`${response.data.roles}`)) ? Decrypt(`${response.data.roles}`) : dispatch({ type: UPDATE_HOST_ERROR_STATE, payload: { id: `Client-Mismatch` } }),
+                        client_address: (Decrypt(`${jwt_data[fetch_key[4]]}`) === CLIENT_ADDRESS) ? CLIENT_ADDRESS : dispatch({ type: UPDATE_HOST_ERROR_STATE, payload: { id: `Client-Mismatch` } }),
+                        groups: (Decrypt(`${jwt_data[fetch_key[3]]}`) === Decrypt(`${response.data.groups}`)) ? Decrypt(`${response.data.groups}`) : dispatch({ type: UPDATE_HOST_ERROR_STATE, payload: { id: `Client-Mismatch` } }),
                         logout_on: parseInt(Decrypt(`${response.data.logout_on}`)),
                         avatar_url_path: Decrypt(`${response.data.avatar_url_path}`),
                         avatar_title: Decrypt(`${response.data.avatar_title}`),
@@ -181,6 +188,27 @@ export const Login_Email_Password = (dto: {
                         login_type: `EMAIL`
                     }
                 })
+
+                axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
+                    token: response.data.token,
+                    id: response.data.id,
+                    online_status: response.data.online_status,
+                    custom_lbl: response.data.custom_lbl,
+                    name: response.data.name,
+                    created_on: response.data.created_on,
+                    avatar_url_path: response.data.avatar_url_path,
+                    avatar_title: response.data.avatar_title,
+                    language_code: await Encrypt(`${current_language.split(`-`)[0]}`),
+                    region_code: await Encrypt(`${current_language.split(`-`)[1]}`),
+                    login_on: response.data.login_on,
+                    logout_on: response.data.logout_on,
+                    login_type: await Encrypt(`EMAIL`),
+                    account_type: response.data.account_type
+                })
+
+                let birth_month = parseInt(Decrypt(`${response.data.birth_month}`))
+                let birth_day = parseInt(Decrypt(`${response.data.birth_day}`))
+                let birth_year = parseInt(Decrypt(`${response.data.birth_year}`))
         
                 dispatch({
                     type: UPDATE_END_USER_PROFILE_ACCOUNT_STATE, payload: {
@@ -189,11 +217,23 @@ export const Login_Email_Password = (dto: {
                         middle_name: Decrypt(`${response.data.middle_name}`),
                         maiden_name: Decrypt(`${response.data.maiden_name}`),
                         gender: parseInt(Decrypt(`${response.data.gender}`)),
-                        birth_month: parseInt(Decrypt(`${response.data.birth_month}`)),
-                        birth_day: parseInt(Decrypt(`${response.data.birth_day}`)),
-                        birth_year: parseInt(Decrypt(`${response.data.birth_year}`)),
+                        birth_month: birth_month,
+                        birth_day: birth_day,
+                        birth_year: birth_year,
                         ethnicity: Decrypt(`${response.data.ethnicity}`)
                     }
+                })
+
+                axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/set/user/profile`, {
+                    token: response.data.token,
+                    id: response.data.id,
+                    birth_date: await Encrypt(`${birth_month}/${birth_day}/${birth_year}`),
+                    ethnicity: response.data.ethnicity,
+                    first_name: response.data.first_name,
+                    last_name: response.data.last_name,
+                    middle_name: response.data.middle_name,
+                    maiden_name: response.data.maiden_name,
+                    gender: response.data.gender
                 })
 
                 dispatch({
@@ -257,10 +297,6 @@ export const Login_Email_Password = (dto: {
                         button_font: Decrypt(`${response.data.button_font}`),
                     }
                 })
-
-                //dispatch(Read_All_End_User_WebSocket_Conversation_Permissions_And_Profile_Data_For_WebSocket_Chat_View())
-
-                // User signed in...
 
             }
         }

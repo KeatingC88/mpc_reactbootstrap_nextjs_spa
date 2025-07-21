@@ -42,7 +42,7 @@ let end_user_token_prompt_response = false
 const Navigation_Menu = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-
+    
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
 

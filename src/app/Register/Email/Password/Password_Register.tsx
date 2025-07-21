@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react'
 
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 import { Row, Col, Card, Form, Button, Alert, ListGroup, Container, InputGroup, Modal, Accordion } from 'react-bootstrap'
 
@@ -216,12 +216,10 @@ const Password_Register = () => {
                 set_alert_text(`${lbl.Success}`)
                 Set_Navigation_Menu_Display(``)
 
-                await Dispatch(Create_End_User_Email_Account(obj))
-
-                setTimeout( async () => {
-                    await Dispatch(Set_Navigation_Menu_Display(` `))
+                await Dispatch(Create_End_User_Email_Account(obj)).then(() => {
                     Navigate.push(`/`)
-                }, 1000)
+                    Dispatch(Set_Navigation_Menu_Display(` `))
+                })
 
             }, 8000)
         }

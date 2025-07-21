@@ -13,7 +13,6 @@ import { useAppDispatch } from '@Redux_Thunk/Provider'
 const Profile_Mirror = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()

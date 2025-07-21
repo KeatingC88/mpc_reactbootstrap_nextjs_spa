@@ -10,11 +10,12 @@ import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 
 import { Row, Col, Card, Container, Table } from 'react-bootstrap'
 
-import { Load_Profile_Viewer_Data, Load_All_Community_Users } from '@Redux_Thunk/Actions/Load'
+import { Load_All_Community_Users } from '@Redux_Thunk/Actions/Load'
 
 const Community = () => {
 
     const props = useSelector(Redux_Thunk_Core)
+    console.log(props)
 
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
@@ -28,45 +29,43 @@ const Community = () => {
     const go_to_end_user_selected_profile = (id: BigInt) => {
 
         if (id !== props.end_user.account.id) {
-            Dispatch(Load_Profile_Viewer_Data(id))
-            setTimeout(() => {
-                Navigate.push(`/profile/view/${id}`)
-            }, 500)
+            Navigate.push(`/profile/view/${id}`)
         } else {
             Navigate.push(`/profile/mirror`)
         }
 
     }
 
-    const build_table_record_rows: () => React.JSX.Element[] | undefined = () => {
-        return (
-            props.application.community.users?.display_names.map((x, i) => (
-                <tr key={i} onClick={() => { go_to_end_user_selected_profile(x.ID) }}>
-                    <td>
-                        {lbl.ID}#{x.ID.toString()}
-                        <br />
-                        {(props.application.community.users?.avatars.length != 0 && props.application.community.users?.avatars[i].Avatar_url_path.length !== 0) &&
-                            <img
-                                src={props.application.community.users?.avatars[i].Avatar_url_path}
-                                width="84"
-                                height="84"
-                                className={`d-inline-block align-top mt-1 rounded-circle`}
-                                alt={props.application.community.users?.avatars[i].Avatar_title}
-                            />
-                        }
-                        {(props.application.community.users?.avatars.length != 0 && props.application.community.users?.avatars[i].Avatar_url_path.length === 0) &&
-                            <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" fill="currentColor" className={`bi bi-person-circle  d-inline-block align-top mt-2 rounded-circle`} viewBox="0 0 16 16">
-                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                                <path fill="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-                            </svg>
-                        }
-                    </td>
-                    <td>{x.Name}</td>
-                    <td>{props.application.community.users?.languages[i].Language_code}</td>
-                    <td>{props.application.community.users?.languages[i].Region_code}</td>
-                </tr>
-            ))
-        )
+    const build_table_record_rows = (end_user_selection_value?: string): React.JSX.Element[] | undefined => {
+
+        if (!props.application.community.users) return
+
+        switch (end_user_selection_value) {
+            default:
+                return Object.values(props.application.community.users).map((user: any) => (
+                    <tr key={user.id} onClick={() => go_to_end_user_selected_profile(user.id)}>
+                        <td>
+                            {user.avatar_url_path ? (
+                                <img
+                                    src={user.avatar_url_path}
+                                    width="84"
+                                    height="84"
+                                    className="d-inline-block align-top mt-1 rounded-circle"
+                                    alt={user.avatar_title}
+                                />
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" fill="currentColor" className="bi bi-person-circle d-inline-block align-top mt-2 rounded-circle" viewBox="0 0 16 16">
+                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                    <path fill="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                                </svg>
+                            )}
+                        </td>
+                        <td>{user.name}</td>
+                        <td>{user.language_code}</td>
+                        <td>{user.region_code}</td>
+                    </tr>
+                ))
+        }
     }
 
     useEffect(() => {
@@ -123,14 +122,30 @@ const Community = () => {
                             <Table striped bordered hover>
                                 <thead>
                                     <tr>
-                                        <th>{lbl.Count}:&nbsp;{props.application.community.users ? Object.keys(props.application.community.users.account_types).length : `Missingno`}</th>
-                                        <th>{lbl.DisplayName}</th>
-                                        <th>{lbl.Language}</th>
-                                        <th>{lbl.Location}</th>
+                                        <th onClick={() => {
+                                            build_table_record_rows("")
+                                        }}>
+                                            {lbl.Count}:&nbsp;{props.application.community.users ? Object.keys(props.application.community.users).length : `Missingno`}
+                                        </th>
+                                        <th onClick={() => {
+                                            build_table_record_rows("DISPLAY_NAME")
+                                        }}>
+                                            {lbl.DisplayName}
+                                        </th>
+                                        <th onClick={() => {
+                                            build_table_record_rows("LANGUAGE")
+                                        }}>
+                                            {lbl.Language}
+                                        </th>
+                                        <th onClick={() => {
+                                            build_table_record_rows("REGION")
+                                        }}>
+                                            {lbl.Region}
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {build_table_record_rows()}
+                                    {build_table_record_rows("")}
                                 </tbody>
                             </Table>
                         </Card.Body>

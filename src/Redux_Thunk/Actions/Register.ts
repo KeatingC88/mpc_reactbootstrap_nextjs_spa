@@ -2,7 +2,7 @@ import {
     USERS_SERVER_ADDRESS, MAIL_SERVER_ADDRESS, UPDATE_NETWORK_ERROR_STATE, UPDATE_END_USER_ACCOUNT_STATE,
     CLIENT_ADDRESS, JWT_ISSUER_KEY, JWT_CLIENT_KEY,
     DEFAULT_NETWORK_ERROR_STATE, DEFAULT_HOST_ERROR_STATE, UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, 
-    UPDATE_HOST_ERROR_STATE
+    UPDATE_HOST_ERROR_STATE, USERS_CACHE_SERVER_ADDRESS
 } from '@Constants'
 
 import { Encrypt } from '@AES/Encryptor'
@@ -385,6 +385,7 @@ export const Create_End_User_Email_Account = (dto: {
                             current_language: `${await Decrypt(response.data.language)}-${await Decrypt(response.data.region)}`
                         }
                     })
+
                     await dispatch({
                         type: UPDATE_END_USER_ACCOUNT_STATE, payload: {
                             account_type: (await parseInt(Decrypt(`${jwt_data[fetch_key[0]]}`)) === await parseInt(Decrypt(response.data.account_type))) ? parseInt(Decrypt(response.data.account_type)) : null,
@@ -401,11 +402,27 @@ export const Create_End_User_Email_Account = (dto: {
                             online_status: await Decrypt(`${response.data.online_status}`)
                         }
                     })
+                    
+                    await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
+                        token: response.data.token,
+                        id: response.data.id,
+                        online_status: response.data.online_status,
+                        custom_lbl: response.data.custom_lbl ? response.data.custom_lbl : await Encrypt(``),
+                        name: response.data.name,
+                        created_on: response.data.created_on,
+                        avatar_url_path: response.data.avatar_url_path ? response.data.avatar_url_path : await Encrypt(``),
+                        avatar_title: response.data.avatar_title ? response.data.avatar_title : await Encrypt(``),
+                        language_code: Encrypt(`${collected_end_user_data.language}`),
+                        region_code: Encrypt(`${collected_end_user_data.region}`),
+                        login_on: response.data.login_on ? response.data.login_on : await Encrypt(``),
+                        logout_on: response.data.logout_on ? response.data.logout_on : await Encrypt(``),
+                        login_type: Encrypt(`EMAIL`),
+                        account_type: response.data.account_type
+                    })
 
                     dispatch(Load_All_Community_Users())
 
-                    resolve(dto)
-
+                    resolve(true)
                 }
             })
 

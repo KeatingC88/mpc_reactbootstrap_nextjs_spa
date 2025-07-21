@@ -35,8 +35,6 @@ const Profile_View = () => {
     const [language, region] = props.application.settings.current_language.split(`-`)
     const lbl = props.application.language_dictionaries[language][region]
 
-    const [profile_id, set_profile_id] = useState<BigInt>(BigInt(0))
-
     const [card_width, set_card_width] = useState<string>(`100%`)
     const [alert_text, set_alert_text] = useState<string>(``)
     const [alert_color, set_alert_color] = useState<string>(``)
@@ -50,6 +48,8 @@ const Profile_View = () => {
     const [disable_end_user_profile_button, set_disable_end_user_profile_button] = useState<boolean>(false)
     const [end_user_message_input_value, set_end_user_message_input_value] = useState<string>(``)
 
+    const [created_on_value, set_created_on_value] = useState<string>(``)
+
     const create_success_alert = (message: string) => {
         set_alert_color(`success`)
         set_alert_text(`${message}`)
@@ -58,6 +58,7 @@ const Profile_View = () => {
             set_alert_color(``)
         }, 3000)
     }
+
     const create_information_alert = (message: string) => {
         set_alert_color(`info`)
         set_alert_text(`${message}`)
@@ -66,6 +67,7 @@ const Profile_View = () => {
             set_alert_color(``)
         }, 3000)
     }
+
     const create_error_alert = (error: string) => {
         set_submit_button_color(`danger`)
         set_alert_text(`${error}`)
@@ -237,17 +239,18 @@ const Profile_View = () => {
     }
 
     useEffect(() => {
+        let profile_id = Path.split("/").pop() ? Path.split("/").pop() : undefined
 
-        const url_profile_id = Path.split("/").pop()
+        if (profile_id != undefined) {
 
-        if (url_profile_id) {
-            set_profile_id(BigInt(url_profile_id))
-        } 
+            Dispatch(Load_Profile_Viewer_Data(BigInt(profile_id))).then(() => {
+                if (props.application.profile_viewer?.created_on)
+                    set_created_on_value(new Date(props.application.profile_viewer?.created_on * 1000).toString())
+            })
 
-        Load_Profile_Viewer_Data(profile_id)
-
-        if (profile_id === props.end_user.account.id) {
-            set_disable_end_user_profile_button(true)
+            if (BigInt(profile_id) === props.end_user.account.id) {
+                set_disable_end_user_profile_button(true)
+            }
         }
 
         if (Path === `/`) {
@@ -305,15 +308,13 @@ const Profile_View = () => {
                                                 <th>{lbl.ID}#</th>
                                                 <th>{lbl.DisplayName}</th>
                                                 <th>{lbl.CreatedOn}</th>
-                                                <th>{lbl.LastLogin}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td>{props.application.profile_viewer.id?.toString()}</td>
                                                 <td>{props.application.profile_viewer.name}</td>
-                                                <td>{props.application.profile_viewer.created_on?.toString()}</td>
-                                                <td>{props.application.profile_viewer.logout_on?.toString()}</td>
+                                                <td>{created_on_value}</td>
                                             </tr>
                                         </tbody>
                                     </Table>

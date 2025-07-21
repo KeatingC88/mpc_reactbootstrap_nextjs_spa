@@ -10,6 +10,7 @@ import {
     UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_REQUESTS_STATE,
     UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_BLOCKS_STATE,
     UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_APPROVALS_STATE,
+    USERS_CACHE_SERVER_ADDRESS
 } from '@Constants'
 
 import axios from 'axios'
@@ -32,6 +33,23 @@ export const Logout_User_Database = () => async (dispatch: AppDispatch, getState
         let alignment_values = await Map_GUI_Values_For_Database_Storage({
             alignment: current_setting_state.alignment,
             text_alignment: current_setting_state.text_alignment
+        })
+
+        await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
+            token: current_end_user_account_state.token,
+            id: Encrypt(`${current_end_user_account_state.id}`),
+            online_status: Encrypt(`${current_end_user_account_state.online_status}`),
+            custom_lbl: Encrypt(`${current_end_user_account_state.custom_lbl}`),
+            name: Encrypt(`${current_end_user_account_state.name}`),
+            created_on: Encrypt(`${current_end_user_account_state.created_on}`),
+            avatar_url_path: Encrypt(`${current_end_user_account_state.avatar_url_path}`),
+            avatar_title: Encrypt(`${current_end_user_account_state.avatar_title}`),
+            language_code: Encrypt(`${current_language_state.language}`),
+            region_code: Encrypt(`${current_language_state.region}`),
+            login_on: Encrypt(`${current_end_user_account_state.login_on}`),
+            logout_on: Encrypt(`${current_end_user_account_state.logout_on}`),
+            login_type: Encrypt(`EMAIL`),
+            account_type: Encrypt(`${current_end_user_account_state.account_type}`)
         })
 
         await axios.put(`${USERS_SERVER_ADDRESS}/Authenticate/Logout`, {
@@ -85,8 +103,9 @@ export const Logout_User_Database = () => async (dispatch: AppDispatch, getState
                 dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_APPROVALS_STATE, payload: { conversation_received_approvals: [] } })
                 reject(error)
             })
-        }).then(() => {
-            return new Promise(async (resolve) => {
+        }).then( async () => {
+
+            return await new Promise(async (resolve) => {
                 dispatch({ type: DEFAULT_APPLICATION_SETTINGS_MAX_BOOTSTRAP_GRID_COLUMNS })
                 dispatch({ type: DEFAULT_APPLICATION_LANGUAGE_CURRENT_VALUE })
                 dispatch({ type: DEFAULT_APPLICATION_SETTINGS_STATE })

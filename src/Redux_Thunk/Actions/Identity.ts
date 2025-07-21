@@ -12,7 +12,8 @@ import {
     UPDATE_END_USER_PROFILE_ACCOUNT_GENDER,
     JWT_CLIENT_KEY, JWT_ISSUER_KEY, CLIENT_ADDRESS,
     DEFAULT_NETWORK_ERROR_STATE,
-    DEFAULT_HOST_ERROR_STATE
+    DEFAULT_HOST_ERROR_STATE,
+    USERS_PROFILE_CACHE_SERVER_ADDRESS
 } from '@Constants'
 
 import axios from 'axios'
@@ -20,15 +21,13 @@ import axios from 'axios'
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import type { AppDispatch } from '@Redux_Thunk/Provider'
 import { Get_Device_Information } from '@Redux_Thunk/Actions/Misc'
-
 import { Encrypt } from '@AES/Encryptor'
-import { Decrypt } from '@AES/Decryptor'
-import { JWT_Decoder } from '@JWT/Decoder'
 
 export const Default_End_User_Birthdate = () => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
 
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
+    let end_user_profile = state.End_User_Profile_State_Reducer
 
     if (end_user_account.id !== null &&
         end_user_account.token !== null &&
@@ -73,6 +72,20 @@ export const Default_End_User_Birthdate = () => async (dispatch: AppDispatch, ge
                 reject(error)
             })
 
+        }).then(async () => {
+
+            await axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/set/user/profile`, {
+                token: end_user_account.token,
+                id: await Encrypt(`${end_user_account.id}`),
+                birth_date: await Encrypt(``),
+                ethnicity: await Encrypt(`${end_user_profile.ethnicity}`),
+                first_name: await Encrypt(`${end_user_profile.first_name}`),
+                last_name: await Encrypt(`${end_user_profile.last_name}`),
+                middle_name: await Encrypt(`${end_user_profile.middle_name}`),
+                maiden_name: await Encrypt(`${end_user_profile.maiden_name}`),
+                gender: await Encrypt(`${end_user_profile.gender}`)
+            })
+
         })
 
         return await new Promise((resolve) => {
@@ -92,6 +105,7 @@ export const Change_End_User_BirthDate = (dto: {
 
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
+    let end_user_profile = state.End_User_Profile_State_Reducer
 
     if (end_user_account.id !== null &&
         end_user_account.token !== null &&
@@ -140,6 +154,20 @@ export const Change_End_User_BirthDate = (dto: {
                     reject(error)
                 })
 
+            }).then(async () => {
+
+                await axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/set/user/profile`, {
+                    token: end_user_account.token,
+                    id: await Encrypt(`${end_user_account.id}`),
+                    birth_date: await Encrypt(`${dto.Month}/${dto.Day}/${dto.Year}`),
+                    ethnicity: await Encrypt(`${end_user_profile.ethnicity}`),
+                    first_name: await Encrypt(`${end_user_profile.first_name}`),
+                    last_name: await Encrypt(`${end_user_profile.last_name}`),
+                    middle_name: await Encrypt(`${end_user_profile.middle_name}`),
+                    maiden_name: await Encrypt(`${end_user_profile.maiden_name}`),
+                    gender: await Encrypt(`${end_user_profile.gender}`)
+                })
+
             })
         }
 
@@ -156,6 +184,7 @@ export const Change_End_User_Ethnicity = (value: string) => async (dispatch: App
 
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
+    let end_user_profile = state.End_User_Profile_State_Reducer
 
     if (end_user_account.id !== null &&
         end_user_account.token !== null &&
@@ -201,6 +230,20 @@ export const Change_End_User_Ethnicity = (value: string) => async (dispatch: App
                 reject(error)
             })
 
+        }).then(async () => {
+
+            await axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/set/user/profile`, {
+                token: end_user_account.token,
+                id: await Encrypt(`${end_user_account.id}`),
+                birth_date: await Encrypt(`${end_user_profile.birth_month}/${end_user_profile.birth_day}/${end_user_profile.birth_year}`),
+                ethnicity: await Encrypt(`${value}`),
+                first_name: await Encrypt(`${end_user_profile.first_name}`),
+                last_name: await Encrypt(`${end_user_profile.last_name}`),
+                middle_name: await Encrypt(`${end_user_profile.middle_name}`),
+                maiden_name: await Encrypt(`${end_user_profile.maiden_name}`),
+                gender: await Encrypt(`${end_user_profile.gender}`)
+            })
+
         })
 
         return await new Promise((resolve) => {
@@ -214,6 +257,7 @@ export const Change_End_User_First_Name = (value: string) => async (dispatch: Ap
 
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
+    let end_user_profile = state.End_User_Profile_State_Reducer
 
     if (end_user_account.id !== null &&
         end_user_account.token !== null &&
@@ -259,6 +303,20 @@ export const Change_End_User_First_Name = (value: string) => async (dispatch: Ap
                 reject(error)
             })
 
+        }).then(async () => {
+
+            await axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/set/user/profile`, {
+                token: end_user_account.token,
+                id: await Encrypt(`${end_user_account.id}`),
+                birth_date: await Encrypt(`${end_user_profile.birth_month}/${end_user_profile.birth_day}/${end_user_profile.birth_year}`),
+                ethnicity: await Encrypt(`${end_user_profile.ethnicity}`),
+                first_name: await Encrypt(`${value}`),
+                last_name: await Encrypt(`${end_user_profile.last_name}`),
+                middle_name: await Encrypt(`${end_user_profile.middle_name}`),
+                maiden_name: await Encrypt(`${end_user_profile.maiden_name}`),
+                gender: await Encrypt(`${end_user_profile.gender}`)
+            })
+
         })
 
         return await new Promise((resolve) => {
@@ -272,6 +330,7 @@ export const Change_End_User_Gender = (value: number) => async (dispatch: AppDis
 
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
+    let end_user_profile = state.End_User_Profile_State_Reducer
 
     if (end_user_account.id !== null &&
         end_user_account.token !== null &&
@@ -317,6 +376,20 @@ export const Change_End_User_Gender = (value: number) => async (dispatch: AppDis
                 reject(error)
             })
 
+        }).then(async () => {
+
+            await axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/set/user/profile`, {
+                token: end_user_account.token,
+                id: await Encrypt(`${end_user_account.id}`),
+                birth_date: await Encrypt(`${end_user_profile.birth_month}/${end_user_profile.birth_day}/${end_user_profile.birth_year}`),
+                ethnicity: await Encrypt(`${end_user_profile.ethnicity}`),
+                first_name: await Encrypt(`${end_user_profile.first_name}`),
+                last_name: await Encrypt(`${end_user_profile.last_name}`),
+                middle_name: await Encrypt(`${end_user_profile.middle_name}`),
+                maiden_name: await Encrypt(`${end_user_profile.maiden_name}`),
+                gender: await Encrypt(`${value}`)
+            })
+
         })
 
         return await new Promise((resolve) => {
@@ -330,6 +403,7 @@ export const Change_End_User_Last_Name = (value: string) => async (dispatch: App
 
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
+    let end_user_profile = state.End_User_Profile_State_Reducer
 
     if (end_user_account.id !== null &&
         end_user_account.token !== null &&
@@ -375,6 +449,20 @@ export const Change_End_User_Last_Name = (value: string) => async (dispatch: App
                 reject(error)
             })
 
+        }).then(async () => {
+
+            await axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/set/user/profile`, {
+                token: end_user_account.token,
+                id: await Encrypt(`${end_user_account.id}`),
+                birth_date: await Encrypt(`${end_user_profile.birth_month}/${end_user_profile.birth_day}/${end_user_profile.birth_year}`),
+                ethnicity: await Encrypt(`${end_user_profile.ethnicity}`),
+                first_name: await Encrypt(`${end_user_profile.first_name}`),
+                last_name: await Encrypt(`${value}`),
+                middle_name: await Encrypt(`${end_user_profile.middle_name}`),
+                maiden_name: await Encrypt(`${end_user_profile.maiden_name}`),
+                gender: await Encrypt(`${end_user_profile.gender}`)
+            })
+
         })
 
         return await new Promise((resolve) => {
@@ -388,6 +476,8 @@ export const Change_End_User_Middle_Name = (value: string) => async (dispatch: A
 
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
+    let end_user_profile = state.End_User_Profile_State_Reducer
+    
 
     if (end_user_account.id !== null &&
         end_user_account.token !== null &&
@@ -433,6 +523,18 @@ export const Change_End_User_Middle_Name = (value: string) => async (dispatch: A
                 reject(error)
             })
 
+        }).then(async () => {
+            await axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/set/user/profile`, {
+                token: end_user_account.token,
+                id: await Encrypt(`${end_user_account.id}`),
+                birth_date: await Encrypt(`${end_user_profile.birth_month}/${end_user_profile.birth_day}/${end_user_profile.birth_year}`),
+                ethnicity: await Encrypt(`${end_user_profile.ethnicity}`),
+                first_name: await Encrypt(`${end_user_profile.first_name}`),
+                last_name: await Encrypt(`${end_user_profile.last_name}`),
+                middle_name: await Encrypt(`${value}`),
+                maiden_name: await Encrypt(`${end_user_profile.maiden_name}`),
+                gender: await Encrypt(`${end_user_profile.gender}`)
+            })
         })
         
         return await new Promise((resolve) => {
@@ -446,6 +548,7 @@ export const Change_End_User_Maiden_Name = (value: string) => async (dispatch: A
 
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
+    let end_user_profile = state.End_User_Profile_State_Reducer
 
     if (end_user_account.id !== null &&
         end_user_account.token !== null &&
@@ -491,11 +594,26 @@ export const Change_End_User_Maiden_Name = (value: string) => async (dispatch: A
                 reject(error)
             })
 
+        }).then(async () => {
+
+            await axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/set/user/profile`, {
+                token: end_user_account.token,
+                id: await Encrypt(`${end_user_account.id}`),
+                birth_date: await Encrypt(`${end_user_profile.birth_month}/${end_user_profile.birth_day}/${end_user_profile.birth_year}`),
+                ethnicity: await Encrypt(`${end_user_profile.ethnicity}`),
+                first_name: await Encrypt(`${end_user_profile.first_name}`),
+                last_name: await Encrypt(`${end_user_profile.last_name}`),
+                middle_name: await Encrypt(`${end_user_profile.middle_name}`),
+                maiden_name: await Encrypt(`${value}`),
+                gender: await Encrypt(`${end_user_profile.gender}`)
+            })
+
         })
 
         return await new Promise((resolve) => {
             dispatch({ type: UPDATE_END_USER_PROFILE_ACCOUNT_MAIDEN_NAME, payload: { maiden_name: value } })
            resolve(value)
         })
+
     }
 }
