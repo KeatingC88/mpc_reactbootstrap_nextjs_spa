@@ -25,6 +25,10 @@ const Profile_Mirror = () => {
     const [avatar_path, set_avatar] = useState<string>(``)
     const [avatar_title, set_avatar_title] = useState<string>(``)
 
+    const [created_on_value, set_created_on_value] = useState<string>(``)
+    const [login_on_value, set_login_on_value] = useState<string>(``)
+    const [logout_on_value, set_logout_on_value] = useState<string>(``)
+
     const [showAvatarModel, set_avatarModalShow] = useState<boolean>(false)
     const [disableAvatarModalBtns, setDisableToAvatarModalBtns] = useState<boolean>(false)
     const hide_avatar_modal = () => set_avatarModalShow(false)
@@ -76,11 +80,28 @@ const Profile_Mirror = () => {
     }
 
     useEffect(() => {
-        if (Path === `/`
-        ) {
+        const { account } = props.end_user || {}
+
+        if (account?.created_on) {
+            const date = new Date(Number(account.created_on) * 1000)
+            set_created_on_value(date.toString())
+        }
+
+        if (account?.login_on) {
+            const date = new Date(Number(account.login_on) * 1000)
+            set_login_on_value(date.toString())
+        }
+
+        if (account?.logout_on) {
+            const date = new Date(Number(account.logout_on) * 1000)
+            set_logout_on_value(date.toString())
+        }
+
+        if (Path === `/`) {
             set_card_width(``)
         }
-    }, [])
+
+    }, [props.end_user])
 
     return (
         <Container id="Profile_View" fluid>
@@ -220,19 +241,19 @@ const Profile_Mirror = () => {
                                         {props.end_user.account.login_on && (
                                             <ListGroupItem>
                                                 {lbl.Login}:<br />
-                                                {props.end_user.account.login_on}
+                                                {login_on_value}
                                             </ListGroupItem>
                                         )}
                                         {props.end_user.account.logout_on && (
                                             <ListGroupItem>
                                                 {lbl.Logout}:<br />
-                                                {props.end_user.account.logout_on}
+                                                {logout_on_value}
                                             </ListGroupItem>
                                         )}
                                         {props.end_user.account.created_on && (
                                             <ListGroupItem>
                                                 {lbl.AccountCreation}:<br />
-                                                {props.end_user.account.created_on}
+                                                {created_on_value}
                                             </ListGroupItem>
                                         )}
                                     </Col>

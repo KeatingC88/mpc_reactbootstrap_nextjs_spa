@@ -179,8 +179,6 @@ export const Load_All_Community_Users = () => async (dispatch: AppDispatch, getS
         }
     } = {}
 
-    
-
     if (end_user_account.id !== null &&
         end_user_account.token !== null &&
         end_user_account.account_type !== null)
