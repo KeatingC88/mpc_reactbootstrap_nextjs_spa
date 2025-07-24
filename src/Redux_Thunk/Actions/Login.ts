@@ -18,7 +18,7 @@ import {
 } from '@Constants'
 
 import {
-    Read_All_End_User_WebSocket_Conversation_Permissions_And_Profile_Data_For_WebSocket_Chat_View, WebSocket_Direct_Chat_Connection
+    Read_Both_Conversation_Participants_WebSocket_Conversation_Permissions_And_Profile_Data_For_Chat_Menu, WebSocket_Direct_Chat_Connection
 } from '@Redux_Thunk/Actions/WebSocket/Direct_Chat'
 
 import { Encrypt } from '@AES/Encryptor'
@@ -203,7 +203,8 @@ export const Login_Email_Password = (dto: {
                     login_on: response.data.login_on,
                     logout_on: response.data.logout_on,
                     login_type: await Encrypt(`EMAIL`),
-                    account_type: response.data.account_type
+                    account_type: response.data.account_type,
+                    email_address: response.data.email_address
                 })
 
                 let birth_month = parseInt(Decrypt(`${response.data.birth_month}`))

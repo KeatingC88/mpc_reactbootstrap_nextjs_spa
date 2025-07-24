@@ -1392,6 +1392,7 @@ export const Change_Application_Language = (value: string) => async (dispatch: A
                 login_type: await Encrypt(`${end_user_account.login_type}`),
                 language_code: await Encrypt(`${dto.language}`),
                 region_code: await Encrypt(`${dto.region}`),
+                email_address: end_user_account.email_address ? await Encrypt(`${end_user_account.email_address}`) : await Encrypt(``)
             })
         })
     }
@@ -1645,6 +1646,7 @@ export const Update_Display_Name = (value: string) => async (dispatch: AppDispat
                 login_type: await Encrypt(`${end_user_account.login_type}`),
                 language_code: await Encrypt(`${current_language_state.language}`),
                 region_code: await Encrypt(`${current_language_state.region}`),
+                email_address: end_user_account.email_address ? await Encrypt(`${end_user_account.email_address}`) : await Encrypt(``)
             })
         })
     }
@@ -1718,6 +1720,7 @@ export const Update_End_User_Avatar = (value: string) => async (dispatch: AppDis
                 login_type: await Encrypt(`${end_user_account.login_type}`),
                 language_code: await Encrypt(`${current_language_state.language}`),
                 region_code: await Encrypt(`${current_language_state.region}`),
+                email_address: end_user_account.email_address ? await Encrypt(`${end_user_account.email_address}`) : await Encrypt(``)
             })
         })
     }
@@ -1795,6 +1798,7 @@ export const Update_End_User_Avatar_Title = (value: string) => async (dispatch: 
                 login_type: await Encrypt(`${end_user_account.login_type}`),
                 language_code: await Encrypt(`${current_language_state.language}`),
                 region_code: await Encrypt(`${current_language_state.region}`),
+                email_address: end_user_account.email_address ? await Encrypt(`${end_user_account.email_address}`) : await Encrypt(``)
             })
         })
     }
@@ -1868,6 +1872,7 @@ export const Update_End_User_Selected_Status = (value: number) => async (dispatc
                 login_type: await Encrypt(`${end_user_account.login_type}`),
                 language_code: await Encrypt(`${current_language_state.language}`),
                 region_code: await Encrypt(`${current_language_state.region}`),
+                email_address: end_user_account.email_address ? await Encrypt(`${end_user_account.email_address}`) : await Encrypt(``)
             })
 
         })
@@ -1945,6 +1950,7 @@ export const Update_End_User_Selected_Custom_Label = (value: string | null) => a
                 login_type: await Encrypt(`${end_user_account.login_type}`),
                 language_code: await Encrypt(`${current_language_state.language}`),
                 region_code: await Encrypt(`${current_language_state.region}`),
+                email_address: end_user_account.email_address ? await Encrypt(`${end_user_account.email_address}`) : await Encrypt(``)
             })
         })
 

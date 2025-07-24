@@ -11,11 +11,13 @@ import {
     UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_REQUESTS_STATE,
     UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_BLOCKS_STATE,
     UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_APPROVALS_STATE,
-    CLIENT_ADDRESS, JWT_ISSUER_KEY, JWT_CLIENT_KEY, CHAT_SERVER_UNIVERSE_NAME,
-    DEFAULT_HOST_ERROR_STATE
+    CLIENT_ADDRESS,
+    JWT_ISSUER_KEY,
+    JWT_CLIENT_KEY,
+    CHAT_SERVER_UNIVERSE_NAME,
+    DEFAULT_HOST_ERROR_STATE,
+    USERS_CACHE_SERVER_ADDRESS
 } from '@Constants'
-
-import { Timestamp } from 'next/dist/server/lib/cache-handlers/types'
 
 import { Encrypt } from '@AES/Encryptor'
 import { Decrypt } from '@AES/Decryptor'
@@ -123,7 +125,85 @@ const create_chat_message_elements = (): DocumentFragment => {
     return fragment
 }
 
-export const Read_All_End_User_WebSocket_Conversation_Permissions_And_Profile_Data_For_WebSocket_Chat_View = () => async (dispatch: AppDispatch, getState: ()=> Current_Redux_State) => {
+const fetch_participant_data_from_cache_server = ({
+    response_data,
+    token,
+}: {
+    response_data: any[];
+    token: string | null;
+}): any[] => {
+     
+    const collected_data: any[] = [];
+    
+    for (let data of response_data) {
+
+        let combine_permission_data_with_participant_profile_data = {...data}
+
+        axios.post(`${USERS_CACHE_SERVER_ADDRESS}/get/user`, {
+            token: token,
+            id: Encrypt(`${data.Participant_ID}`)
+        }).then(async (response: any) => {
+
+            let participant_data: any = {}
+
+            Object.keys(response.data).forEach((index: any) => {
+                const set_decrypted_string = Decrypt(`${response.data[index]}`)
+                const set_decrypted_number = parseInt(set_decrypted_string)
+
+                participant_data[index] = Number.isNaN(set_decrypted_number) ? set_decrypted_string : set_decrypted_number
+
+            })
+
+            Object.assign(combine_permission_data_with_participant_profile_data, participant_data)
+
+            collected_data.push(combine_permission_data_with_participant_profile_data)
+        })
+
+    }
+
+    return collected_data
+}
+
+const fetch_end_user_data_from_cache_server = ({
+    response_data,
+    token,
+}: {
+    response_data: any[];
+    token: string | null;
+}): any[] => {
+
+    let collected_data: any[] = []
+
+    for (let data of response_data) {
+
+        let combine_permission_data_with_participant_profile_data = {...data}
+
+        axios.post(`${USERS_CACHE_SERVER_ADDRESS}/get/user`, {
+            token: token,
+            id: Encrypt(`${data.User_ID}`)
+        }).then(async (response: any) => {
+
+            let participant_data: any = {}
+
+            Object.keys(response.data).forEach((index: any) => {
+                const set_decrypted_string = Decrypt(`${response.data[index]}`)
+                const set_decrypted_number = parseInt(set_decrypted_string)
+
+                participant_data[index] = Number.isNaN(set_decrypted_number) ? set_decrypted_string : set_decrypted_number
+
+            })
+
+            Object.assign(combine_permission_data_with_participant_profile_data, participant_data)
+
+            collected_data.push(combine_permission_data_with_participant_profile_data)
+        })
+
+    }
+
+    return collected_data
+}
+
+export const Read_Both_Conversation_Participants_WebSocket_Conversation_Permissions_And_Profile_Data_For_Chat_Menu = () => async (dispatch: AppDispatch, getState: ()=> Current_Redux_State) => {
 
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
@@ -133,8 +213,6 @@ export const Read_All_End_User_WebSocket_Conversation_Permissions_And_Profile_Da
         end_user_account.account_type !== null) {
 
         let current_language_state = state.Application_Language_State_Reducer
-
-        let end_user_chat_requests_collection_data: any = []
 
         axios.post(`${USERS_SERVER_ADDRESS}/WebSocket/Chat_Requests/End_User`, {
             token: await end_user_account.token,
@@ -177,65 +255,11 @@ export const Read_All_End_User_WebSocket_Conversation_Permissions_And_Profile_Da
 
             } else {
 
-                for (let obj of response.data) {
-
-                    let end_user_chat_requests_data = {}
-
-                    Object.assign(end_user_chat_requests_data, obj)
-
-                    axios.post(`${USERS_SERVER_ADDRESS}/Load/User/Profile`, {
-                        token: end_user_account.token,
-                        id: await Encrypt(`${end_user_account.id}`),
-                        profile_id: await Encrypt(`${obj.Participant_ID}`),
-                        account_type: await Encrypt(`${end_user_account.account_type}`),
-                        login_type: await Encrypt(`${end_user_account.login_type}`),
-                        language: await Encrypt(`${current_language_state.language}`),
-                        region: await Encrypt(`${current_language_state.region}`),
-                        client_time: await Encrypt(`${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`),
-                        location: await Encrypt(`${Intl.DateTimeFormat().resolvedOptions().timeZone}`),
-                        jwt_issuer_key: await Encrypt(`${JWT_ISSUER_KEY}`),
-                        jwt_client_key: await Encrypt(`${JWT_CLIENT_KEY}`),
-                        jwt_client_address: await Encrypt(`${CLIENT_ADDRESS}`),
-                        user_agent: await Encrypt(`${Get_Device_Information().userAgent}`),
-                        orientation: await Encrypt(`${Get_Device_Information().orientation_type}`),
-                        screen_width: await Encrypt(`${Get_Device_Information().screen_width}`),
-                        screen_height: await Encrypt(`${Get_Device_Information().screen_height}`),
-                        color_depth: await Encrypt(`${Get_Device_Information().color_depth}`),
-                        pixel_depth: await Encrypt(`${Get_Device_Information().pixel_depth}`),
-                        window_width: await Encrypt(`${Get_Device_Information().window_width}`),
-                        window_height: await Encrypt(`${Get_Device_Information().window_height}`),
-                        connection_type: await Encrypt(`${Get_Device_Information().effectiveType}`),
-                        down_link: await Encrypt(`${Get_Device_Information().downlink}`),
-                        rtt: await Encrypt(`${Get_Device_Information().rtt}`),
-                        data_saver: await Encrypt(`${Get_Device_Information().saveData}`),
-                        device_ram_gb: await Encrypt(`${Get_Device_Information().deviceMemory}`),
-                    }).catch((error) => {
-
-                        return new Promise((reject) => {
-                            error.id = `Load-User-Profile-Chat-Request-Failed`
-                            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
-                            setTimeout(() => {
-                                dispatch({ type: DEFAULT_HOST_ERROR_STATE })
-                                dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-                            }, 1)
-                            reject(error)
-                        })
-
-                    }).then((response: any) => {
-
-                        Object.assign(end_user_chat_requests_data, response.data)
-                        end_user_chat_requests_collection_data.push(end_user_chat_requests_data)
-
-                    })
-                }
-
-                dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_SENT_REQUESTS_STATE, payload: { conversation_sent_requests: end_user_chat_requests_collection_data } })
+                dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_SENT_REQUESTS_STATE, payload: { conversation_sent_requests: fetch_participant_data_from_cache_server({ response_data: response.data, token: end_user_account.token })}})
 
             }
         })
         
-        let end_user_chat_blocks_collection_data: any = []
-
         await axios.post(`${USERS_SERVER_ADDRESS}/WebSocket/Chat_Blocks/End_User`, {
             token: await end_user_account.token,
             id: await Encrypt(`${end_user_account.id}`),
@@ -276,62 +300,10 @@ export const Read_All_End_User_WebSocket_Conversation_Permissions_And_Profile_Da
 
             } else {
 
-                for (let obj of response.data) {
-
-                    let end_user_chat_blocks_data = {}
-                    Object.assign(end_user_chat_blocks_data, obj)
-
-                    axios.post(`${USERS_SERVER_ADDRESS}/Load/User/Profile`, {
-                        token: end_user_account.token,
-                        id: await Encrypt(`${end_user_account.id}`),
-                        profile_id: await Encrypt(`${obj.Participant_ID}`),
-                        account_type: await Encrypt(`${end_user_account.account_type}`),
-                        login_type: await Encrypt(`${end_user_account.login_type}`),
-                        language: await Encrypt(`${current_language_state.language}`),
-                        region: await Encrypt(`${current_language_state.region}`),
-                        client_time: await Encrypt(`${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`),
-                        location: await Encrypt(`${Intl.DateTimeFormat().resolvedOptions().timeZone}`),
-                        jwt_issuer_key: await Encrypt(`${JWT_ISSUER_KEY}`),
-                        jwt_client_key: await Encrypt(`${JWT_CLIENT_KEY}`),
-                        jwt_client_address: await Encrypt(`${CLIENT_ADDRESS}`),
-                        user_agent: await Encrypt(`${Get_Device_Information().userAgent}`),
-                        orientation: await Encrypt(`${Get_Device_Information().orientation_type}`),
-                        screen_width: await Encrypt(`${Get_Device_Information().screen_width}`),
-                        screen_height: await Encrypt(`${Get_Device_Information().screen_height}`),
-                        color_depth: await Encrypt(`${Get_Device_Information().color_depth}`),
-                        pixel_depth: await Encrypt(`${Get_Device_Information().pixel_depth}`),
-                        window_width: await Encrypt(`${Get_Device_Information().window_width}`),
-                        window_height: await Encrypt(`${Get_Device_Information().window_height}`),
-                        connection_type: await Encrypt(`${Get_Device_Information().effectiveType}`),
-                        down_link: await Encrypt(`${Get_Device_Information().downlink}`),
-                        rtt: await Encrypt(`${Get_Device_Information().rtt}`),
-                        data_saver: await Encrypt(`${Get_Device_Information().saveData}`),
-                        device_ram_gb: await Encrypt(`${Get_Device_Information().deviceMemory}`),
-                    }).catch((error) => {
-                        return new Promise((reject) => {
-                            error.id = `Load-User-Profile-Chat-Block-Failed`
-                            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
-                            setTimeout(() => {
-                                dispatch({ type: DEFAULT_HOST_ERROR_STATE })
-                                dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-                            }, 1)
-                            reject(error)
-                        })
-                    }).then((response: any) => {
-
-                        Object.assign(end_user_chat_blocks_data, response.data)
-                        end_user_chat_blocks_collection_data.push(end_user_chat_blocks_data)
-
-                    })
-                }
-
-                dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_SENT_BLOCKS_STATE, payload: { conversation_sent_blocks: end_user_chat_blocks_collection_data } })
+                dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_SENT_BLOCKS_STATE, payload: { conversation_sent_blocks: fetch_participant_data_from_cache_server({ response_data: response.data, token: end_user_account.token })}})
 
             }
         })
-
-
-        let end_user_chat_approvals_collection_data: any = []
 
         await axios.post(`${USERS_SERVER_ADDRESS}/WebSocket/Chat_Approvals/End_User`, {
             token: await end_user_account.token,
@@ -374,61 +346,10 @@ export const Read_All_End_User_WebSocket_Conversation_Permissions_And_Profile_Da
 
             } else {
 
-                for (let obj of response.data) {
-
-                    let end_user_chat_approvals = {}
-                    Object.assign(end_user_chat_approvals, obj)
-
-                    axios.post(`${USERS_SERVER_ADDRESS}/Load/User/Profile`, {
-                        token: end_user_account.token,
-                        id: await Encrypt(`${end_user_account.id}`),
-                        profile_id: await Encrypt(`${obj.Participant_ID}`),
-                        account_type: await Encrypt(`${end_user_account.account_type}`),
-                        login_type: await Encrypt(`${end_user_account.login_type}`),
-                        language: await Encrypt(`${current_language_state.language}`),
-                        region: await Encrypt(`${current_language_state.region}`),
-                        client_time: await Encrypt(`${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`),
-                        location: await Encrypt(`${Intl.DateTimeFormat().resolvedOptions().timeZone}`),
-                        jwt_issuer_key: await Encrypt(`${JWT_ISSUER_KEY}`),
-                        jwt_client_key: await Encrypt(`${JWT_CLIENT_KEY}`),
-                        jwt_client_address: await Encrypt(`${CLIENT_ADDRESS}`),
-                        user_agent: await Encrypt(`${Get_Device_Information().userAgent}`),
-                        orientation: await Encrypt(`${Get_Device_Information().orientation_type}`),
-                        screen_width: await Encrypt(`${Get_Device_Information().screen_width}`),
-                        screen_height: await Encrypt(`${Get_Device_Information().screen_height}`),
-                        color_depth: await Encrypt(`${Get_Device_Information().color_depth}`),
-                        pixel_depth: await Encrypt(`${Get_Device_Information().pixel_depth}`),
-                        window_width: await Encrypt(`${Get_Device_Information().window_width}`),
-                        window_height: await Encrypt(`${Get_Device_Information().window_height}`),
-                        connection_type: await Encrypt(`${Get_Device_Information().effectiveType}`),
-                        down_link: await Encrypt(`${Get_Device_Information().downlink}`),
-                        rtt: await Encrypt(`${Get_Device_Information().rtt}`),
-                        data_saver: await Encrypt(`${Get_Device_Information().saveData}`),
-                        device_ram_gb: await Encrypt(`${Get_Device_Information().deviceMemory}`),
-                    }).catch((error) => {
-                        return new Promise((reject) => {
-                            error.id = `Load-User-Profile-Chat-Approved-Failed`
-                            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
-                            setTimeout(() => {
-                                dispatch({ type: DEFAULT_HOST_ERROR_STATE })
-                                dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-                            }, 1)
-                            reject(error)
-                        })
-                    }).then((response: any) => {
-
-                        Object.assign(end_user_chat_approvals, response.data)
-                        end_user_chat_approvals_collection_data.push(end_user_chat_approvals)
-
-                    })
-                }
-
-                dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_SENT_APPROVALS_STATE, payload: { conversation_sent_approvals: end_user_chat_approvals_collection_data } })
+                dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_SENT_APPROVALS_STATE, payload: { conversation_sent_approvals: fetch_participant_data_from_cache_server({ response_data: response.data, token: end_user_account.token })}})
 
             }
         })
-
-        let end_user_recieved_chat_requests_collection_data: any = []
 
         await axios.post(`${USERS_SERVER_ADDRESS}/WebSocket/Chat_Requests/Participant`, {
             token: await end_user_account.token,
@@ -469,63 +390,10 @@ export const Read_All_End_User_WebSocket_Conversation_Permissions_And_Profile_Da
 
             } else {
 
-                for (let obj of response.data) {
-
-                    let end_user_received_chat_requests_data = {}
-                    Object.assign(end_user_received_chat_requests_data, obj)
-
-                    axios.post(`${USERS_SERVER_ADDRESS}/Load/User/Profile`, {
-                        token: end_user_account.token,
-                        id: await Encrypt(`${end_user_account.id}`),
-                        profile_id: await Encrypt(`${obj.User_ID}`),
-                        account_type: await Encrypt(`${end_user_account.account_type}`),
-                        login_type: await Encrypt(`${end_user_account.login_type}`),
-                        language: await Encrypt(`${current_language_state.language}`),
-                        region: await Encrypt(`${current_language_state.region}`),
-                        client_time: await Encrypt(`${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`),
-                        location: await Encrypt(`${Intl.DateTimeFormat().resolvedOptions().timeZone}`),
-                        jwt_issuer_key: await Encrypt(`${JWT_ISSUER_KEY}`),
-                        jwt_client_key: await Encrypt(`${JWT_CLIENT_KEY}`),
-                        jwt_client_address: await Encrypt(`${CLIENT_ADDRESS}`),
-                        user_agent: await Encrypt(`${Get_Device_Information().userAgent}`),
-                        orientation: await Encrypt(`${Get_Device_Information().orientation_type}`),
-                        screen_width: await Encrypt(`${Get_Device_Information().screen_width}`),
-                        screen_height: await Encrypt(`${Get_Device_Information().screen_height}`),
-                        color_depth: await Encrypt(`${Get_Device_Information().color_depth}`),
-                        pixel_depth: await Encrypt(`${Get_Device_Information().pixel_depth}`),
-                        window_width: await Encrypt(`${Get_Device_Information().window_width}`),
-                        window_height: await Encrypt(`${Get_Device_Information().window_height}`),
-                        connection_type: await Encrypt(`${Get_Device_Information().effectiveType}`),
-                        down_link: await Encrypt(`${Get_Device_Information().downlink}`),
-                        rtt: await Encrypt(`${Get_Device_Information().rtt}`),
-                        data_saver: await Encrypt(`${Get_Device_Information().saveData}`),
-                        device_ram_gb: await Encrypt(`${Get_Device_Information().deviceMemory}`),
-                    }).catch((error) => {
-
-                        return new Promise((reject) => {
-                            error.id = `Load-User-Profile-Chat-Request-Participant-Failed`
-                            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
-                            setTimeout(() => {
-                                dispatch({ type: DEFAULT_HOST_ERROR_STATE })
-                                dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-                            }, 1)
-                            reject(error)
-                        })
-
-                    }).then((response: any) => {
-
-                        Object.assign(end_user_received_chat_requests_data, response.data)
-                        end_user_recieved_chat_requests_collection_data.push(end_user_received_chat_requests_data)
-
-                    })
-                }
-
-                dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_REQUESTS_STATE, payload: { conversation_received_requests: end_user_recieved_chat_requests_collection_data } })
+                dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_REQUESTS_STATE, payload: { conversation_received_requests: fetch_end_user_data_from_cache_server({ response_data: response.data, token: end_user_account.token })}})
 
             }
         })
-
-        let chat_blocks_collection_data: any = []
 
         await axios.post(`${USERS_SERVER_ADDRESS}/WebSocket/Chat_Blocks/Participant`, {
             token: await end_user_account.token,
@@ -566,64 +434,10 @@ export const Read_All_End_User_WebSocket_Conversation_Permissions_And_Profile_Da
 
             } else {
 
-                for (let obj of response.data) {
-
-                    let chat_blocks_for_participant_data = {}
-                    Object.assign(chat_blocks_for_participant_data, obj)
-
-                    axios.post(`${USERS_SERVER_ADDRESS}/Load/User/Profile`, {
-                        token: end_user_account.token,
-                        id: await Encrypt(`${end_user_account.id}`),
-                        profile_id: await Encrypt(`${obj.User_ID}`),
-                        account_type: await Encrypt(`${end_user_account.account_type}`),
-                        login_type: await Encrypt(`${end_user_account.login_type}`),
-                        language: await Encrypt(`${current_language_state.language}`),
-                        region: await Encrypt(`${current_language_state.region}`),
-                        client_time: await Encrypt(`${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`),
-                        location: await Encrypt(`${Intl.DateTimeFormat().resolvedOptions().timeZone}`),
-                        jwt_issuer_key: await Encrypt(`${JWT_ISSUER_KEY}`),
-                        jwt_client_key: await Encrypt(`${JWT_CLIENT_KEY}`),
-                        jwt_client_address: await Encrypt(`${CLIENT_ADDRESS}`),
-                        user_agent: await Encrypt(`${Get_Device_Information().userAgent}`),
-                        orientation: await Encrypt(`${Get_Device_Information().orientation_type}`),
-                        screen_width: await Encrypt(`${Get_Device_Information().screen_width}`),
-                        screen_height: await Encrypt(`${Get_Device_Information().screen_height}`),
-                        color_depth: await Encrypt(`${Get_Device_Information().color_depth}`),
-                        pixel_depth: await Encrypt(`${Get_Device_Information().pixel_depth}`),
-                        window_width: await Encrypt(`${Get_Device_Information().window_width}`),
-                        window_height: await Encrypt(`${Get_Device_Information().window_height}`),
-                        connection_type: await Encrypt(`${Get_Device_Information().effectiveType}`),
-                        down_link: await Encrypt(`${Get_Device_Information().downlink}`),
-                        rtt: await Encrypt(`${Get_Device_Information().rtt}`),
-                        data_saver: await Encrypt(`${Get_Device_Information().saveData}`),
-                        device_ram_gb: await Encrypt(`${Get_Device_Information().deviceMemory}`),
-                    }).catch((error) => {
-
-                        return new Promise((reject) => {
-                            error.id = `Load-User-Profile-Chat-Block-Particiapnt-Failed`
-                            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
-                            setTimeout(() => {
-                                dispatch({ type: DEFAULT_HOST_ERROR_STATE })
-                                dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-                            }, 1)
-                            reject(error)
-                        })
-
-                    }).then((response: any) => {
-
-                        Object.assign(chat_blocks_for_participant_data, response.data)
-                        chat_blocks_collection_data.push(chat_blocks_for_participant_data)
-
-                    })
-                }
-
-                dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_BLOCKS_STATE, payload: { conversation_received_blocks: chat_blocks_collection_data } })
+                dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_BLOCKS_STATE, payload: { conversation_received_blocks: fetch_end_user_data_from_cache_server({ response_data: response.data, token: end_user_account.token })}})
 
             }
         })
-
-
-        let chat_approval_collection_data: any = []
 
         await axios.post(`${USERS_SERVER_ADDRESS}/WebSocket/Chat_Approvals/Participant`, {
             token: await end_user_account.token,
@@ -664,59 +478,7 @@ export const Read_All_End_User_WebSocket_Conversation_Permissions_And_Profile_Da
 
             } else {
 
-                for (let obj of response.data) {
-
-                    let chat_approvals_for_participant_data = {}
-                    Object.assign(chat_approvals_for_participant_data, obj)
-
-                    axios.post(`${USERS_SERVER_ADDRESS}/Load/User/Profile`, {
-                        token: end_user_account.token,
-                        id: await Encrypt(`${end_user_account.id}`),
-                        profile_id: await Encrypt(`${obj.User_ID}`),
-                        account_type: await Encrypt(`${end_user_account.account_type}`),
-                        login_type: await Encrypt(`${end_user_account.login_type}`),
-                        language: await Encrypt(`${current_language_state.language}`),
-                        region: await Encrypt(`${current_language_state.region}`),
-                        client_time: await Encrypt(`${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`),
-                        location: await Encrypt(`${Intl.DateTimeFormat().resolvedOptions().timeZone}`),
-                        jwt_issuer_key: await Encrypt(`${JWT_ISSUER_KEY}`),
-                        jwt_client_key: await Encrypt(`${JWT_CLIENT_KEY}`),
-                        jwt_client_address: await Encrypt(`${CLIENT_ADDRESS}`),
-                        user_agent: await Encrypt(`${Get_Device_Information().userAgent}`),
-                        orientation: await Encrypt(`${Get_Device_Information().orientation_type}`),
-                        screen_width: await Encrypt(`${Get_Device_Information().screen_width}`),
-                        screen_height: await Encrypt(`${Get_Device_Information().screen_height}`),
-                        color_depth: await Encrypt(`${Get_Device_Information().color_depth}`),
-                        pixel_depth: await Encrypt(`${Get_Device_Information().pixel_depth}`),
-                        window_width: await Encrypt(`${Get_Device_Information().window_width}`),
-                        window_height: await Encrypt(`${Get_Device_Information().window_height}`),
-                        connection_type: await Encrypt(`${Get_Device_Information().effectiveType}`),
-                        down_link: await Encrypt(`${Get_Device_Information().downlink}`),
-                        rtt: await Encrypt(`${Get_Device_Information().rtt}`),
-                        data_saver: await Encrypt(`${Get_Device_Information().saveData}`),
-                        device_ram_gb: await Encrypt(`${Get_Device_Information().deviceMemory}`),
-                    }).catch((error) => {
-
-                        return new Promise((reject) => {
-                            error.id = `Load-User-Profile-Chat-Approval-Participant-Failed`
-                            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
-                            setTimeout(() => {
-                                dispatch({ type: DEFAULT_HOST_ERROR_STATE })
-                                dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-                            }, 1)
-                            reject(error)
-                        })
-
-                    }).then((response: any) => {
-
-                        Object.assign(chat_approvals_for_participant_data, response.data)
-                        chat_approval_collection_data.push(chat_approvals_for_participant_data)
-
-                    })
-
-                }
-
-                dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_APPROVALS_STATE, payload: { conversation_received_approvals: chat_approval_collection_data } })
+                dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_APPROVALS_STATE, payload: { conversation_received_approvals: fetch_end_user_data_from_cache_server({ response_data: response.data, token: end_user_account.token })}})
 
             }
         })
@@ -1014,26 +776,6 @@ export const Get_End_User_Chat_History_With_Other_User_ID = (participant_id: Big
         }
     })
 }
-
-/*export const DecreaseChatFont = () => {
-    if (User_Selected_FontSize < 6) {
-        User_Selected_FontSize++
-        let end_user_chat_messages = create_chat_messages_string()
-        if (document.getElementsByClassName(`wsprofileviewer-chatbox-${Chat[i].send_to}`)[0])
-            document.getElementsByClassName(`wsprofileviewer-chatbox-${Chat[i].send_to}`)[0].innerHTML = end_user_chat_messages
-    }
-}
-
-export const IncreaseChatFont = () => {
-    if (User_Selected_FontSize > 1) {
-        User_Selected_FontSize--
-        let end_user_chat_messages = create_chat_messages_string()
-        for (let i in Chat) {
-            if (document.getElementsByClassName(`ws-viewer-chatbox-${Chat[i].id}`)[0])
-                document.getElementsByClassName(`ws-viewer-chatbox-${Chat[i].id}`)[0].innerHTML = end_user_chat_messages
-        }
-    }
-}*/
 
 const Chat_Status_Color_Display = (status_code: number): string => {
     switch (status_code) {

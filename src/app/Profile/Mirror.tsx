@@ -110,7 +110,8 @@ const Profile_Mirror = () => {
                     <Card className={`moveable ${props.application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
                         style={{
                             float: props.application.settings.alignment === `justify-content-end` ? `right` : `none`,
-                            borderColor: `${props.end_user.custom_design.card_border_color}`
+                            borderColor: `${props.end_user.custom_design.card_border_color}`,
+                            minWidth: `${card_width}`
                         }}
                     >
                         <Card.Header className={`${props.application.settings.text_alignment} p-4`}

@@ -143,7 +143,6 @@ export const Load_Profile_Viewer_Data = (value: BigInt) => async (dispatch: AppD
 
                 obj[index] = Number.isNaN(set_decrypted_number) ? set_decrypted_string : set_decrypted_number
             })
-
         })
 
         setTimeout(async() => {

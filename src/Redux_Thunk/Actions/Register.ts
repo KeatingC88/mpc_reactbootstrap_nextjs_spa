@@ -417,7 +417,8 @@ export const Create_End_User_Email_Account = (dto: {
                         login_on: response.data.login_on ? response.data.login_on : await Encrypt(``),
                         logout_on: response.data.logout_on ? response.data.logout_on : await Encrypt(``),
                         login_type: Encrypt(`EMAIL`),
-                        account_type: response.data.account_type
+                        account_type: response.data.account_type,
+                        email_address: response.data.email_address ? response.data.email_address : await Encrypt(``)
                     })
 
                     dispatch(Load_All_Community_Users())

@@ -14,7 +14,7 @@ import {
     Send_WebSocket_Chat_Message,
     Approve_Chat_For_End_User,
     Block_Chat_For_End_User,
-    Read_All_End_User_WebSocket_Conversation_Permissions_And_Profile_Data_For_WebSocket_Chat_View,
+    Read_Both_Conversation_Participants_WebSocket_Conversation_Permissions_And_Profile_Data_For_Chat_Menu,
     Get_End_User_Chat_History_With_Other_User_ID,
     Authenticate_End_Users_Permissions,
     Report_Spam_Content,
@@ -38,6 +38,8 @@ import {
 const WebSocket_Chat = () => {
 
     const props = useSelector(Redux_Thunk_Core)
+
+    console.log(props)
 
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
@@ -185,7 +187,7 @@ const WebSocket_Chat = () => {
     }
 
     const handle_chat_launcher_display = async () => {
-        await Dispatch(Read_All_End_User_WebSocket_Conversation_Permissions_And_Profile_Data_For_WebSocket_Chat_View()).then(() => {
+        await Dispatch(Read_Both_Conversation_Participants_WebSocket_Conversation_Permissions_And_Profile_Data_For_Chat_Menu()).then(() => {
             set_launcher_display(true)
         })
     }
@@ -392,7 +394,7 @@ const WebSocket_Chat = () => {
                                                         {props.application.websocket.conversation_sent_approvals.map((x) => (
                                                             <Accordion.Item eventKey={`wschat-eventkey-${x.Participant_ID}`} key={`wschat-key-${x.Participant_ID}`}>
                                                                 <Accordion.Header>
-                                                                    {`${x.name.split(`#`)[0].toUpperCase()} ID: ${x.Participant_ID}`}
+                                                                    {`${x.name.split(`#`)[0].toUpperCase()}`}
                                                                 </Accordion.Header>
                                                                 <Accordion.Body>
                                                                     <Row className="mb-3">

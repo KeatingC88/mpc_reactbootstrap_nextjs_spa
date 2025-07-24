@@ -280,12 +280,6 @@ const Settings = () => {
 
     const submit_theme_variables_that_were_changed = () => {
 
-        console.log(card_header_font_color_value)
-        console.log(card_header_background_color_value)
-        console.log(card_header_font_value)
-        console.log(card_body_font_color_value)
-        console.log(card_body_background_color_value)
-
         if (card_header_font_color_value != null) {
             Dispatch(Change_Application_Card_Header_Font_Color(card_header_font_color_value))
         }

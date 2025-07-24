@@ -49,7 +49,8 @@ export const Logout_User_Database = () => async (dispatch: AppDispatch, getState
             login_on: Encrypt(`${current_end_user_account_state.login_on}`),
             logout_on: Encrypt(`${current_end_user_account_state.logout_on}`),
             login_type: Encrypt(`EMAIL`),
-            account_type: Encrypt(`${current_end_user_account_state.account_type}`)
+            account_type: Encrypt(`${current_end_user_account_state.account_type}`),
+            email_address: Encrypt(`${current_end_user_account_state.email_address}`),
         })
 
         await axios.put(`${USERS_SERVER_ADDRESS}/Authenticate/Logout`, {
