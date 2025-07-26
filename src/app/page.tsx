@@ -16,6 +16,7 @@ import Identity from './Identity/Identity'
 import Settings from './Settings/Settings'
 import FAQ from './Faq/FAQ'
 import Help from './Help/Help'
+import News_Feed from './News/News_Feed'
 
 const Main = () => {
 
@@ -101,6 +102,7 @@ const Main = () => {
                                 <FAQ />
                                 <Help />
                                 <Profile_Mirror />
+                                <News_Feed />
                             </Col>
                         </Row>
                     </Container>
@@ -116,6 +118,7 @@ const Main = () => {
                             </Col>
                             <Col>
                                 <Identity />
+                                <News_Feed />
                                 <FAQ />
                                 <Help />
                             </Col>
@@ -128,6 +131,7 @@ const Main = () => {
                         <Row>
                             <Col>
                                 <Community />
+                                <News_Feed />
                                 <Help />
                             </Col>
                             <Col>
@@ -147,6 +151,7 @@ const Main = () => {
                         <Row>
                             <Col>
                                 <Community />
+                                <News_Feed />
                             </Col>
                             <Col>
                                 <Settings />

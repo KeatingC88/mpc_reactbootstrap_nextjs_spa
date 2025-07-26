@@ -22,6 +22,7 @@ import Community_Discord from './Community/Discord/Discord'
 import Login_Email_Address_Password from './Login/User/Email/Login_Email_Address_Password'
 import Navigation_Menu from '@Shared_Components/Navigation_Menu'
 import Password_Register from './Register/Email/Password/Password_Register'
+import News_Feed from './News/News_Feed'
 
 const External_NextJS_Router = () => {
 
@@ -56,6 +57,7 @@ const External_NextJS_Router = () => {
         '/HELP',
         '/IDENTITY',
         '/INTEGRATION',
+        '/NEWS',
         '/PROFILE/MIRROR',
         '/SETTINGS',
         '/SUGGESTION'
@@ -92,7 +94,6 @@ const External_NextJS_Router = () => {
     const administrator_route = () => { return ADMINISTRATOR_USER_ROUTES.includes(Path.toUpperCase()) }
 
     const user_account_user_route_component = () => {
-
         switch (Path.toUpperCase()) {
             case '/CHAT':
                 return <WebSocket_Chat />
@@ -108,6 +109,8 @@ const External_NextJS_Router = () => {
                 return <Integration />
             case '/FAQ':
                 return <Faq />
+            case '/NEWS':
+                return <News_Feed />
             case '/SUGGESTION':
                 return <Suggestion />
             case '/HELP':

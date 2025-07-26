@@ -212,7 +212,7 @@ export const Delay_Execution = (time: number, Action: () => void): void => {
 
 export class Moveable_Card_2D {
 
-  private observer: MutationObserver | null = null
+    private observer: MutationObserver | null = null
     private html_body: HTMLElement
     private container: HTMLElement | null
     private html_element: HTMLElement | null = null

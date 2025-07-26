@@ -20,30 +20,33 @@ export interface Application_Props {
                 Region_code: string
             }[]
         } | null
+        news: [] | null
+        profile_viewer: {
+            id: BigInt | number | null
+            birth_date: string | null
+            ethnicity: string | null
+            first_name: string | null
+            last_name: string | null
+            gender: number | null
+            maiden_name: string | null
+            middle_name: string | null
+            account_type: string | null
+            avatar_title: string | null
+            avatar_url_path: string | null
+            created_on: number | null
+            custom_lbl: string | null
+            language_code: string | null
+            region_code: string | null
+            online_status: number | null
+            name: string | null
+            logout_on: number | null
+            login_type: string | null
+            login_on: number | null
+        }
     }
+    
     language_dictionaries: Language_Dictionaries
-    profile_viewer: {
-        id: BigInt | number | null
-        birth_date: string | null
-        ethnicity: string | null
-        first_name: string | null
-        last_name: string | null
-        gender: number | null
-        maiden_name: string | null
-        middle_name: string | null
-        account_type: string | null
-        avatar_title: string | null
-        avatar_url_path: string | null
-        created_on: number | null
-        custom_lbl: string | null
-        language_code: string | null
-        region_code: string | null
-        online_status: number | null
-        name: string | null
-        logout_on: number | null
-        login_type: string | null
-        login_on: number | null
-    }
+    
     settings: {
         current_language: string
         theme: number

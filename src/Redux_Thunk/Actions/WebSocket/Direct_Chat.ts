@@ -41,69 +41,65 @@ const set_avatar_image_source_url = (avatar_url_path: string): string => {
     }
 }
 
-type ChatMessageData = {
-    html_list_group_item_value: string
-    avatar_url_path: string
-    name: string
-    online_status: string | number
-    message: string
-}
-
-type ChatMessage = {
-    data: ChatMessageData
+const create_chat_message_element = (obj: {
+    data: {
+        html_list_group_item_value: string
+        avatar_url_path: string
+        name: string
+        online_status: string | number
+        message: string
+    }
     time_stamp: string | number
+}): HTMLDivElement => {
+    const container = document.createElement("div")
+    container.classList.add("list-group-item", `list-group-item-${obj.data.html_list_group_item_value}`)
+
+    const row = document.createElement("div")
+    row.classList.add("row")
+
+    const avatar_column = document.createElement("div")
+    avatar_column.classList.add("col-xs-5", "col-sm-12", "col-md-4", "col-lg-3", "col")
+
+    const avatar_image_element = document.createElement("div")
+    avatar_image_element.innerHTML = set_avatar_image_source_url(obj.data.avatar_url_path)
+
+    const user_name_display_element = document.createElement(`h${User_Selected_FontSize}`)
+    user_name_display_element.textContent = obj.data.name.split("#")[0]
+
+    const online_status_element = document.createElement("span")
+    online_status_element.style.color = Chat_Status_Color_Display(parseInt(obj.data.online_status.toString()))
+
+    avatar_column.appendChild(avatar_image_element)
+    avatar_column.appendChild(user_name_display_element)
+    avatar_column.appendChild(online_status_element)
+
+    const message_column = document.createElement("div")
+    message_column.classList.add("col-xs-7", "col-sm-12", "col-md-8", "col-lg-9", "col")
+
+    const message_row = document.createElement("div")
+    message_row.classList.add("row")
+
+    const message_column_container = document.createElement("div")
+    message_column_container.classList.add("col", "text-start")
+
+    const message_heading_element = document.createElement(`h${User_Selected_FontSize}`)
+    message_heading_element.textContent = obj.data.message
+
+    const time_stamp_element = document.createElement("p")
+    time_stamp_element.classList.add("text-end")
+    time_stamp_element.textContent = new Date(parseInt(obj.time_stamp.toString())).toLocaleString()
+
+    message_column_container.appendChild(message_heading_element)
+    message_column_container.appendChild(time_stamp_element)
+    message_row.appendChild(message_column_container)
+    message_column.appendChild(message_row)
+
+    row.appendChild(avatar_column)
+    row.appendChild(message_column)
+    container.appendChild(row)
+
+    return container
 }
-
-const create_chat_message_element = (obj: ChatMessage): HTMLDivElement => {
-    const container = document.createElement("div");
-    container.classList.add("list-group-item", `list-group-item-${obj.data.html_list_group_item_value}`);
-
-    const row = document.createElement("div");
-    row.classList.add("row");
-
-    const avatar_column = document.createElement("div");
-    avatar_column.classList.add("col-xs-5", "col-sm-12", "col-md-4", "col-lg-3", "col");
-
-    const avatar_image_element = document.createElement("div");
-    avatar_image_element.innerHTML = set_avatar_image_source_url(obj.data.avatar_url_path);
-
-    const user_name_display_element = document.createElement(`h${User_Selected_FontSize}`);
-    user_name_display_element.textContent = obj.data.name.split("#")[0];
-
-    const online_status_element = document.createElement("span");
-    online_status_element.style.color = Chat_Status_Color_Display(parseInt(obj.data.online_status.toString()));
-
-    avatar_column.appendChild(avatar_image_element);
-    avatar_column.appendChild(user_name_display_element);
-    avatar_column.appendChild(online_status_element);
-
-    const message_column = document.createElement("div");
-    message_column.classList.add("col-xs-7", "col-sm-12", "col-md-8", "col-lg-9", "col");
-
-    const message_row = document.createElement("div");
-    message_row.classList.add("row");
-
-    const message_column_container = document.createElement("div");
-    message_column_container.classList.add("col", "text-start");
-
-    const message_heading_element = document.createElement(`h${User_Selected_FontSize}`);
-    message_heading_element.textContent = obj.data.message;
-
-    const time_stamp_element = document.createElement("p");
-    time_stamp_element.classList.add("text-end");
-    time_stamp_element.textContent = new Date(parseInt(obj.time_stamp.toString())).toLocaleString();
-
-    message_column_container.appendChild(message_heading_element);
-    message_column_container.appendChild(time_stamp_element);
-    message_row.appendChild(message_column_container);
-    message_column.appendChild(message_row);
-
-    row.appendChild(avatar_column);
-    row.appendChild(message_column);
-    container.appendChild(row);
-
-    return container;
-};
 
 const create_chat_message_elements = (): DocumentFragment => {
 
@@ -123,6 +119,25 @@ const create_chat_message_elements = (): DocumentFragment => {
     }
 
     return fragment
+}
+
+const Chat_Status_Color_Display = (status_code: number): string => {
+    switch (status_code) {
+        case 0:
+            return 'grey'
+        case 1:
+            return 'grey'
+        case 2:
+            return 'green'
+        case 3:
+            return 'yellow'
+        case 4:
+            return 'red'
+        case 5:
+            return 'cyan'
+        default:
+            return "undefined"
+    }
 }
 
 const fetch_participant_data_from_cache_server = ({
@@ -635,20 +650,6 @@ export const Authenticate_End_Users_Permissions = (dto: {
     }
 }
 
-type ConversationEntry = [
-    string,
-    any,   
-    string,
-    string, 
-    string,
-    string,
-    string,
-    string,
-    string,
-    string,
-    string | undefined 
-]
-
 export const Get_End_User_Chat_History_With_Other_User_ID = (participant_id: BigInt) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
 
     let state = getState()
@@ -674,7 +675,7 @@ export const Get_End_User_Chat_History_With_Other_User_ID = (participant_id: Big
                 ...response.data.sent_to
             }
 
-            const conversation_array: ConversationEntry[] = Object.values(conversation)
+            const conversation_array: any[] = Object.values(conversation)
 
             conversation_array.sort((a, b) => parseInt(Decrypt(a[3])) - parseInt(Decrypt(b[3])))
   
@@ -739,9 +740,9 @@ export const Get_End_User_Chat_History_With_Other_User_ID = (participant_id: Big
 
             const ordered:any = {}
 
-            for (const userId in End_User_Conversations) {
+            for (const participants_user_id in End_User_Conversations) {
 
-                const messages = End_User_Conversations[userId]
+                const messages = End_User_Conversations[participants_user_id]
 
                 // Convert to array and sort by timestamp (as number)
                 const sortedEntries = Object.entries(messages).sort((a:any, b:any) => {
@@ -751,7 +752,7 @@ export const Get_End_User_Chat_History_With_Other_User_ID = (participant_id: Big
                 })
 
                 // Reconstruct sorted object
-                ordered[userId] = Object.fromEntries(sortedEntries)
+                ordered[participants_user_id] = Object.fromEntries(sortedEntries)
 
             }
 
@@ -775,25 +776,6 @@ export const Get_End_User_Chat_History_With_Other_User_ID = (participant_id: Big
             })
         }
     })
-}
-
-const Chat_Status_Color_Display = (status_code: number): string => {
-    switch (status_code) {
-        case 0:
-            return 'grey'
-        case 1:
-            return 'grey'
-        case 2:
-            return 'green'
-        case 3:
-            return 'yellow'
-        case 4:
-            return 'red'
-        case 5:
-            return 'cyan'
-        default:
-            return "undefined"
-    }
 }
 
 export const Approve_Chat_For_End_User = (value: BigInt) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {

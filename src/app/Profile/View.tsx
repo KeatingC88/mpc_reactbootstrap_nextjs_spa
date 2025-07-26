@@ -27,7 +27,7 @@ import { Delay_Execution } from '@Redux_Thunk/Actions/Misc'
 const Profile_View = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-
+    
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -244,8 +244,8 @@ const Profile_View = () => {
         if (profile_id != undefined) {
 
             Dispatch(Load_Profile_Viewer_Data(BigInt(profile_id))).then(() => {
-                if (props.application.profile_viewer?.created_on)
-                    set_created_on_value(new Date(props.application.profile_viewer?.created_on * 1000).toString())
+                if (props.application.community.profile_viewer?.created_on)
+                    set_created_on_value(new Date(props.application.community.profile_viewer?.created_on * 1000).toString())
             })
 
             if (BigInt(profile_id) === props.end_user.account.id) {
@@ -277,7 +277,7 @@ const Profile_View = () => {
                                 fontFamily: `${props.end_user.custom_design.card_header_font}`
                             }}
                         >
-                            <h1>{props.application.profile_viewer.name}</h1>
+                            <h1>{props.application.community.profile_viewer.name}</h1>
                         </Card.Header>
                         <Card.Body
                             style={{
@@ -313,8 +313,8 @@ const Profile_View = () => {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{props.application.profile_viewer.id?.toString()}</td>
-                                                <td>{props.application.profile_viewer.name}</td>
+                                                <td>{props.application.community.profile_viewer.id?.toString()}</td>
+                                                <td>{props.application.community.profile_viewer.name}</td>
                                                 <td>{created_on_value}</td>
                                             </tr>
                                         </tbody>
@@ -403,7 +403,7 @@ const Profile_View = () => {
             </Modal>
             <Modal show={chat_modal_visibility_value} onHide={() => { close_end_user_chat_modal() }}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{lbl.ChatWithUser} ({props.application.profile_viewer.name})</Modal.Title>
+                    <Modal.Title>{lbl.ChatWithUser} ({props.application.community.profile_viewer.name})</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Row>

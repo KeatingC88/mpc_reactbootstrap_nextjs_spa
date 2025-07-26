@@ -11,6 +11,7 @@ import Application_Settings_State_Reducer from '@Redux_Thunk/Reducers/Applicatio
 import Application_Community_State_Reducer from '@Redux_Thunk/Reducers/Application/Application_Community_State_Reducer'
 import Application_Profile_Viewer_State_Reducer from '@Redux_Thunk/Reducers/Application/Application_Profile_Viewer_State_Reducer'
 import Application_Notification_State_Reducer from '@Redux_Thunk/Reducers/Application/Application_Notification_State_Reducer'
+import Application_News_Feed_State_Reducer from '@Redux_Thunk/Reducers/Application/Application_News_Feed_State_Reducer'
 
 import End_User_Account_State_Reducer from '@Redux_Thunk/Reducers/End_User/End_User_Account_State_Reducer'
 import End_User_Profile_State_Reducer from '@Redux_Thunk/Reducers/End_User/End_User_Profile_State_Reducer'
@@ -30,6 +31,7 @@ const Combined_Reducers = combineReducers({
     Application_Profile_Viewer_State_Reducer,
     Application_Community_State_Reducer,
     Application_Notification_State_Reducer,
+    Application_News_Feed_State_Reducer,
     End_User_Account_State_Reducer,
     End_User_Profile_State_Reducer,
     End_User_Discord_Account_State_Reducer,
