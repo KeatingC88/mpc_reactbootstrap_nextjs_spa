@@ -47,6 +47,8 @@ export const Redux_Thunk_Core = createSelector(
             language_dictionaries: state.Application_Language_State_Reducer.language_dictionaries,
             settings: {
                 current_language: state.Application_Language_State_Reducer.current_language,
+                current_language_value: state.Application_Language_State_Reducer.language,
+                current_region_value: state.Application_Language_State_Reducer.region,
                 theme: state.Application_Settings_State_Reducer.theme,
                 alignment: state.Application_Settings_State_Reducer.alignment,
                 text_alignment: state.Application_Settings_State_Reducer.text_alignment,

@@ -41,20 +41,20 @@ const Community = () => {
     }
 
     const sortedUsers = useMemo(() => {
-        if (!props.application.community.users) return [];
+        if (!props.application.community.users) return []
 
-        const usersArray = Object.values(props.application.community.users);
+        const usersArray = Object.values(props.application.community.users)
 
         switch (display_name_index) {
             case 1:
-                return usersArray.sort((a, b) => a.name.localeCompare(b.name)); // Ascending
+                return usersArray.sort((a, b) => a.name.localeCompare(b.name))
             case 2:
-                return usersArray.sort((a, b) => b.name.localeCompare(a.name)); // Descending
+                return usersArray.sort((a, b) => b.name.localeCompare(a.name))
             default:
-                return usersArray;
+                return usersArray
         }
 
-    }, [props.application.community.users, display_name_index]);
+    }, [props.application.community.users, display_name_index])
 
     const toggle_display_id_sort = () => {
         set_display_name_index(0)

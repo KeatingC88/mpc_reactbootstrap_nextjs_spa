@@ -49,6 +49,8 @@ export interface Application_Props {
     
     settings: {
         current_language: string
+        current_language_value: string
+        current_region_value: string
         theme: number
         alignment: string
         text_alignment: string
