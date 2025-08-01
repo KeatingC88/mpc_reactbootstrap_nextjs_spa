@@ -88,7 +88,7 @@ const Community = () => {
         return sortedUsers.map((user: any) => (
             <tr key={user.id} onClick={() => go_to_end_user_selected_profile(user.id)}>
                 <td>
-                    {user.avatar_url_path ? (
+                    {user.avatar_url_path && user.avatar_url_path !== "null"? (
                         <img
                             src={user.avatar_url_path}
                             width="84"

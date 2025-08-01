@@ -229,7 +229,7 @@ export const Read_Both_Conversation_Participants_WebSocket_Conversation_Permissi
 
         let current_language_state = state.Application_Language_State_Reducer
 
-        axios.post(`${USERS_SERVER_ADDRESS}/WebSocket/Chat_Requests/End_User`, {
+        await axios.post(`${USERS_SERVER_ADDRESS}/WebSocket/Chat_Requests/End_User`, {
             token: await end_user_account.token,
             id: await Encrypt(`${end_user_account.id}`),
             account_type: await Encrypt(`${end_user_account.account_type}`),
@@ -656,7 +656,6 @@ export const Get_End_User_Chat_History_With_Other_User_ID = (participant_id: Big
     let end_user_account = state.End_User_Account_State_Reducer
 
     await axios.get(`${CHAT_SERVER_ADDRESS}/${end_user_account.id}/${participant_id}`).catch((error) => {
-
         return new Promise((reject) => {
             error.id = `WebSocket-End-Users-Chat-History-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -667,9 +666,7 @@ export const Get_End_User_Chat_History_With_Other_User_ID = (participant_id: Big
         })
 
     }).then((response: any) => {
-
-        if (response) {
-
+        if (response && response.data.from && response.data.sent_to) {
             const conversation = {
                 ...response.data.from,
                 ...response.data.sent_to

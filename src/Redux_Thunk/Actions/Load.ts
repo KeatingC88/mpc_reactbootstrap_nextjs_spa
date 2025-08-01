@@ -120,38 +120,37 @@ export const Load_Profile_Viewer_Data = (value: BigInt) => async (dispatch: AppD
         end_user_account.token !== null &&
         end_user_account.account_type !== null) {
 
-        axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/get/user/profile`, {
+        await axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/get/user/profile`, {
             token: end_user_account.token,
             id: Encrypt(`${value}`)
-        }).then( async (response: any) => {
-            Object.keys(response.data).forEach((index: any) => {
-                const set_decrypted_string = Decrypt(`${response.data[index]}`)
-                const set_decrypted_number = parseInt(set_decrypted_string)
+        }).then(async (response: any) => {
+            if (response.data) {
+                Object.keys(response.data).forEach((index: any) => {
+                    const set_decrypted_string = Decrypt(`${response.data[index]}`)
+                    const set_decrypted_number = parseInt(set_decrypted_string)
 
-                obj[index] = Number.isNaN(set_decrypted_number) ? set_decrypted_string : set_decrypted_number
+                    obj[index] = Number.isNaN(set_decrypted_number) ? set_decrypted_string : set_decrypted_number
+                })
+            }
+        }).then( async () => {
+            await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/get/user`, {
+                token: end_user_account.token,
+                id: Encrypt(`${value}`)
+            }).then(async (response: any) => {
+                if (response.data) {
+                    Object.keys(response.data).forEach((index: any) => {
+                        const set_decrypted_string = Decrypt(`${response.data[index]}`)
+                        const set_decrypted_number = parseInt(set_decrypted_string)
+
+                        obj[index] = Number.isNaN(set_decrypted_number) ? set_decrypted_string : set_decrypted_number
+                    })
+                    return await new Promise( async (resolve) => {
+                        await dispatch({ type: UPDATE_APPLICATION_PROFILE_VIEWER_STATE, payload: obj })
+                        resolve(obj)
+                    })
+                }
             })
-
         })
-
-        axios.post(`${USERS_CACHE_SERVER_ADDRESS}/get/user`, {
-            token: end_user_account.token,
-            id: Encrypt(`${value}`)
-        }).then( async (response: any) => {
-            Object.keys(response.data).forEach((index: any) => {
-                const set_decrypted_string = Decrypt(`${response.data[index]}`)
-                const set_decrypted_number = parseInt(set_decrypted_string)
-
-                obj[index] = Number.isNaN(set_decrypted_number) ? set_decrypted_string : set_decrypted_number
-            })
-        })
-
-        setTimeout(async() => {
-            return await new Promise(async (resolve) => {
-                await dispatch({ type: UPDATE_APPLICATION_PROFILE_VIEWER_STATE, payload: obj })
-                resolve(obj)
-
-            })
-        }, 100)
     }
 }
 
