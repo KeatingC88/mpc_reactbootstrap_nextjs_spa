@@ -101,6 +101,10 @@ export const Redux_Thunk_Core = createSelector(
             },
             twitch: {
                 id: state.End_User_Twitch_Account_State_Reducer.id,
+                display_name: state.End_User_Twitch_Account_State_Reducer.display_name,
+                login: state.End_User_Twitch_Account_State_Reducer.login,
+                email_address: state.End_User_Twitch_Account_State_Reducer.email_address,
+                profile_image_url: state.End_User_Twitch_Account_State_Reducer.profile_image_url
             },
             profile: {
                 first_name: state.End_User_Profile_State_Reducer.first_name,

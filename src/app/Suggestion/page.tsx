@@ -2,7 +2,7 @@ import Comment from "./Suggestion"
 
 import type { Metadata } from 'next'
 export const metadata: Metadata = {
-    keywords: ['MPC Community'],
+    keywords: ['Suggestion Box'],
 }
 
 const Comment_Page = (): React.ReactElement => {

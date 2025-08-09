@@ -8,7 +8,7 @@ import {
     Attempt_To_Register_The_End_User_An_Email_Account,
     Notify_Attempted_Registration_To_Same_Email_Account_By_Email_Message,
     Validate_Email_With_Users_Server
-} from '@Redux_Thunk/Actions/Register'
+} from '@Redux_Thunk/Actions/Register/Email_Account'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'

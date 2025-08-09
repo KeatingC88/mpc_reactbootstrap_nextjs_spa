@@ -1,6 +1,7 @@
 import Community from "./Community"
 
 import type { Metadata } from 'next'
+
 export const metadata: Metadata = {
     keywords: ['MPC Community'],
 }

@@ -11,7 +11,7 @@ import {
     Create_End_User_Email_Account,
     Validate_Email_Confirmation_Code_With_Email_Server,
     Validate_Email_Confirmation_Code_With_User_Server
-} from '@Redux_Thunk/Actions/Register'
+} from '@Redux_Thunk/Actions/Register/Email_Account'
 
 import {
     Set_Navigation_Menu_Display

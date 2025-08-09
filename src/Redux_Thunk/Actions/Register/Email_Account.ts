@@ -1,8 +1,16 @@
 import {
-    USERS_SERVER_ADDRESS, MAIL_SERVER_ADDRESS, UPDATE_NETWORK_ERROR_STATE, UPDATE_END_USER_ACCOUNT_STATE,
-    CLIENT_ADDRESS, JWT_ISSUER_KEY, JWT_CLIENT_KEY,
-    DEFAULT_NETWORK_ERROR_STATE, DEFAULT_HOST_ERROR_STATE, UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, 
-    UPDATE_HOST_ERROR_STATE, USERS_CACHE_SERVER_ADDRESS
+    USERS_SERVER_ADDRESS,
+    MAIL_SERVER_ADDRESS,
+    UPDATE_NETWORK_ERROR_STATE,
+    UPDATE_END_USER_ACCOUNT_STATE,
+    CLIENT_ADDRESS,
+    JWT_ISSUER_KEY,
+    JWT_CLIENT_KEY,
+    DEFAULT_NETWORK_ERROR_STATE,
+    DEFAULT_HOST_ERROR_STATE,
+    UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, 
+    UPDATE_HOST_ERROR_STATE,
+    USERS_CACHE_SERVER_ADDRESS
 } from '@Constants'
 
 import { Encrypt } from '@AES/Encryptor'
@@ -12,7 +20,6 @@ import { JWT_Decoder } from '@JWT/Decoder'
 import axios from 'axios'
 
 import { Get_Device_Information, Map_GUI_Values_For_Database_Storage } from '@Redux_Thunk/Actions/Misc'
-import { Load_All_Community_Users } from '@Redux_Thunk/Actions/Load'
 
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import type { AppDispatch } from '@Redux_Thunk/Provider'
@@ -313,7 +320,7 @@ export const Create_End_User_Email_Account = (dto: {
 
     let state = getState()
 
-    if (!state.Network_Error_State_Reducer.id && typeof window !== 'undefined') {
+    if (!state.Network_Error_State_Reducer.id) {
 
         let current_language_state = state.Application_Language_State_Reducer
         let current_settings_state = state.Application_Settings_State_Reducer
@@ -420,8 +427,6 @@ export const Create_End_User_Email_Account = (dto: {
                         account_type: response.data.account_type,
                         email_address: response.data.email_address ? response.data.email_address : await Encrypt(``)
                     })
-
-                    dispatch(Load_All_Community_Users())
 
                     resolve(true)
                 }

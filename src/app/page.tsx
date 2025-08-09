@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux'
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 
 import Email_Register from './Register/Email/Email_Register'
+import Twitch_Login from './Login/User/Twitch/Twitch_Login'
+
 import Profile_Mirror from './Profile/Mirror'
 import Login_Email_Address_Password from './Login/User/Email/Login_Email_Address_Password'
 import Community from "./Community/Community"
@@ -17,6 +19,7 @@ import Settings from './Settings/Settings'
 import FAQ from './Faq/FAQ'
 import Help from './Help/Help'
 import News_Feed from './News/News_Feed'
+
 
 const Main = () => {
 
@@ -30,8 +33,11 @@ const Main = () => {
                     <Container fluid>
                         <Row>
                             <Col>
-                                <Email_Register />
+                                
                                 <Login_Email_Address_Password />
+                                <Email_Register />
+                                <Twitch_Login />
+                                
                             </Col>
                         </Row>
                     </Container>
@@ -41,10 +47,11 @@ const Main = () => {
                     <Container fluid>
                         <Row>
                             <Col>
-                                <Email_Register />
+                                <Login_Email_Address_Password />
                             </Col>
                             <Col>
-                                <Login_Email_Address_Password />
+                                <Email_Register />
+                                <Twitch_Login />
                             </Col>
                         </Row>
                     </Container>
@@ -54,13 +61,13 @@ const Main = () => {
                     <Container fluid>
                         <Row>
                             <Col>
-                                <Email_Register />
-                            </Col>
-                            <Col>
                                 <Login_Email_Address_Password />
                             </Col>
                             <Col>
-                                
+                                <Email_Register />
+                            </Col>
+                            <Col>
+                                <Twitch_Login />
                             </Col>
                         </Row>
                     </Container>
@@ -70,13 +77,13 @@ const Main = () => {
                     <Container fluid>
                         <Row>
                             <Col>
-                                <Email_Register />
-                            </Col>
-                            <Col>
                                 <Login_Email_Address_Password />
                             </Col>
                             <Col>
-                                
+                                <Email_Register />
+                            </Col>
+                            <Col>
+                                <Twitch_Login />
                             </Col>
                             <Col>
                                 

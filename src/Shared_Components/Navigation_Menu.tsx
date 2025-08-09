@@ -27,7 +27,7 @@ import {
 
 import {
     Logout_User_Database,
-} from '@Redux_Thunk/Actions/Logout'
+} from '@Redux_Thunk/Actions/Authentication/Logout'
 
 import {
     Load_New_Token

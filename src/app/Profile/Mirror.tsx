@@ -167,7 +167,6 @@ const Profile_Mirror = () => {
                                     </Col>
                                     <Col>
                                         <ListGroupItem>{props.end_user.account.name}</ListGroupItem>
-                                        <ListGroupItem>#&nbsp;{props.end_user.account.public_id}</ListGroupItem>
                                         <ListGroupItem>{set_profile_status()}</ListGroupItem>
                                     </Col>
                                 </Row>

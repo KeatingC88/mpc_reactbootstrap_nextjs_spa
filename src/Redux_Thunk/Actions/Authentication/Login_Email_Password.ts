@@ -1,5 +1,11 @@
-import { Get_Nation_Flag_Value, Map_GUI_Values_For_Database_Storage, Map_Database_Values_For_ReactBootstrap } from '@Redux_Thunk/Actions/Misc'
+import {
+    Get_Nation_Flag_Value,
+    Map_GUI_Values_For_Database_Storage,
+    Map_Database_Values_For_ReactBootstrap
+} from '@Redux_Thunk/Actions/Misc'
+
 import axios from 'axios'
+
 import {
     USERS_SERVER_ADDRESS, UPDATE_NETWORK_ERROR_STATE,
     UPDATE_END_USER_ACCOUNT_STATE, UPDATE_APPLICATION_SETTINGS_LOCAL_TIME,
@@ -23,59 +29,8 @@ import { JWT_Decoder } from '@JWT/Decoder'
 
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import type { AppDispatch } from '@Redux_Thunk/Provider'
+
 import { Get_Device_Information } from '@Redux_Thunk/Actions/Misc'
-
-interface JwtData {
-    [key: string]: string | number;
-}
-
-interface ResponseData {
-    token: string
-    current_language: string
-    account_type: string
-    created_on: string
-    email_address: string
-    id: string
-    login_on: string
-    name: string
-    roles: string
-    groups: string
-    logout_on: string
-    avatar_url_path: string
-    avatar_title: string
-    custom_lbl: string
-    online_status: string
-    first_name: string
-    last_name: string
-    middle_name: string
-    maiden_name: string
-    gender: string
-    birth_month: string
-    birth_day: string
-    birth_year: string
-    ethnicity: string
-    grid_type: string
-    theme: string
-    nav_lock: string
-    alignment: string
-    text_alignment: string
-    card_border_color: string
-    card_header_font: string
-    card_header_background_color: string
-    card_header_font_color: string
-    card_body_font: string
-    card_body_background_color: string
-    card_body_font_color: string
-    card_footer_font: string
-    card_footer_background_color: string
-    card_footer_font_color: string
-    navigation_menu_background_color: string
-    navigation_menu_font_color: string
-    navigation_menu_font: string
-    button_background_color: string
-    button_font_color: string
-    button_font: string
-}
 
 export const Login_Email_Password = (dto: {
     email_address: string
@@ -90,17 +45,19 @@ export const Login_Email_Password = (dto: {
         alignment: current_setting.alignment,
         text_alignment: current_setting.text_alignment,
     })
+
+
     
      axios.put(`${USERS_SERVER_ADDRESS}/Authenticate/Login/Email`, {
         email_address:  Encrypt(dto.email_address),
         password:  Encrypt(dto.password),
-         theme: Encrypt(`${current_setting.theme}`),
+        theme: Encrypt(`${current_setting.theme}`),
         alignment: Encrypt(`${converted_alignment_numerically.alignment}`),
         text_alignment: Encrypt(`${converted_alignment_numerically.text_alignment}`),
-         grid_type: Encrypt(`${current_setting.grid_type}`),
+        grid_type: Encrypt(`${current_setting.grid_type}`),
         locked: Encrypt(`${current_setting.nav_lock}`),
-         language: Encrypt(`${current_language_state.current_language.split(`-`)[0]}`),
-         region: Encrypt(`${current_language_state.current_language.split(`-`)[1]}`),
+        language: Encrypt(`${current_language_state.current_language.split(`-`)[0]}`),
+        region: Encrypt(`${current_language_state.current_language.split(`-`)[1]}`),
         client_time:  Encrypt(`${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`),
         location:  Encrypt(`${Intl.DateTimeFormat().resolvedOptions().timeZone}`),
         jwt_issuer_key:  Encrypt(`${JWT_ISSUER_KEY}`),
@@ -129,8 +86,10 @@ export const Login_Email_Password = (dto: {
         }, 1)
 
     }).then( async (response: any) => {
-
+        console.log(response)
         if (!state.Network_Error_State_Reducer.id) {
+
+            console.log(response.data.token)
 
             let jwt_data = JWT_Decoder(response.data.token)
 
@@ -299,4 +258,3 @@ export const Login_Email_Password = (dto: {
         }
     })
 }
-

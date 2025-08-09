@@ -31,7 +31,11 @@ export interface End_User_Props {
     }
 
     twitch: {
-        id: string | null
+        id: BigInt | null
+        display_name: string | null
+        login: string | null
+        email_address: string | null
+        profile_image_url: string | null
     }
 
     profile: {

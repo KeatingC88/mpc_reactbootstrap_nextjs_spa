@@ -22,6 +22,9 @@ import Community_Discord from './Community/Discord/Discord'
 import Login_Email_Address_Password from './Login/User/Email/Login_Email_Address_Password'
 import Navigation_Menu from '@Shared_Components/Navigation_Menu'
 import Password_Register from './Register/Email/Password/Password_Register'
+import Twitch_Register from './Login/User/Twitch/Twitch_Login'
+import Twitch_Confirmation from './Login/User/Twitch/Confirmation/Twitch_Confirmation'
+import Twitch_Login from './Login/User/Twitch/Twitch_Login'
 import News_Feed from './News/News_Feed'
 
 const External_NextJS_Router = () => {
@@ -40,8 +43,11 @@ const External_NextJS_Router = () => {
 
     const [PUBLIC_ROUTES, SET_PUBLIC_ROUTES] = useState([
         '/LOGIN/USER/EMAIL',
+        '/LOGIN/USER/TWITCH',
         '/REGISTER/EMAIL',
         '/REGISTER/EMAIL/PASSWORD',
+        '/REGISTER/TWITCH',
+        '/REGISTER/TWITCH/CONFIRMATION',
         '/'
     ])
 
@@ -60,7 +66,8 @@ const External_NextJS_Router = () => {
         '/NEWS',
         '/PROFILE/MIRROR',
         '/SETTINGS',
-        '/SUGGESTION'
+        '/SUGGESTION',
+        '/REGISTER/TWITCH/CONFIRMATION',
     ])
 
     const user_route = () => {
@@ -121,6 +128,8 @@ const External_NextJS_Router = () => {
                 return <Profile_View />
             case '/PROFILE/MIRROR':
                 return <Profile_Mirror />
+            case '/REGISTER/TWITCH/CONFIRMATION':
+                return <Twitch_Confirmation />
             default:
                 return null
         }
@@ -135,6 +144,12 @@ const External_NextJS_Router = () => {
                 return <Login_Email_Address_Password />
             case '/REGISTER/EMAIL/PASSWORD':
                 return <Password_Register />
+            case '/REGISTER/TWITCH':
+                return <Twitch_Register />
+            case '/REGISTER/TWITCH/CONFIRMATION':
+                return <Twitch_Confirmation />
+            case '/LOGIN/USER/TWITCH':
+                return <Twitch_Login />
             default:
                 return null
         }
