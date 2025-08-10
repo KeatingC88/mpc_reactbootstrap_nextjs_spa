@@ -15,7 +15,7 @@ import { Load_All_Community_Users } from '@Redux_Thunk/Actions/Load'
 const Community = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-    
+    console.log(props)
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()

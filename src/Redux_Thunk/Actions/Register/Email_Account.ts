@@ -15,7 +15,7 @@ import {
 
 import { Encrypt } from '@AES/Encryptor'
 import { Decrypt } from '@AES/Decryptor'
-import { JWT_Decoder } from '@JWT/Decoder'
+import { JWT_Email_Validation } from '@JWT/Decoder'
 
 import axios from 'axios'
 
@@ -223,24 +223,7 @@ export const Validate_Email_Confirmation_Code_With_User_Server = (dto: {
                 dispatch({ type: DEFAULT_HOST_ERROR_STATE })
                 dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
             }, 1000)
-        }).then( async (response: any) => {
-
-            if (!state.Network_Error_State_Reducer.id) {
-
-                if (response.status != 200) {
-                    let error = {
-                        id: ``
-                    }
-                    error.id = `Email-Second-Verification-Code-Failed.`
-                    await dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
-                } else if (response.status === 200 && dto.email_address === response.data.Email_Address) {
-                    await dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-                    await dispatch({ type: DEFAULT_HOST_ERROR_STATE })
-                }
-
-            }
         })
-        
     }
 }
 
@@ -369,63 +352,51 @@ export const Create_End_User_Email_Account = (dto: {
             data_saver: await Encrypt(`${Get_Device_Information().saveData}`),
             device_ram_gb: await Encrypt(`${Get_Device_Information().deviceMemory}`),
         }).then( async (response) => {
+            return await new Promise(async (resolve) => {
 
-            return await new Promise( async (resolve) => {
+                let response_data = JSON.parse(JSON.parse(Decrypt(response.data)).mpc_data)
 
-                let jwt_data = JWT_Decoder(response.data.token)
-
-                let jwt_client_issuer_match = false
-
-                const fetch_key = Object.keys(jwt_data) as Array<keyof typeof jwt_data>
-
-                await Decrypt(`${jwt_data[fetch_key[7]]}`) === JWT_ISSUER_KEY &&
-                await Decrypt(`${jwt_data[fetch_key[8]]}`) === JWT_CLIENT_KEY ? (jwt_client_issuer_match = true) : (jwt_client_issuer_match = false)
-
-                if (!jwt_client_issuer_match) {
-
-                    await dispatch({ type: UPDATE_HOST_ERROR_STATE, payload: { id: `JWT-Mismatch` } })
-
-                } else {
+                if (JWT_Email_Validation({ token: response_data.token, comparable_data: response_data })) {
 
                     await dispatch({
                         type: UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, payload: {
-                            current_language: `${await Decrypt(response.data.language)}-${await Decrypt(response.data.region)}`
+                            current_language: `${response_data.language}-${response_data.region}`
                         }
                     })
 
                     await dispatch({
                         type: UPDATE_END_USER_ACCOUNT_STATE, payload: {
-                            account_type: (await parseInt(Decrypt(`${jwt_data[fetch_key[0]]}`)) === await parseInt(Decrypt(response.data.account_type))) ? parseInt(Decrypt(response.data.account_type)) : null,
-                            created_on: await parseInt(Decrypt(response.data.created_on)),
-                            email_address: (await Decrypt(`${jwt_data[fetch_key[5]]}`) === await Decrypt(response.data.email_address)) ? Decrypt(response.data.email_address) : null,
-                            id: (await parseInt(Decrypt(`${jwt_data[fetch_key[1]]}`)) === await parseInt(Decrypt(response.data.id))) ? parseInt(Decrypt(response.data.id)) : null,
-                            login_on: await parseInt(Decrypt(response.data.login_on)),
-                            token: response.data.token,
-                            name: await Decrypt(`${response.data.name}`),
-                            roles: (await Decrypt(`${jwt_data[fetch_key[2]]}`) === await Decrypt(response.data.roles).slice(1, -1)) ? Decrypt(response.data.roles).slice(1, -1) : null,
-                            client_address: (await Decrypt(`${jwt_data[fetch_key[4]]}`) === CLIENT_ADDRESS) ? CLIENT_ADDRESS : null,
-                            groups: (await Decrypt(`${jwt_data[fetch_key[3]]}`) === await Decrypt(response.data.groups).slice(1, -1)) ? Decrypt(response.data.groups).slice(1, -1) : null,
-                            login_type: await Decrypt(`${response.data.login_type}`),
-                            online_status: await Decrypt(`${response.data.online_status}`)
+                            account_type: parseInt(response_data.account_type),
+                            created_on: parseInt(response_data.created_on),
+                            email_address: response_data.email_address,
+                            id: parseInt(response_data.id),
+                            login_on: parseInt(response_data.login_on),
+                            token: response_data.token,
+                            name: response_data.name,
+                            roles: response_data.roles.slice(1, -1),
+                            client_address: CLIENT_ADDRESS,
+                            groups: response_data.groups.slice(1, -1),
+                            login_type: response_data.login_type,
+                            online_status: parseInt(response_data.online_status)
                         }
                     })
                     
                     await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
-                        token: response.data.token,
-                        id: response.data.id,
-                        online_status: response.data.online_status,
-                        custom_lbl: response.data.custom_lbl ? response.data.custom_lbl : await Encrypt(``),
-                        name: response.data.name,
-                        created_on: response.data.created_on,
-                        avatar_url_path: response.data.avatar_url_path ? response.data.avatar_url_path : await Encrypt(``),
-                        avatar_title: response.data.avatar_title ? response.data.avatar_title : await Encrypt(``),
+                        token: response_data.token,
+                        id: Encrypt(`${response_data.id}`),
+                        online_status: Encrypt(`${response_data.online_status}`),
+                        custom_lbl: Encrypt(`${response_data.custom_lbl}`),
+                        name: Encrypt(`${response_data.name}`),
+                        created_on: Encrypt(`${response_data.created_on}`),
+                        avatar_url_path: Encrypt(`${response_data.avatar_url_path}`),
+                        avatar_title: Encrypt(`${response_data.avatar_title}`),
                         language_code: Encrypt(`${collected_end_user_data.language}`),
                         region_code: Encrypt(`${collected_end_user_data.region}`),
-                        login_on: response.data.login_on ? response.data.login_on : await Encrypt(``),
-                        logout_on: response.data.logout_on ? response.data.logout_on : await Encrypt(``),
+                        login_on: Encrypt(`${response_data.login_on}`),
+                        logout_on: Encrypt(`${response_data.logout_on}`),
                         login_type: Encrypt(`EMAIL`),
-                        account_type: response.data.account_type,
-                        email_address: response.data.email_address ? response.data.email_address : await Encrypt(``)
+                        account_type: Encrypt(`${response_data.account_type}`),
+                        email_address: Encrypt(`${response_data.email_address}`)
                     })
 
                     resolve(true)

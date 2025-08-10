@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux'
 import { Row, Col, Card, Table, Alert, Container } from 'react-bootstrap'
 
 import {
-    Register_End_User_Twitch_Account
-} from '@Redux_Thunk/Actions/Register/Twitch_Account'
+    Login_End_User_Twitch_Account
+} from '@Redux_Thunk/Actions/Authentication/Login_Twitch_Account'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
@@ -65,7 +65,7 @@ const Twitch_Confirmation = () => {
             set_card_width(``)
         }
 
-        Dispatch(Register_End_User_Twitch_Account())
+        Dispatch(Login_End_User_Twitch_Account())
     }, [])
 
     return (

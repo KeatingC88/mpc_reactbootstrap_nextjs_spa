@@ -16,7 +16,7 @@ import {
 
 import { Encrypt } from '@AES/Encryptor'
 import { Decrypt } from '@AES/Decryptor'
-import { JWT_Decoder } from '@JWT/Decoder'
+import { JWT_Email_Validation } from '@JWT/Decoder'
 
 import { Get_Device_Information } from '@Redux_Thunk/Actions/Misc'
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
@@ -78,32 +78,24 @@ export const Load_New_Token = () => async (dispatch: AppDispatch, getState: () =
 
             if (!state.Network_Error_State_Reducer.id) {
 
-                let jwt_data = JWT_Decoder(response.data.token)
+                let response_data = JSON.parse(JSON.parse(Decrypt(response.data)).mpc_data)
 
-                let jwt_client_issuer_match = false
+                if (JWT_Email_Validation({ token: response_data.token, comparable_data: response_data })) {
 
-                const fetch_key = Object.keys(jwt_data) as Array<keyof typeof jwt_data>
+                    return await new Promise(async (resolve) => {
 
-                Decrypt(`${jwt_data[fetch_key[7]]}`) === JWT_ISSUER_KEY &&
-                    Decrypt(`${jwt_data[fetch_key[8]]}`) === JWT_CLIENT_KEY ? (jwt_client_issuer_match = true) : (jwt_client_issuer_match = false)
-
-                if (!jwt_client_issuer_match) {
-
-                    dispatch({ type: UPDATE_HOST_ERROR_STATE, payload: { id: `Client-Mismatch` } })
-
-                } else {
-
-                    return await new Promise( async (resolve) => {
                         await dispatch({
                             type: UPDATE_END_USER_ACCOUNT_TOKEN, payload: {
-                                token: response.data.token,
-                                token_expire: response.data.token,
+                                token: response_data.token,
+                                token_expire: response_data.token,
                                 token_expire_notification: false
                             }
                         })
 
-                        resolve({token: response.data.token, token_expire: response.data.token })
+                        resolve({ token: response_data.token, token_expire: response_data.token })
+
                     })
+
                 }
             }
         })

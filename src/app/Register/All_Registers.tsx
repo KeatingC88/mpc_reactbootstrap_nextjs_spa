@@ -7,7 +7,7 @@ import { Row, Col, Card, Form, Button, Alert, Container } from 'react-bootstrap'
 
 import {
 
-} from '@Redux_Thunk/Actions/Register/Twitch_Account'
+} from '@Redux_Thunk/Actions/Authentication/Login_Twitch_Account'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'

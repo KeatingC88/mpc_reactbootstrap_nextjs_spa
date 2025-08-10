@@ -8,7 +8,7 @@ import { Row, Col, Card, Form, Button, Alert, Container} from 'react-bootstrap'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
-import { Login_Email_Password } from '@Redux_Thunk/Actions/Authentication/Login_Email_Password'
+import { Login_Email_Password_Account } from '@Redux_Thunk/Actions/Authentication/Login_Email_Password_Account'
 
 const Login_Email_Address_Password = () => {
 
@@ -108,7 +108,7 @@ const Login_Email_Address_Password = () => {
             set_lock_form_submit_button(true)
             set_submit_button_font_color(`info`)
 
-            Dispatch(Login_Email_Password({
+            Dispatch(Login_Email_Password_Account({
                 email_address: user_email_address,
                 password: user_password
             }))
