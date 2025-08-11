@@ -15,6 +15,7 @@ import {
 
 import { Encrypt } from '@AES/Encryptor'
 import { Decrypt } from '@AES/Decryptor'
+
 import { JWT_Email_Validation } from '@JWT/Decoder'
 
 import axios from 'axios'
@@ -352,11 +353,13 @@ export const Create_End_User_Email_Account = (dto: {
             data_saver: await Encrypt(`${Get_Device_Information().saveData}`),
             device_ram_gb: await Encrypt(`${Get_Device_Information().deviceMemory}`),
         }).then( async (response) => {
-            return await new Promise(async (resolve) => {
+            return await new Promise( async (resolve) => {
 
                 let response_data = JSON.parse(JSON.parse(Decrypt(response.data)).mpc_data)
 
-                if (JWT_Email_Validation({ token: response_data.token, comparable_data: response_data })) {
+                const isValid = await dispatch(JWT_Email_Validation({ token: response_data.token, comparable_data: response_data }))
+
+                if (isValid) {
 
                     await dispatch({
                         type: UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, payload: {
@@ -371,11 +374,10 @@ export const Create_End_User_Email_Account = (dto: {
                             email_address: response_data.email_address,
                             id: parseInt(response_data.id),
                             login_on: parseInt(response_data.login_on),
-                            token: response_data.token,
                             name: response_data.name,
-                            roles: response_data.roles.slice(1, -1),
+                            roles: response_data.roles,
                             client_address: CLIENT_ADDRESS,
-                            groups: response_data.groups.slice(1, -1),
+                            groups: response_data.groups,
                             login_type: response_data.login_type,
                             online_status: parseInt(response_data.online_status)
                         }

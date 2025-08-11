@@ -89,9 +89,9 @@ export const Login_Email_Password_Account = (dto: {
 
              let response_data = JSON.parse(JSON.parse(Decrypt(response.data)).mpc_data)
 
-             console.log(response_data)
+             const isValid = await dispatch(JWT_Email_Validation({ token: response.data.token, comparable_data: response_data }))
 
-            if (JWT_Email_Validation({ token: response.data.token, comparable_data: response_data })) {
+            if (isValid) {
 
                 dispatch({ type: UPDATE_APPLICATION_SETTINGS_LOCAL_TIME })
                 dispatch({ type: UPDATE_APPLICATION_SETTINGS_DATE })

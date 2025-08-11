@@ -80,8 +80,6 @@ const End_User_Account_State_Reducer = (
             case UPDATE_END_USER_ACCOUNT_STATE:
                 return {
                     ...state,
-                    token: action.payload?.token ?? initial_state.token,
-                    token_expire: action.payload?.token_expire ?? initial_state.token_expire,
                     id: action.payload?.id ?? initial_state.id,
                     public_id: action.payload?.public_id ?? initial_state.public_id,
                     avatar_title: action.payload?.avatar_title ?? initial_state.avatar_title,
