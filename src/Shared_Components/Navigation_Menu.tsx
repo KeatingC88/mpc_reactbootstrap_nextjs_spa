@@ -23,15 +23,11 @@ import {
     Alternate_Application_Grid_Value,
     Alternate_Application_Display_Alignment_Value,
     Lock_Navigation_Bar_Toggler
-} from '@Redux_Thunk/Actions/Selected'
+} from '@Redux_Thunk/Actions/User/Selected'
 
 import {
-    Logout_User_Database,
+    Logout_User_Database
 } from '@Redux_Thunk/Actions/Authentication/Logout'
-
-import {
-    Load_New_Token
-} from '@Redux_Thunk/Actions/Load'
 
 import {
     Get_Nation_Flag_Value, Delay_Execution
@@ -42,7 +38,7 @@ let end_user_token_prompt_response = false
 const Navigation_Menu = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-    
+    console.log(props)
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
 
@@ -89,7 +85,7 @@ const Navigation_Menu = () => {
         set_html_selected_language(props.application.settings.current_language)
     }
 
-    const offcanvas_button = (value: String) => {
+    const offcanvas_button = (value: string) => {
         if (value === `language`) {
             show_language_modal_to_end_user()
             set_language_modal_show_value(true)
@@ -345,14 +341,14 @@ const Navigation_Menu = () => {
         }
     }
 
-    (() => {
+/*    (() => {
         if (props.end_user.account.token) {
             end_user_token_prompt_response = false
             set_token_expiration_event_listeners()
         } else {
             end_user_token_prompt_response = true
         }
-    })()
+    })()*/
 
     const load_new_web_token = async () => {
         set_are_you_there_modal_value(false)
@@ -365,7 +361,7 @@ const Navigation_Menu = () => {
             clearInterval(id)
         })
         set_interval_objects([])
-        Dispatch(Load_New_Token())
+        //Dispatch(Load_New_Token())//check_session/load_user?
         set_token_expiration_event_listeners()
     }
 
@@ -640,7 +636,8 @@ const Navigation_Menu = () => {
                                                 }
                                             </Nav.Link>
                                         </Col>
-                                        {props.end_user.account.token &&
+
+                                        {props.end_user.account.account_type === 1 &&
                                             <>
                                                 <Col className="text-center">
                                                     <Nav.Link onClick={() => { Navigate.push(`/profile/mirror`) }}>
@@ -867,7 +864,8 @@ const Navigation_Menu = () => {
                                                 </Col>
                                             </>
                                         }
-                                        {!props.end_user.account.token &&
+
+                                        {props.end_user.account.account_type === 0 &&
                                             <>
                                                 <Col className="text-center">
                                                     <Nav.Link onClick={() => { Navigate.push(`/login`) }}>
@@ -914,6 +912,7 @@ const Navigation_Menu = () => {
                                                 </Col>
                                             </>
                                         }
+
                                     </Row>
                                 </Container>
                             </Nav>
@@ -1025,7 +1024,7 @@ const Navigation_Menu = () => {
                 </Offcanvas.Header>
                 <Offcanvas.Body id="selected-canvas-body">
                     <Container fluid>
-                        {!props.end_user.account.token &&
+                        {props.end_user.account.account_type === 0 &&
                             <>
                                 <Row className="justify-content-center pt-2 text-center" onClick={() => { offcanvas_button(`language`) }}>
                                     <Col>
@@ -1033,20 +1032,31 @@ const Navigation_Menu = () => {
                                             <Card.Header>{lbl.Language}</Card.Header>
                                         </Card>
                                     </Col>
+                                </Row>
+                                <Row className="justify-content-center pt-2 text-center" onClick={() => { offcanvas_button(`register/email`) }}>
                                     <Col>
                                         <Card>
                                             <Card.Header>{lbl.CreateEmailAccount}</Card.Header>
                                         </Card>
                                     </Col>
+                                </Row>
+                                <Row className="justify-content-center pt-2 text-center" onClick={() => { offcanvas_button(`login/email`) }}>
                                     <Col>
                                         <Card>
-                                            <Card.Header>{lbl.Login}</Card.Header>
+                                            <Card.Header>{lbl.LoginWithEmail}</Card.Header>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                                <Row className="justify-content-center pt-2 text-center" onClick={() => { offcanvas_button(`login/twitch`) }}>
+                                    <Col>
+                                        <Card>
+                                            <Card.Header>{lbl.LoginWithTwitch}</Card.Header>
                                         </Card>
                                     </Col>
                                 </Row>
                             </>
                         }
-                        {props.end_user.account.token &&
+                        {props.end_user.account.account_type === 1 &&
                             <>
                                 <Row className="justify-content-center text-center" onClick={() => { offcanvas_button(`community`) }}>
                                     <Col>

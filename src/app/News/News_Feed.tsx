@@ -8,7 +8,7 @@ import { Row, Col, Card, Alert, Container, ListGroup, Accordion, Button, Modal, 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
 
-import { Load_News_Feed, Submit_Article, Delete_Article_By_ID, Update_Article_By_ID } from '@Redux_Thunk/Actions/News'
+import { Load_News_Feed, Submit_Article, Delete_Article_By_ID, Update_Article_By_ID } from '@Redux_Thunk/Actions/Community/News'
 
 import { Get_Nation_Flag_Value } from '@Redux_Thunk/Actions/Misc'
 
@@ -17,7 +17,6 @@ import { usePathname } from 'next/navigation'
 const News_Feed = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -102,7 +101,6 @@ const News_Feed = () => {
         if (!props.application.community.news) return []
 
         const headlines = Object.values(props.application.community.news)
-
         if (alphabet_index !== 0) {
             return [...headlines].sort((a: any, b: any) => {
                 const nameA = a.headline.toLowerCase()
@@ -120,7 +118,6 @@ const News_Feed = () => {
                 return date_index === 1 ? dateB - dateA : dateA - dateB
             })
         }
-
         return headlines
     }, [props.application.community.news, alphabet_index, date_index])
 

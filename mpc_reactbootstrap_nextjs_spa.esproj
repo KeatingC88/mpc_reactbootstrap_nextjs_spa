@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.2752196">
   <ItemGroup>
+    <Folder Include="src\app\Login\Mod\" />
+    <Folder Include="src\app\Login\Admin\" />
     <Folder Include="src\app\Login\User\Facebook\" />
     <Folder Include="src\app\Login\User\Google\" />
     <Folder Include="src\app\Login\User\Discord\" />

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
-import { Row, Col, Card, Table, Alert, Container } from 'react-bootstrap'
+import { Row, Col, Card, Alert, Container } from 'react-bootstrap'
 
 import {
     Login_End_User_Twitch_Account

@@ -75,8 +75,6 @@ export const Redux_Thunk_Core = createSelector(
             account: {
                 id: state.End_User_Account_State_Reducer.id,
                 public_id: state.End_User_Account_State_Reducer.public_id,
-                token: state.End_User_Account_State_Reducer.token,
-                token_expire: state.End_User_Account_State_Reducer.token_expire,
                 account_type: state.End_User_Account_State_Reducer.account_type,
                 roles: state.End_User_Account_State_Reducer.roles,
                 email_address: state.End_User_Account_State_Reducer.email_address,

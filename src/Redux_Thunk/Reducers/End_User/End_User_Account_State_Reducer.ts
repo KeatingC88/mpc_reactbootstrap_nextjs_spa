@@ -4,7 +4,6 @@ import {
     UPDATE_END_USER_ACCOUNT_ONLINE_STATUS,
     UPDATE_END_USER_ACCOUNT_CUSTOM_LABEL,
     UPDATE_END_USER_ACCOUNT_EMAIL_ADDRESS,
-    UPDATE_END_USER_ACCOUNT_TOKEN,
     UPDATE_END_USER_ACCOUNT_LOGIN_TYPE,
     UPDATE_END_USER_ACCOUNT_ACCOUNT_TYPE,
     UPDATE_END_USER_ACCOUNT_NAME,
@@ -15,9 +14,6 @@ import {
 } from '@Constants'
 
 interface End_User_Account_State {
-    token: string | null
-    token_expire: number | any | string | undefined | null
-    token_expire_notification: string | null
     id: BigInt | null
     avatar_title: string | null
     avatar_url_path: string | undefined | null
@@ -46,9 +42,6 @@ interface End_User_Account_Action {
 }
 
 const initial_state: End_User_Account_State = {
-    token: null,
-    token_expire: null,
-    token_expire_notification: null,
     id: null,
     avatar_title: null,
     avatar_url_path: null,
@@ -100,8 +93,6 @@ const End_User_Account_State_Reducer = (
             case NULL_END_USER_ACCOUNT_STATE:
                 return {
                     ...state,
-                    token: initial_state.token,
-                    token_expire: initial_state.token_expire,
                     id: initial_state.id,
                     public_id: initial_state.public_id,
                     avatar_title: initial_state.avatar_title,
@@ -128,12 +119,6 @@ const End_User_Account_State_Reducer = (
                 return {
                     ...state,
                     email_address: action.payload?.email_address ?? state.email_address
-                }
-            case UPDATE_END_USER_ACCOUNT_TOKEN:
-                return {
-                    ...state,
-                    token: action.payload?.token ?? state.token,
-                    token_expire: action.payload?.token_expire ?? state.token_expire
                 }
             case UPDATE_END_USER_ACCOUNT_LOGIN_TYPE:
                 return {
@@ -182,8 +167,6 @@ const End_User_Account_State_Reducer = (
 
     return {
         ...state,
-        token: state.token ?? initial_state.token,
-        token_expire: state.token_expire ?? initial_state.token_expire,
         id: state.id ?? initial_state.id,
         public_id: state.public_id ?? initial_state.public_id,
         account_type: state.account_type ?? initial_state.account_type,

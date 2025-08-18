@@ -20,12 +20,11 @@ import FAQ from './Faq/FAQ'
 import Help from './Help/Help'
 import News_Feed from './News/News_Feed'
 
-
 const Main = () => {
 
     const props = useSelector(Redux_Thunk_Core)
 
-    if (!props.end_user.account.token && props.end_user.account.account_type === 0) {
+    if (props.end_user.account.account_type === 0) {
         
         switch (props.application.settings.grid_type) {
             case 1:
@@ -95,7 +94,7 @@ const Main = () => {
 
     }
 
-    if (props.end_user.account.token && props.end_user.account.account_type === 1) {
+    if (props.end_user.account.account_type === 1) {
 
         switch (props.application.settings.grid_type) {
             case 1:
@@ -177,6 +176,7 @@ const Main = () => {
         }
 
     }
+
 }
 
 export default Main

@@ -13,7 +13,7 @@ import { Alert, Row, Col, Card, Form, Button, Accordion, InputGroup, Container }
 import {
     Send_Interal_Broken_Link_Inquiry, Send_Website_Bug_Inquiry,
     Send_Discord_Bot_Bug_Inquiry, Comment_Inquiry, Contact_Us_Inquiry
-} from '@Redux_Thunk/Actions/Help'
+} from '@Redux_Thunk/Actions/User/Help'
 
 const Help_Menu = () => {
 

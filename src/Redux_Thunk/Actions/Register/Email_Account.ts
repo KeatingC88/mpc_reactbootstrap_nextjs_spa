@@ -8,17 +8,12 @@ import {
     JWT_CLIENT_KEY,
     DEFAULT_NETWORK_ERROR_STATE,
     DEFAULT_HOST_ERROR_STATE,
-    UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, 
-    UPDATE_HOST_ERROR_STATE,
-    USERS_CACHE_SERVER_ADDRESS
+    UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE
 } from '@Constants'
 
-import { Encrypt } from '@AES/Encryptor'
-import { Decrypt } from '@AES/Decryptor'
-
-import { JWT_Email_Validation } from '@JWT/Decoder'
-
 import axios from 'axios'
+
+import { Encrypt } from '@AES/Encryptor'
 
 import { Get_Device_Information, Map_GUI_Values_For_Database_Storage } from '@Redux_Thunk/Actions/Misc'
 
@@ -297,7 +292,7 @@ export const Create_End_User_Email_Account = (dto: {
     password: string
     code: string
     name: string
-}) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+}) => async (dispatch: AppDispatch, getState: () => Current_Redux_State): Promise<void> => {
 
     dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
     dispatch({ type: DEFAULT_HOST_ERROR_STATE })
@@ -322,89 +317,80 @@ export const Create_End_User_Email_Account = (dto: {
             text_alignment: current_settings_state.text_alignment
         })
 
-        axios.post(`${USERS_SERVER_ADDRESS}/Email/Submit`, {
-            email_address: await Encrypt(dto.email_address),
-            name: await Encrypt(`${dto.name}`),
-            password: await Encrypt(dto.password),
+        await axios.post("/api/register/email_account", {
+            email_address: Encrypt(dto.email_address),
+            name: Encrypt(`${dto.name}`),
+            password: Encrypt(dto.password),
             code: dto.code,
-            theme: await Encrypt(`${collected_end_user_data.theme}`),
-            alignment: await Encrypt(`${converted_to_numerical_values.alignment}`),
-            nav_lock: await Encrypt(`${collected_end_user_data.nav_lock}`),
-            text_alignment: await Encrypt(`${converted_to_numerical_values.text_alignment}`),
-            grid_type: await Encrypt(`${collected_end_user_data.grid_type}`),
-            language: await Encrypt(`${collected_end_user_data.language}`),
-            region: await Encrypt(`${collected_end_user_data.region}`),
-            client_time: await Encrypt(`${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`),
-            location: await Encrypt(Intl.DateTimeFormat().resolvedOptions().timeZone),
-            jwt_issuer_key: await Encrypt(`${JWT_ISSUER_KEY}`),
-            jwt_client_key: await Encrypt(`${JWT_CLIENT_KEY}`),
-            jwt_client_address: await Encrypt(`${CLIENT_ADDRESS}`),
-            user_agent: await Encrypt(`${Get_Device_Information().userAgent}`),
-            orientation: await Encrypt(`${Get_Device_Information().orientation_type}`),
-            screen_width: await Encrypt(`${Get_Device_Information().screen_width}`),
-            screen_height: await Encrypt(`${Get_Device_Information().screen_height}`),
-            color_depth: await Encrypt(`${Get_Device_Information().color_depth}`),
-            pixel_depth: await Encrypt(`${Get_Device_Information().pixel_depth}`),
-            window_width: await Encrypt(`${Get_Device_Information().window_width}`),
-            window_height: await Encrypt(`${Get_Device_Information().window_height}`),
-            connection_type: await Encrypt(`${Get_Device_Information().effectiveType}`),
-            down_link: await Encrypt(`${Get_Device_Information().downlink}`),
-            rtt: await Encrypt(`${Get_Device_Information().rtt}`),
-            data_saver: await Encrypt(`${Get_Device_Information().saveData}`),
-            device_ram_gb: await Encrypt(`${Get_Device_Information().deviceMemory}`),
+            theme: Encrypt(`${collected_end_user_data.theme}`),
+            alignment: Encrypt(`${converted_to_numerical_values.alignment}`),
+            nav_lock: Encrypt(`${collected_end_user_data.nav_lock}`),
+            text_alignment: Encrypt(`${converted_to_numerical_values.text_alignment}`),
+            grid_type: Encrypt(`${collected_end_user_data.grid_type}`),
+            language: Encrypt(`${collected_end_user_data.language}`),
+            region: Encrypt(`${collected_end_user_data.region}`),
+            client_time: Encrypt(`${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`),
+            location: Encrypt(Intl.DateTimeFormat().resolvedOptions().timeZone),
+            jwt_issuer_key: Encrypt(`${JWT_ISSUER_KEY}`),
+            jwt_client_key: Encrypt(`${JWT_CLIENT_KEY}`),
+            jwt_client_address: Encrypt(`${CLIENT_ADDRESS}`),
+            user_agent: Encrypt(`${Get_Device_Information().userAgent}`),
+            orientation: Encrypt(`${Get_Device_Information().orientation_type}`),
+            screen_width: Encrypt(`${Get_Device_Information().screen_width}`),
+            screen_height: Encrypt(`${Get_Device_Information().screen_height}`),
+            color_depth: Encrypt(`${Get_Device_Information().color_depth}`),
+            pixel_depth: Encrypt(`${Get_Device_Information().pixel_depth}`),
+            window_width: Encrypt(`${Get_Device_Information().window_width}`),
+            window_height: Encrypt(`${Get_Device_Information().window_height}`),
+            connection_type: Encrypt(`${Get_Device_Information().effectiveType}`),
+            down_link: Encrypt(`${Get_Device_Information().downlink}`),
+            rtt: Encrypt(`${Get_Device_Information().rtt}`),
+            data_saver: Encrypt(`${Get_Device_Information().saveData}`),
+            device_ram_gb: Encrypt(`${Get_Device_Information().deviceMemory}`),
+        }, {
+            withCredentials: true
         }).then( async (response) => {
-            return await new Promise( async (resolve) => {
 
-                let response_data = JSON.parse(JSON.parse(Decrypt(response.data)).mpc_data)
+            return await new Promise(async (resolve) => {
 
-                const isValid = await dispatch(JWT_Email_Validation({ token: response_data.token, comparable_data: response_data }))
+                let response_data = response.data.success
 
-                if (isValid) {
+                await dispatch({
+                    type: UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, payload: {
+                        current_language: `${response_data.language}-${response_data.region}`
+                    }
+                })
 
-                    await dispatch({
-                        type: UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, payload: {
-                            current_language: `${response_data.language}-${response_data.region}`
-                        }
-                    })
+                await dispatch({
+                    type: UPDATE_END_USER_ACCOUNT_STATE, payload: {
+                        account_type: parseInt(response_data.account_type),
+                        created_on: parseInt(response_data.created_on),
+                        email_address: response_data.email_address,
+                        id: parseInt(response_data.id),
+                        login_on: parseInt(response_data.login_on),
+                        name: response_data.name,
+                        roles: response_data.roles,
+                        client_address: CLIENT_ADDRESS,
+                        groups: response_data.groups,
+                        login_type: response_data.login_type,
+                        online_status: parseInt(response_data.online_status)
+                    }
+                })
 
-                    await dispatch({
-                        type: UPDATE_END_USER_ACCOUNT_STATE, payload: {
-                            account_type: parseInt(response_data.account_type),
-                            created_on: parseInt(response_data.created_on),
-                            email_address: response_data.email_address,
-                            id: parseInt(response_data.id),
-                            login_on: parseInt(response_data.login_on),
-                            name: response_data.name,
-                            roles: response_data.roles,
-                            client_address: CLIENT_ADDRESS,
-                            groups: response_data.groups,
-                            login_type: response_data.login_type,
-                            online_status: parseInt(response_data.online_status)
-                        }
-                    })
-                    
-                    await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
-                        token: response_data.token,
-                        id: Encrypt(`${response_data.id}`),
-                        online_status: Encrypt(`${response_data.online_status}`),
-                        custom_lbl: Encrypt(`${response_data.custom_lbl}`),
-                        name: Encrypt(`${response_data.name}`),
-                        created_on: Encrypt(`${response_data.created_on}`),
-                        avatar_url_path: Encrypt(`${response_data.avatar_url_path}`),
-                        avatar_title: Encrypt(`${response_data.avatar_title}`),
-                        language_code: Encrypt(`${collected_end_user_data.language}`),
-                        region_code: Encrypt(`${collected_end_user_data.region}`),
-                        login_on: Encrypt(`${response_data.login_on}`),
-                        logout_on: Encrypt(`${response_data.logout_on}`),
-                        login_type: Encrypt(`EMAIL`),
-                        account_type: Encrypt(`${response_data.account_type}`),
-                        email_address: Encrypt(`${response_data.email_address}`)
-                    })
-
-                    resolve(true)
-                }
+                await resolve({
+                    account_type: parseInt(response_data.account_type),
+                    created_on: parseInt(response_data.created_on),
+                    email_address: response_data.email_address,
+                    id: parseInt(response_data.id),
+                    login_on: parseInt(response_data.login_on),
+                    name: response_data.name,
+                    roles: response_data.roles,
+                    client_address: CLIENT_ADDRESS,
+                    groups: response_data.groups,
+                    login_type: response_data.login_type,
+                    online_status: parseInt(response_data.online_status)
+                })
             })
-
         })
     }
 }

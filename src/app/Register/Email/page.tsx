@@ -6,7 +6,10 @@ export const metadata: Metadata = {
 }
 
 const Email_Registration_Page = (): React.ReactElement => {
-  return <Email_Register />
+    return <Email_Register />
 }
+
+
+
 
 export default Email_Registration_Page

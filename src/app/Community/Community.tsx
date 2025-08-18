@@ -10,12 +10,12 @@ import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 
 import { Row, Col, Card, Container, Table, Form } from 'react-bootstrap'
 
-import { Load_All_Community_Users } from '@Redux_Thunk/Actions/Load'
+import { Load_All_Community_Users } from '@Redux_Thunk/Actions/Community/Load'
 
 const Community = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-    console.log(props)
+
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -88,7 +88,7 @@ const Community = () => {
         return sortedUsers.map((user: any) => (
             <tr key={user.id} onClick={() => go_to_end_user_selected_profile(user.id)}>
                 <td>
-                    {user.avatar_url_path && user.avatar_url_path !== "null"? (
+                    {user.avatar_url_path && user.avatar_url_path !== "null" && user.avatar_url_path !== "undefined" ? (
                         <img
                             src={user.avatar_url_path}
                             width="84"

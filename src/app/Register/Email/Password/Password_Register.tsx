@@ -217,7 +217,7 @@ const Password_Register = () => {
                 Set_Navigation_Menu_Display(``)
 
                 await Dispatch(Create_End_User_Email_Account(obj)).then(() => {
-                    Navigate.push(`/`)
+                    Navigate.push(`/Community`)
                     Dispatch(Set_Navigation_Menu_Display(` `))
                 })
 

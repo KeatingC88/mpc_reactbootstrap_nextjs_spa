@@ -494,5 +494,9 @@
   "AreYouSure": "Sind Sie sicher?",
   "AreYouSureYouWantToDelete": "Sind Sie sicher, dass Sie löschen möchten?",
   "Alphabet": "Alphabet",
-  "Alphabetically": "Alphabetisch"
+  "Alphabetically": "Alphabetisch",
+  "CreateTwitchAccount": "Twitch-Konto erstellen",
+  "TwitchAccountCreatedSuccessfully": "Twitch-Konto erfolgreich erstellt",
+  "LoginWithTwitch": "Mit Twitch anmelden",
+  "LoginWithEmail": "Mit E-Mail-Adresse anmelden"
 }

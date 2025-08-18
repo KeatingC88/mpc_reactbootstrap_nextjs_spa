@@ -494,5 +494,9 @@
   "AreYouSure": "Weet je het zeker?",
   "AreYouSureYouWantToDelete": "Weet je zeker dat je wilt verwijderen?",
   "Alphabet": "Alfabet",
-  "Alphabetically": "Alfabetisch"
+  "Alphabetically": "Alfabetisch",
+  "CreateTwitchAccount": "Twitch-account aanmaken",
+  "TwitchAccountCreatedSuccessfully": "Twitch-account succesvol aangemaakt",
+  "LoginWithTwitch": "Inloggen met Twitch",
+  "LoginWithEmail": "Inloggen met e-mailadres"
 }

@@ -494,5 +494,9 @@
   "AreYouSure": "क्या आप सुनिश्चित हैं?",
   "AreYouSureYouWantToDelete": "क्या आप वाकई हटाना चाहते हैं?",
   "Alphabet": "वर्णमाला",
-  "Alphabetically": "वर्णक्रमानुसार"
+  "Alphabetically": "वर्णक्रमानुसार",
+  "CreateTwitchAccount": "Twitch खाता बनाएँ",
+  "TwitchAccountCreatedSuccessfully": "Twitch खाता सफलतापूर्वक बनाया गया",
+  "LoginWithTwitch": "Twitch से लॉगिन करें",
+  "LoginWithEmail": "ईमेल पते से लॉगिन करें"
 }

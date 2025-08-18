@@ -18,7 +18,7 @@ import {
     Change_End_User_BirthDate, Change_End_User_Ethnicity,
     Change_End_User_Last_Name, Change_End_User_First_Name,
     Change_End_User_Middle_Name, Default_End_User_Birthdate
-} from '@Redux_Thunk/Actions/Identity'
+} from '@Redux_Thunk/Actions/User/Identity'
 
 import { Delay_Execution } from '@Redux_Thunk/Actions/Misc'
 

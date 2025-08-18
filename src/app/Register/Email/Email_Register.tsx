@@ -199,7 +199,7 @@ const Email_Register = () => {
                                             <Form.Control
                                                 type="email_address"
                                                 name="email_address"
-                                                className="text-center bg-red-400"
+                                                className="text-center mx-auto"
                                                 value={email_address}
                                                 onChange={(e) => set_email_address(e.target.value)}
                                                 disabled={lock_form_submit_button}

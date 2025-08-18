@@ -482,5 +482,9 @@
   "By": "作者",
   "DocumentID": "文档编号",
   "Headline": "标题",
-  "Tags": "标签"
+  "Tags": "标签",
+  "CreateTwitchAccount": "创建Twitch账户",
+  "TwitchAccountCreatedSuccessfully": "Twitch账户创建成功",
+  "LoginWithTwitch": "使用Twitch登录",
+  "LoginWithEmail": "使用邮箱地址登录"
 }

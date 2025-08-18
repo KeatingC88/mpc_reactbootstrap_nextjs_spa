@@ -15,7 +15,7 @@ import { useAppDispatch } from '@Redux_Thunk/Provider'
 
 import { usePathname } from 'next/navigation'
 
-const Twitch_Login = () => {
+const Twitch_Login = (): React.ReactElement => {
 
     const props = useSelector(Redux_Thunk_Core)
 

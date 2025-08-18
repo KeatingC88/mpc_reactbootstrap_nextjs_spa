@@ -36,9 +36,9 @@ import {
     Change_Application_Button_Background_Color,
     Change_Application_Button_Font_Color,
     Change_Application_Button_Font,
-    Change_Application_Theme_Default_Settings,
+    Default_Application_Theme_Custom_Settings,
 
-} from '@Redux_Thunk/Actions/Selected'
+} from '@Redux_Thunk/Actions/User/Selected'
 
 import { useSelector } from 'react-redux'
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
@@ -275,7 +275,7 @@ const Settings = () => {
         set_navigation_menu_font_value(``)
         set_navigation_menu_background_color_value(``)
         set_card_border_color_value(``)
-        Change_Application_Theme_Default_Settings()
+        Default_Application_Theme_Custom_Settings()
     }
 
     const submit_theme_variables_that_were_changed = () => {

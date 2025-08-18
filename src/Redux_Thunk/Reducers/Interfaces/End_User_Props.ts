@@ -2,8 +2,6 @@ export interface End_User_Props {
 
     account: {
         id: BigInt | null,
-        token: string | null
-        token_expire: string | null
         account_type: number
         public_id: string | null
         roles: string[] | null

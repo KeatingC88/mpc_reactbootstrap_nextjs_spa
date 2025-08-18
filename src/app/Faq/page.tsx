@@ -1,3 +1,9 @@
+import { cookies } from 'next/headers'
+import { redirect } from "next/navigation";
+
+import {
+    USERS_SERVER_COOKIE_NAME
+} from '@Constants'
 import FAQ from "./FAQ"
 import type { Metadata } from 'next'
 
@@ -8,10 +14,17 @@ export const metadata: Metadata = {
     ],
 }
 
-const Frequently_Asked_Questions_Page = (): React.ReactElement => {
-    return (
-        <FAQ />
-    )
+const Frequently_Asked_Questions_Page = async (): Promise<React.ReactElement> => {
+    let token = null
+    const cookie = await cookies()
+
+    if (USERS_SERVER_COOKIE_NAME)
+        token = cookie.get(USERS_SERVER_COOKIE_NAME)?.value
+
+    if (!token)
+        redirect("/Logout")
+
+    return <FAQ />
 }
 
 export default Frequently_Asked_Questions_Page

@@ -424,5 +424,9 @@
   "By": "作者",
   "DocumentID": "文档编号",
   "Headline": "标题",
-  "Tags": "标签"
+  "Tags": "标签",
+  "CreateTwitchAccount": "創建Twitch帳號",
+  "TwitchAccountCreatedSuccessfully": "Twitch帳號已成",
+  "LoginWithTwitch": "以Twitch入",
+  "LoginWithEmail": "以電郵入"
 }

@@ -217,6 +217,7 @@
   "LoggingOut": "Logging Out",
   "Login": "Login",
   "LoginWithTwitch": "Login With Twitch",
+  "LoginWithEmail": "Login With Email Address",
   "LoginOn": "Login On",
   "LoginWithAPhoneAccount": "Login With A Phone Account",
   "LoginWithAnEmailAccount": "Login With An Email Account",

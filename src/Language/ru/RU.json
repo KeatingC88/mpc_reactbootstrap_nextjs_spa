@@ -494,5 +494,9 @@
   "AreYouSure": "Вы уверены?",
   "AreYouSureYouWantToDelete": "Вы действительно хотите удалить?",
   "Alphabet": "Алфавит",
-  "Alphabetically": "По алфавиту"
+  "Alphabetically": "По алфавиту",
+  "CreateTwitchAccount": "Создать аккаунт Twitch",
+  "TwitchAccountCreatedSuccessfully": "Аккаунт Twitch успешно создан",
+  "LoginWithTwitch": "Войти через Twitch",
+  "LoginWithEmail": "Войти через адрес электронной почты"
 }

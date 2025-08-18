@@ -1,5 +1,4 @@
 "use client"
-
 import React, { useState, useEffect} from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useSelector } from 'react-redux'
@@ -10,7 +9,7 @@ import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
 import { Login_Email_Password_Account } from '@Redux_Thunk/Actions/Authentication/Login_Email_Password_Account'
 
-const Login_Email_Address_Password = () => {
+const Login_Email_Address_Password = (): React.ReactElement => {
 
     const props = useSelector(Redux_Thunk_Core)
 
