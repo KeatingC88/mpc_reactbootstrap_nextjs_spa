@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
-import { Row, Col, Card, Alert, Container } from 'react-bootstrap'
+import { Row, Col, Card, Alert, Container, Button } from 'react-bootstrap'
 
 import {
     Login_End_User_Twitch_Account
@@ -13,6 +13,13 @@ import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
 
 import { usePathname } from 'next/navigation'
+
+import { New_Twitch_Session_Token } from '@Redux_Thunk/Actions/Authentication/Session_Token'
+
+import {
+    Set_Navigation_Menu_Display
+} from '@Redux_Thunk/Actions/Misc'
+
 
 const Twitch_Confirmation = () => {
 
@@ -30,8 +37,8 @@ const Twitch_Confirmation = () => {
     const [alert_text, set_alert_text] = useState<string>(``)
     const [alert_color, set_alert_color] = useState<string>(``)
 
-    const [lock_form_submit_button, set_lock_form_submit_button] = useState<boolean>(false)
-    const [submit_button_text, set_submit_button_text] = useState("Register")
+    const [lock_form_submit_button, set_lock_form_submit_button] = useState<boolean>(true)
+    const [submit_button_text, set_submit_button_text] = useState(`${lbl.ValidatingPleaseWait}`)
     const [submit_button_color, set_submit_button_color] = useState<string>(`primary`)
 
     const create_success_alert = (value: string | null) => {
@@ -61,18 +68,25 @@ const Twitch_Confirmation = () => {
     }
 
     useEffect(() => {
+        Dispatch(Set_Navigation_Menu_Display(`none`))
+        
         if (Path === `/`) {
             set_card_width(``)
         }
 
+        if (props.end_user.twitch.id) {
+            set_lock_form_submit_button(false)
+            set_submit_button_text(`${lbl.LoginWithTwitch}`)
+        }
+
         Dispatch(Login_End_User_Twitch_Account())
-    }, [])
+    }, [props.end_user?.twitch?.id])
 
     return (
         <Container fluid>
             <Row className={`${props.application.settings.alignment}`}>
                 <Col className={`${props.application.settings.grid_type === 1 ? "col-xs-12 col-sm-12 col-md-12 col-lg-12" : ""}`}>
-                    <Card className={`moveable ${props.application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
+                    <Card className={`moveable ${props.application.settings.alignment === 'justify-content-start' ? '' : ''} ${props.application.settings.alignment === 'justify-content-end' ? '' : ''} ${props.application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
                         style={{
                             float: props.application.settings.alignment === `justify-content-end` ? `right` : `none`,
                             borderColor: `${props.end_user.custom_design.card_border_color}`,
@@ -102,11 +116,33 @@ const Twitch_Confirmation = () => {
                                     <Row>
                                         <Col>{lbl.AvatarPreview}</Col>
                                         <Col>
-                                            <img
-                                            src={`${props.end_user.twitch.profile_image_url}`}
-                                            height="32" width="32"
-                                            className="d-inline-block rounded-circle"
-                                            />
+                                            {!props.end_user.twitch.profile_image_url &&
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="32"
+                                                    height="32"
+                                                    fill="currentColor"
+                                                    className={`bi-person-circle d-inline-block align-top mt-2`}
+                                                    viewBox="0 0 16 16">
+                                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                                    <path fill="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                                                </svg>
+                                            }
+                                            {props.end_user.twitch.profile_image_url &&
+                                                <img
+                                                    src={`${props.end_user.twitch.profile_image_url}`}
+                                                    height="32" width="32"
+                                                    className="d-inline-block rounded-circle"
+                                                />
+                                            }
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <Button variant="primary" size="lg" disabled={lock_form_submit_button} onClick={() => {
+                                                Dispatch(Set_Navigation_Menu_Display(` `))
+                                                Navigate.push(`/`)
+                                            }}>{submit_button_text}</Button>
                                         </Col>
                                     </Row>
                                 </Col>

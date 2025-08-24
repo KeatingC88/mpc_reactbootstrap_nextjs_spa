@@ -8,19 +8,26 @@ import axios from 'axios'
 
 import {
     UPDATE_NETWORK_ERROR_STATE,
-    UPDATE_END_USER_ACCOUNT_STATE, UPDATE_APPLICATION_SETTINGS_LOCAL_TIME,
-    UPDATE_APPLICATION_SETTINGS_GLOBAL_TIME, UPDATE_APPLICATION_SETTINGS_DATE,
-    UPDATE_APPLICATION_SETTINGS_LOCATION, UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE,
-    UPDATE_END_USER_PROFILE_ACCOUNT_STATE, UPDATE_APPLICATION_SETTINGS_MAX_BOOTSTRAP_GRID_COLUMNS,
-    CLIENT_ADDRESS, JWT_ISSUER_KEY, JWT_CLIENT_KEY,
-    UPDATE_APPLICATION_SETTINGS_FLAG, UPDATE_APPLICATION_SETTINGS_ALIGNMENT,
-    UPDATE_APPLICATION_SETTINGS_NAV_LOCK, UPDATE_APPLICATION_SETTINGS_THEME,
-    UPDATE_APPLICATION_SETTINGS_TEXT_ALIGNMENT, DEFAULT_NETWORK_ERROR_STATE,
+    UPDATE_END_USER_ACCOUNT_STATE,
+    UPDATE_APPLICATION_SETTINGS_LOCAL_TIME,
+    UPDATE_APPLICATION_SETTINGS_GLOBAL_TIME,
+    UPDATE_APPLICATION_SETTINGS_DATE,
+    UPDATE_APPLICATION_SETTINGS_LOCATION,
+    UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE,
+    UPDATE_END_USER_PROFILE_ACCOUNT_STATE,
+    UPDATE_APPLICATION_SETTINGS_MAX_BOOTSTRAP_GRID_COLUMNS,
+    CLIENT_ADDRESS,
+    JWT_ISSUER_KEY,
+    JWT_CLIENT_KEY,
+    UPDATE_APPLICATION_SETTINGS_FLAG,
+    UPDATE_APPLICATION_SETTINGS_ALIGNMENT,
+    UPDATE_APPLICATION_SETTINGS_NAV_LOCK,
+    UPDATE_APPLICATION_SETTINGS_THEME,
+    UPDATE_APPLICATION_SETTINGS_TEXT_ALIGNMENT,
+    DEFAULT_NETWORK_ERROR_STATE,
     DEFAULT_HOST_ERROR_STATE,
     UPDATE_CSS_CUSTOM_DESIGN_STATE,
 } from '@Constants'
-
-import { Encrypt } from '@AES/Encryptor'
 
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import type { AppDispatch } from '@Redux_Thunk/Provider'
@@ -41,7 +48,7 @@ export const Login_Email_Password_Account = (dto: {
         text_alignment: current_setting.text_alignment,
     })
 
-    await axios.put(`/api/authentciation/login/email_password_account`, {
+    await axios.put(`/api/authentication/login/email_password_account`, {
         email_address: `${dto.email_address}`,
         password: `${dto.password}`,
         theme: `${current_setting.theme}`,
@@ -79,8 +86,7 @@ export const Login_Email_Password_Account = (dto: {
             }, 1)
         })
     }).then( async (response: any) => {
-
-        let response_data = response.mpc_data
+        let response_data = response.data.user_data
 
         dispatch({ type: UPDATE_APPLICATION_SETTINGS_LOCAL_TIME })
         dispatch({ type: UPDATE_APPLICATION_SETTINGS_DATE })

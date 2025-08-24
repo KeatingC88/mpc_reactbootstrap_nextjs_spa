@@ -1,31 +1,28 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation";
 
 import axios from "axios"
+
 import { Encrypt } from '@AES/Encryptor'
 import { Decrypt } from '@AES/Decryptor'
 
 import {
     USERS_SERVER_ADDRESS,
-    USERS_SERVER_COOKIE_NAME,
     USERS_PROFILE_CACHE_SERVER_ADDRESS,
-    USERS_CACHE_SERVER_ADDRESS
+    USERS_CACHE_SERVER_ADDRESS,
+    USERS_SERVER_COOKIE_NAME
 } from '@Constants'
+
+import { JWT_Email_Validation } from '@JWT/Decoder'
 
 export const PUT = async (req: NextRequest) => {
     try {
+
         const dto = await req.json()
         let token = null
-        const cookie = await cookies()
+        let response_data = null
 
-        if (USERS_SERVER_COOKIE_NAME)
-            token = cookie.get(USERS_SERVER_COOKIE_NAME)?.value
-
-        if (!token)
-            redirect("/Logout")
-
-        axios.put(`${USERS_SERVER_ADDRESS}/Email/Login`, {
+        const res = await axios.put(`${USERS_SERVER_ADDRESS}/Email/Login`, {
             email_address: Encrypt(`${dto.email_address}`),
             password: Encrypt(`${dto.password}`),
             theme: Encrypt(`${dto.theme}`),
@@ -53,12 +50,27 @@ export const PUT = async (req: NextRequest) => {
             rtt: Encrypt(`${dto.rtt}`),
             data_saver: Encrypt(`${dto.data_saver}`),
             device_ram_gb: Encrypt(`${dto.device_ram_gb}`),
-        }).catch((error) => {
+        }, {withCredentials: true}).catch((error) => {
             return NextResponse.json({ error: error.message }, { status: 500 })
-        }).then(async (response: any) => {
+        }).then( async (response: any) => {
 
-            let response_data = JSON.parse(JSON.parse(Decrypt(response.data)).mpc_data)
+            const setCookieHeader = response.headers['set-cookie']
+            if (!setCookieHeader) {
+                throw new Error("No Set-Cookie header received from server")
+            }
 
+            const cookieName = USERS_SERVER_COOKIE_NAME ?? ""
+            const jwtMatch = setCookieHeader[0].match(
+                new RegExp(`${cookieName}=([^]+)`)
+            )
+
+            if (!jwtMatch) {
+                throw new Error("JWT token not found in Set-Cookie")
+            }
+
+            token = response.headers["set-cookie"][0].split(`${USERS_SERVER_COOKIE_NAME}=`)[1].split(`;`)[0]
+            response_data = JSON.parse(Decrypt(response.data)).user_data
+            
             await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
                 token: token,
                 id: Encrypt(`${response_data.id}`),
@@ -93,10 +105,19 @@ export const PUT = async (req: NextRequest) => {
                 gender: Encrypt(`${response_data.gender}`)
             })
 
-            return await new Promise(() => {
-                return NextResponse.json({ mpc_data: response_data }, { status: 200 })
-            })
+
+            let jwt_token = jwtMatch[1].split(`;`)[0]
+
+            if (!JWT_Email_Validation({ token: jwt_token, comparable_data: response_data })) {
+                throw new Error("JWT Mis-Match Data")
+            }
+
+            let cookie = await cookies()
+            await cookie.set(cookieName, jwt_token, { httpOnly: true, path: "/" })
+
         })
+
+        return NextResponse.json({ user_data: response_data }, { status: 200 })
     } catch (err: any) {
         return NextResponse.json({ error: err.message }, { status: 500 })
     }

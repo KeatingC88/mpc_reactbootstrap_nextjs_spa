@@ -1,7 +1,6 @@
 import {
     CHAT_SERVER_ADDRESS_WSPROTOCOL,
     CHAT_SERVER_ADDRESS,
-    USERS_SERVER_ADDRESS,
     UPDATE_NETWORK_ERROR_STATE,
     DEFAULT_NETWORK_ERROR_STATE,
     UPDATE_APPLICATION_WEBSOCKET_CONVERSATIONS_STATE,
@@ -327,7 +326,7 @@ export const Authenticate_End_Users_Permissions = (dto: {
     let end_user_account = state.End_User_Account_State_Reducer
     let current_language_state = state.Application_Language_State_Reducer
 
-    await axios.post(`${USERS_SERVER_ADDRESS}/WebSocket/Authorize_Users`, {
+    await axios.post(`/api/websocket/direct_chat/authorize_users`, {
         id: `${end_user_account.id}`,
         user: `${dto.id}`,
         account_type: `${end_user_account.account_type}`,

@@ -17,6 +17,7 @@ import '@CSS/Design/Bootstrap/Icons/Check_Circle.css'
 import '@CSS/Design/Bootstrap/Icons/X_Octagon.css'
 import '@CSS/Design/App/WebSocket/Default_Chat_Icon.css'
 import '@CSS/Design/Bootstrap/Accordion.css'
+import '@CSS/Design/App/Theme/Background.css'
 
 import App from './App'
 

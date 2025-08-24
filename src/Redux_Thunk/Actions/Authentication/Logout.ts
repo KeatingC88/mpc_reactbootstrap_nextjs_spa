@@ -1,5 +1,4 @@
 import {
-    UPDATE_NETWORK_ERROR_STATE,
     JWT_CLIENT_KEY,
     JWT_ISSUER_KEY,
     CLIENT_ADDRESS,
@@ -8,8 +7,10 @@ import {
     DEFAULT_APPLICATION_SETTINGS_STATE,
     DEFAULT_CSS_CUSTOM_DESIGN_STATE,
     DEFAULT_HOST_ERROR_STATE,
-    NULL_END_USER_ACCOUNT_STATE,
     DEFAULT_NETWORK_ERROR_STATE,
+    NULL_END_USER_ACCOUNT_STATE,
+    NULL_END_USER_TWITCH_ACCOUNT_STATE,
+    UPDATE_NETWORK_ERROR_STATE,
     UPDATE_APPLICATION_WEBSOCKET_CONVERSATIONS_STATE,
     UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_SENT_REQUESTS_STATE,
     UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_SENT_BLOCKS_STATE,
@@ -40,7 +41,7 @@ export const Logout_User_Database = () => async (dispatch: AppDispatch, getState
 
     if (current_end_user_account_state.id !== null) {
 
-        await axios.post(`/api/authentication/logout`, {
+        await axios.put(`/api/authentication/logout`, {
             id: current_end_user_account_state.id,
             online_status: current_end_user_account_state.online_status,
             theme: current_setting_state.theme,
@@ -88,6 +89,7 @@ export const Logout_User_Database = () => async (dispatch: AppDispatch, getState
     dispatch({ type: DEFAULT_APPLICATION_LANGUAGE_CURRENT_VALUE })
     dispatch({ type: DEFAULT_APPLICATION_SETTINGS_STATE })
     dispatch({ type: NULL_END_USER_ACCOUNT_STATE })
+    dispatch({ type: NULL_END_USER_TWITCH_ACCOUNT_STATE })
     dispatch({ type: DEFAULT_CSS_CUSTOM_DESIGN_STATE })
     dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATIONS_STATE, payload: { conversations: {} } })
     dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_SENT_REQUESTS_STATE, payload: { conversation_sent_requests: [] } })

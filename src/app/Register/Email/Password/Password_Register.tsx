@@ -214,10 +214,9 @@ const Password_Register = () => {
                 set_lock_form_submit_button(false)
                 set_alert_color(`success`)
                 set_alert_text(`${lbl.Success}`)
-                Set_Navigation_Menu_Display(``)
 
                 await Dispatch(Create_End_User_Email_Account(obj)).then(() => {
-                    Navigate.push(`/Community`)
+                    Navigate.push(`/`)
                     Dispatch(Set_Navigation_Menu_Display(` `))
                 })
 
@@ -235,7 +234,7 @@ const Password_Register = () => {
         <Container>
             <Row className={`${props.application.settings.alignment}`}>
                 <Col className={`p-0`}>
-                    <Card className={`moveable ${props.application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
+                    <Card className={`moveable ${props.application.settings.alignment === 'justify-content-start' ? '' : ''} ${props.application.settings.alignment === 'justify-content-end' ? '' : ''} ${props.application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
                         style={{
                             float: props.application.settings.alignment === `justify-content-end` ? `right` : `none`,
                             borderColor: `${props.end_user.custom_design.card_border_color}`,

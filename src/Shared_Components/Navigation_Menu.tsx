@@ -6,7 +6,7 @@ import {
     Navbar, Container, Nav,
     Modal, Button, Row,
     Col, Form, Offcanvas,
-    Card, Alert
+    Card, Alert, Image
 } from 'react-bootstrap'
 
 import { useRouter } from 'next/navigation'
@@ -24,6 +24,8 @@ import {
     Alternate_Application_Display_Alignment_Value,
     Lock_Navigation_Bar_Toggler
 } from '@Redux_Thunk/Actions/User/Selected'
+
+import { Renew_Session_Token } from '@Redux_Thunk/Actions/Authentication/Session_Token'
 
 import {
     Logout_User_Database
@@ -326,7 +328,7 @@ const Navigation_Menu = () => {
 
                         interval_objects.push(intervalId)
                     }
-                }, 600000) // 10 minutes
+                }, 60000) // 10 minutes = 600k
 
                 timeout_objects.push(timeoutId)
             }
@@ -341,14 +343,14 @@ const Navigation_Menu = () => {
         }
     }
 
-/*    (() => {
-        if (props.end_user.account.token) {
+    (() => {
+        if (props.end_user.account.account_type !== 0) {
             end_user_token_prompt_response = false
             set_token_expiration_event_listeners()
         } else {
             end_user_token_prompt_response = true
         }
-    })()*/
+    })()
 
     const load_new_web_token = async () => {
         set_are_you_there_modal_value(false)
@@ -361,7 +363,7 @@ const Navigation_Menu = () => {
             clearInterval(id)
         })
         set_interval_objects([])
-        //Dispatch(Load_New_Token())//check_session/load_user?
+        Dispatch(Renew_Session_Token())
         set_token_expiration_event_listeners()
     }
 
@@ -827,13 +829,15 @@ const Navigation_Menu = () => {
                                                         }
                                                         {props.end_user.account.avatar_url_path &&
                                                             <>
-                                                                <img
+                                                                <Image
                                                                     src={props.end_user.account.avatar_url_path}
                                                                     width="32"
                                                                     height="32"
                                                                     className={`d-inline-block align-top mt-2`}
+                                                                    roundedCircle 
                                                                     alt={props.end_user.account.avatar_title ? props.end_user.account.avatar_title : ``}
                                                                 />
+                                                                <br />
                                                                 {props.end_user.account.name ? props.end_user.account.name.split(`#`)[0] : `error-name-display`}
                                                             </>
                                                         }

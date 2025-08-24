@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux'
 import { Row, Col, Card, Form, Button, Alert, Container } from 'react-bootstrap'
 
 import {
-    APPLLICATION_TWITCH_CLIENT_ID,
-    APPLLICATION_TWITCH_REDIRECT_URI,
+    APPLICATION_TWITCH_CLIENT_ID,
+    APPLICATION_TWITCH_REDIRECT_URI,
 } from '@Constants'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
@@ -77,7 +77,7 @@ const Twitch_Login = (): React.ReactElement => {
         <Container fluid>
             <Row className={`${props.application.settings.alignment}`}>
                 <Col className={`${props.application.settings.grid_type === 1 ? "col-xs-12 col-sm-12 col-md-12 col-lg-12" : ""}`}>
-                    <Card className={`moveable ${props.application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
+                    <Card className={`moveable ${props.application.settings.alignment === 'justify-content-start' ? '' : ''} ${props.application.settings.alignment === 'justify-content-end' ? '' : ''} ${props.application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
                         style={{
                             float: props.application.settings.alignment === `justify-content-end` ? `right` : `none`,
                             borderColor: `${props.end_user.custom_design.card_border_color}`,
@@ -96,7 +96,7 @@ const Twitch_Login = (): React.ReactElement => {
                                 <Col lg={10} md={8} sm={9} xs={10}>
                                     <Button variant="primary" size="lg" onClick={() => {
                                         (() => {
-                                            Navigate.push(`https://id.twitch.tv/oauth2/authorize?client_id=${APPLLICATION_TWITCH_CLIENT_ID}&redirect_uri=${APPLLICATION_TWITCH_REDIRECT_URI}&response_type=code&scope=${SCOPES}`)
+                                            Navigate.push(`https://id.twitch.tv/oauth2/authorize?client_id=${APPLICATION_TWITCH_CLIENT_ID}&redirect_uri=${APPLICATION_TWITCH_REDIRECT_URI}&response_type=code&scope=${SCOPES}`)
                                         })()
                                     }}>{lbl.Login}</Button>
                                 </Col>
