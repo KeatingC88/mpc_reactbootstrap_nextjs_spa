@@ -40,7 +40,7 @@ let end_user_token_prompt_response = false
 const Navigation_Menu = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-    console.log(props)
+    
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
 
@@ -328,7 +328,7 @@ const Navigation_Menu = () => {
 
                         interval_objects.push(intervalId)
                     }
-                }, 60000) // 10 minutes = 600k
+                }, 600000) // 10 minutes
 
                 timeout_objects.push(timeoutId)
             }
