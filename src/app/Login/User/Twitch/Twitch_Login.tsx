@@ -20,12 +20,7 @@ const Twitch_Login = (): React.ReactElement => {
     const props = useSelector(Redux_Thunk_Core)
 
     const Navigate = useRouter()
-    const Dispatch = useAppDispatch()
     const Path = usePathname()
-
-    const SCOPES = [
-        'user:read:email'
-    ].join('+')
 
     const [language, region] = props.application.settings.current_language.split(`-`)
     const lbl = props.application.language_dictionaries[language][region]
@@ -65,8 +60,6 @@ const Twitch_Login = (): React.ReactElement => {
         }, 8000)
     }
 
-
-
     useEffect(() => {
         if (Path === `/`) {
             set_card_width(``)
@@ -96,7 +89,7 @@ const Twitch_Login = (): React.ReactElement => {
                                 <Col lg={10} md={8} sm={9} xs={10}>
                                     <Button variant="primary" size="lg" onClick={() => {
                                         (() => {
-                                            Navigate.push(`https://id.twitch.tv/oauth2/authorize?client_id=${APPLICATION_TWITCH_CLIENT_ID}&redirect_uri=${APPLICATION_TWITCH_REDIRECT_URI}&response_type=code&scope=${SCOPES}`)
+                                            Navigate.push(`https://id.twitch.tv/oauth2/authorize?client_id=${APPLICATION_TWITCH_CLIENT_ID}&redirect_uri=${APPLICATION_TWITCH_REDIRECT_URI}&response_type=code&scope=user:read:email`)
                                         })()
                                     }}>{lbl.Login}</Button>
                                 </Col>

@@ -17,11 +17,12 @@ import { JWT_Email_Validation } from '@JWT/Decoder'
 let iteration = 0
 
 export const POST = async (req: NextRequest) => {
-    
+
     const dto = await req.json()
-    let token = null
+    let token: any = null
     let twitch_data: any = null
     let mpc_data: any = null
+    let twitch_data_combined: any = null
 
     await axios.post(`${USERS_SERVER_ADDRESS}/Twitch/Login`, {
         code: dto.code,
@@ -59,12 +60,16 @@ export const POST = async (req: NextRequest) => {
 
         return NextResponse.json({ error: error.message }, { status: 500 })
 
-    }).then( async (response: any) => {
+    }).then(async (response: any) => {
         iteration++
         if (iteration === 2) {
 
+            const { headers } = req;
+            const protocol = headers.get("x-forwarded-proto") || "http";
+            const host = headers.get("host");
+            const baseUrl = `${protocol}://${host}`;
+            
             token = response.headers['set-cookie'][0].split(`;`)[0].split(`${USERS_SERVER_COOKIE_NAME}=`)[1]
-            twitch_data = JSON.parse(Decrypt(response.data)).twitch_data
             mpc_data = JSON.parse(Decrypt(response.data)).mpc_data
 
             const setCookieHeader = response.headers['set-cookie']
@@ -72,24 +77,44 @@ export const POST = async (req: NextRequest) => {
                 throw new Error("No Set-Cookie header received from server")
             }
 
-            const cookieName = USERS_SERVER_COOKIE_NAME ?? ""
-            const jwtMatch = setCookieHeader[0].match(
-                new RegExp(`${cookieName}=([^]+)`)
+            const jwtMatch: boolean = setCookieHeader[0].match(
+                new RegExp(`${USERS_SERVER_COOKIE_NAME}=([^]+)`)
             )
 
             if (!jwtMatch) {
                 throw new Error("JWT token not found in Set-Cookie")
             }
 
-            token = response.headers["set-cookie"][0].split(`${USERS_SERVER_COOKIE_NAME}=`)[1].split(`;`)[0]
-
-            let jwt_token = jwtMatch[1].split(`;`)[0]
-
-            if (!JWT_Email_Validation({ token: jwt_token, comparable_data: mpc_data })) {
+            if (!JWT_Email_Validation({ token: token, comparable_data: mpc_data })) {
                 throw new Error("JWT Mis-Match Data")
             }
 
-            axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
+            twitch_data = JSON.parse(Decrypt(response.data)).twitch_data
+            let app_token: string = JSON.parse(Decrypt(response.data)).app_token
+
+            let user_channel: any = await axios.post(`${baseUrl}/api/authentication/login/twitch_account/channel_id`, {
+                twitch_login: twitch_data.login,
+                app_token: app_token
+            })
+
+            let follower_count_response: any = await axios.post(`${baseUrl}/api/authentication/login/twitch_account/follower_count`, {
+                twitch_channel_id: twitch_data.id,
+                app_token: app_token
+            })
+
+            let stream_response: any = await axios.post(`${baseUrl}/api/authentication/login/twitch_account/stream`, {
+                twitch_channel_id: twitch_data.id,
+                app_token: app_token
+            })
+
+            twitch_data_combined = {
+                user: twitch_data,
+                channel: user_channel.data,
+                follower_count: follower_count_response.data,
+                stream: stream_response.data,
+            }
+
+            await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
                 token: token,
                 id: Encrypt(`${mpc_data.id}`),
                 online_status: Encrypt(`${mpc_data.online_status}`),
@@ -107,13 +132,17 @@ export const POST = async (req: NextRequest) => {
                 email_address: twitch_data.email === mpc_data.email_address ? Encrypt(`${twitch_data.email}`) : Encrypt(``)
             })
 
-            let cookie = await cookies()
-            cookie.set(cookieName, jwt_token, { httpOnly: true, path: "/" })
-
+            if (USERS_SERVER_COOKIE_NAME) {
+                let cookie = await cookies()
+                cookie.set(USERS_SERVER_COOKIE_NAME, token, { httpOnly: true, path: "/" })
+            }  
         }
     })
 
-    if (twitch_data && mpc_data) {
-        return NextResponse.json({ twitch_data: twitch_data, mpc_data: mpc_data }, { status: 200 })
+    if (twitch_data_combined && mpc_data) {
+        return NextResponse.json({
+            twitch_data: twitch_data_combined,
+            mpc_data: mpc_data
+        }, { status: 200 })
     }
 }

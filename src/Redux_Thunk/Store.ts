@@ -28,9 +28,16 @@ const Copied_Current_Redux_State_Reducers: Middleware = store => next => action 
 
     sessionSet('End_User_Account_State', state.End_User_Account_State_Reducer)
     sessionSet('End_User_Profile_State', state.End_User_Profile_State_Reducer)
-    sessionSet('End_User_Discord_Account_State', state.End_User_Discord_Account_State_Reducer)
-    sessionSet('End_User_Twitch_Account_State', state.End_User_Twitch_Account_State_Reducer)
     sessionSet('End_User_Custom_CSSDesign_State', state.End_User_Custom_CSSDesign_State_Reducer)
+
+    sessionSet('End_User_Discord_Account_State', state.End_User_Discord_Account_State_Reducer)
+
+    sessionSet('End_User_Twitch_Account_State', state.End_User_Twitch_Account_State_Reducer)
+    sessionSet('End_User_Twitch_Stream_State', state.End_User_Twitch_Stream_State_Reducer)
+    sessionSet('End_User_Twitch_Channel_State', state.End_User_Twitch_Channel_State_Reducer)
+    sessionSet('End_User_Twitch_Videos_State', state.End_User_Twitch_Videos_State_Reducer)
+    sessionSet('End_User_Twitch_Clips_State', state.End_User_Twitch_Clips_State_Reducer)
+    sessionSet('End_User_Twitch_Followers_State', state.End_User_Twitch_Followers_State_Reducer)
 
     return result
 }

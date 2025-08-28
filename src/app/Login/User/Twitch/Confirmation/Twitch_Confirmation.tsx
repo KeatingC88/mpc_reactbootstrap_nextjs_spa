@@ -14,8 +14,6 @@ import { useAppDispatch } from '@Redux_Thunk/Provider'
 
 import { usePathname } from 'next/navigation'
 
-import { New_Twitch_Session_Token } from '@Redux_Thunk/Actions/Authentication/Session_Token'
-
 import {
     Set_Navigation_Menu_Display
 } from '@Redux_Thunk/Actions/Misc'
@@ -24,7 +22,7 @@ import {
 const Twitch_Confirmation = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-
+    console.log(props)
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -103,15 +101,15 @@ const Twitch_Confirmation = () => {
                                 <Col lg={10} md={8} sm={9} xs={10}>
                                     <Row>
                                         <Col>{lbl.ID}</Col>
-                                        <Col>{`${props.end_user.twitch.id}`}</Col>
+                                        <Col>{`${props.end_user.twitch.id ? props.end_user.twitch.id : lbl.Loading }`}</Col>
                                     </Row>
                                     <Row>
                                         <Col>{lbl.Email}</Col>
-                                        <Col>{props.end_user.twitch.email_address}</Col>
+                                        <Col>{`${props.end_user.twitch.email_address ? props.end_user.twitch.email_address : lbl.Loading }`}</Col>
                                     </Row>
                                     <Row>
                                         <Col>{lbl.DisplayName}</Col>
-                                        <Col>{props.end_user.twitch.display_name}</Col>
+                                        <Col>{`${props.end_user.twitch.display_name ? props.end_user.twitch.display_name : lbl.Loading }`}</Col>
                                     </Row>
                                     <Row>
                                         <Col>{lbl.AvatarPreview}</Col>

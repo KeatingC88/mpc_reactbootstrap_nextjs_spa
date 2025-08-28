@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation";
 
 import axios from "axios"
 import { Encrypt } from '@AES/Encryptor'

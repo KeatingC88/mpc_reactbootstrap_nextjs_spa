@@ -36,7 +36,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             <head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <base href={CLIENT_ADDRESS} />
-
             </head>
 
             <body data-theme="Light-Theme">

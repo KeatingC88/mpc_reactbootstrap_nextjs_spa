@@ -33,7 +33,69 @@ export interface End_User_Props {
         display_name: string | null
         login: string | null
         email_address: string | null
-        profile_image_url: string | null
+        profile_image_url: string | null,
+        follower_count: BigInt | null,
+        channel: {
+            channel_id: BigInt | null,
+            login: string | null,
+            display_name: string | null,
+            type: string | null,
+            broadcaster_type: string | null,
+            description: string | null,
+            profile_image_url: string | null,
+            offline_image_url: string | null,
+            current_view_count: BigInt | null,
+            created_at: string | null
+        } | [],
+        stream: {
+            id: BigInt | null,
+            user_id: BigInt | null,
+            game_id: BigInt |null,
+            viewer_count: BigInt |null,
+            started_at: string | null,
+            user_login: string | null,
+            user_name: string | null,
+            game_name: string | null,
+            type: string | null,
+            title: string | null,
+            language: string | null,
+            thumbnail_url: string | null,
+            tag_ids: [string] | null,
+            tags: [string] | null,
+            is_mature: boolean | null,
+        } | [],
+        videos: {
+            id: string | null
+            stream_id: string | null
+            user_id: string | null
+            user_login: string | null
+            user_name: string | null
+            title: string | null
+            description: string | null
+            created_at: string | null
+            published_at: string | null
+            url: string | null
+            thumbnail_url: string | null
+            viewable: 'public' | 'private' | null
+            view_count: number | null
+            language: string | null
+            type: 'archive' | 'highlight' | 'upload' | null
+            duration: string | null
+        } | [],
+        clips: {
+            id: string | null
+            url: string | null
+            embed_url: string | null
+            broadcaster_id: string | null
+            creator_id: string | null
+            video_id: string | null
+            game_id: string | null
+            language: string | null
+            title: string | null
+            view_count: number | null
+            created_at: string | null // ISO date string
+            thumbnail_url: string | null
+        } | []
     }
 
     profile: {

@@ -26,6 +26,11 @@ const get_all_reducers_initial_state_values = (): Partial<Current_Redux_State> =
         End_User_Profile_State_Reducer: getSession('End_User_Profile_State'),
         End_User_Discord_Account_State_Reducer: getSession('End_User_Discord_Account_State'),
         End_User_Twitch_Account_State_Reducer: getSession('End_User_Twitch_Account_State'),
+        End_User_Twitch_Channel_State_Reducer: getSession('End_User_Twitch_Channel_State'),
+        End_User_Twitch_Stream_State_Reducer: getSession('End_User_Twitch_Stream_State'),
+        End_User_Twitch_Followers_State_Reducer: getSession('End_User_Twitch_Followers_State'),
+        End_User_Twitch_Videos_State_Reducer: getSession('End_User_Twitch_Videos_State'),
+        End_User_Twitch_Clips_State_Reducer: getSession('End_User_Twitch_Clips_State'),
         End_User_Custom_CSSDesign_State_Reducer: getSession('End_User_Custom_CSSDesign_State_Reducer')
     }
 }
