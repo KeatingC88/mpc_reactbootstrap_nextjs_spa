@@ -85,10 +85,6 @@ export const POST = async (req: NextRequest) => {
                 throw new Error("JWT token not found in Set-Cookie")
             }
 
-            if (!JWT_Email_Validation({ token: token, comparable_data: mpc_data })) {
-                throw new Error("JWT Mis-Match Data")
-            }
-
             twitch_data = JSON.parse(Decrypt(response.data)).twitch_data
             let app_token: string = JSON.parse(Decrypt(response.data)).app_token
 

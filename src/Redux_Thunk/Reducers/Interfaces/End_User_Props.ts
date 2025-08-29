@@ -46,7 +46,7 @@ export interface End_User_Props {
             offline_image_url: string | null,
             current_view_count: BigInt | null,
             created_at: string | null
-        } | [],
+        },
         stream: {
             id: BigInt | null,
             user_id: BigInt | null,
@@ -63,7 +63,7 @@ export interface End_User_Props {
             tag_ids: [string] | null,
             tags: [string] | null,
             is_mature: boolean | null,
-        } | [],
+        },
         videos: {
             id: string | null
             stream_id: string | null
@@ -81,7 +81,7 @@ export interface End_User_Props {
             language: string | null
             type: 'archive' | 'highlight' | 'upload' | null
             duration: string | null
-        } | [],
+        },
         clips: {
             id: string | null
             url: string | null
@@ -95,7 +95,7 @@ export interface End_User_Props {
             view_count: number | null
             created_at: string | null // ISO date string
             thumbnail_url: string | null
-        } | []
+        }
     }
 
     profile: {

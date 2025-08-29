@@ -10,6 +10,7 @@ import '@CSS/Layout/Bootstrap/Navbar/Button.css'
 import '@CSS/Layout/Bootstrap/OffCanvas.css'
 import '@CSS/Layout/Bootstrap/Icons/Check_Circle.css'
 import '@CSS/Layout/Bootstrap/Icons/X_Octagon.css'
+import '@CSS/Layout/App/Background.css'
 //App Design CSS
 import '@CSS/Design/App/Theme/Night.css'
 import '@CSS/Design/App/Theme/Light.css'
@@ -18,6 +19,8 @@ import '@CSS/Design/Bootstrap/Icons/X_Octagon.css'
 import '@CSS/Design/App/WebSocket/Default_Chat_Icon.css'
 import '@CSS/Design/Bootstrap/Accordion.css'
 import '@CSS/Design/App/Theme/Background.css'
+import '@CSS/Design/Bootstrap/Card_Header.css'
+
 
 import App from './App'
 

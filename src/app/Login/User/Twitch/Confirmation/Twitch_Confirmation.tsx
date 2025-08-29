@@ -22,7 +22,7 @@ import {
 const Twitch_Confirmation = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-    console.log(props)
+
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -47,7 +47,7 @@ const Twitch_Confirmation = () => {
         set_alert_text(`${value}`)
         setTimeout(() => {
             set_lock_form_submit_button(false)
-            set_submit_button_text(`${lbl.RegisterEmail}`)
+            set_submit_button_text(`${lbl.Login}`)
             set_alert_text(``)
         }, 8000)
     }
@@ -60,7 +60,7 @@ const Twitch_Confirmation = () => {
         set_alert_text(`${error}`)
         setTimeout(() => {
             set_lock_form_submit_button(false)
-            set_submit_button_text(`${lbl.RegisterEmail}`)
+            set_submit_button_text(`${lbl.Login}`)
             set_alert_text(``)
         }, 8000)
     }
@@ -74,7 +74,7 @@ const Twitch_Confirmation = () => {
 
         if (props.end_user.twitch.id) {
             set_lock_form_submit_button(false)
-            set_submit_button_text(`${lbl.LoginWithTwitch}`)
+            set_submit_button_text(`${lbl.Login}`)
         }
 
         Dispatch(Login_End_User_Twitch_Account())
@@ -135,6 +135,67 @@ const Twitch_Confirmation = () => {
                                             }
                                         </Col>
                                     </Row>
+                                    <Row>
+                                        <Col>
+                                            {lbl.CurrentFollowerTotal}
+                                        </Col>
+                                        <Col>
+                                            {props.end_user.twitch.follower_count?.toString()}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            {lbl.Description}
+                                        </Col>
+                                        <Col>
+                                            {props.end_user.twitch.channel.description?.toString()}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            {lbl.CurrentViewerCount}
+                                        </Col>
+                                        <Col>
+                                            {props.end_user.twitch.channel.current_view_count?.toString()}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            {lbl.CreatedOn}
+                                        </Col>
+                                        <Col>
+                                            {props.end_user.twitch.channel.created_at?.toString()}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            {lbl.BroadcasterType}
+                                        </Col>
+                                        <Col>
+                                            {props.end_user.twitch.channel.broadcaster_type?.toString()}
+                                        </Col>
+                                    </Row>
+                                    {(props.end_user.twitch.login && props.end_user.twitch.channel.login && props.end_user.twitch.channel.login === props.end_user.twitch.login) &&
+                                        <Row>
+                                            <Col lg={6}>
+                                                <iframe
+                                                    src={`https://player.twitch.tv/?channel=${props.end_user.twitch.login}&parent=localhost`}
+                                                    height="480"
+                                                    width="500"
+                                                    allowFullScreen>
+                                                </iframe>
+                                            </Col>
+                                            <Col lg={6}>
+                                                <iframe
+                                                    frameBorder="0"
+                                                    scrolling="no"
+                                                    src={`https://www.twitch.tv/embed/${props.end_user.twitch.login}/chat?parent=localhost`}
+                                                    height="480"
+                                                    width="250">
+                                                </iframe>
+                                            </Col>
+                                        </Row>
+                                    }
                                     <Row>
                                         <Col>
                                             <Button variant="primary" size="lg" disabled={lock_form_submit_button} onClick={() => {
