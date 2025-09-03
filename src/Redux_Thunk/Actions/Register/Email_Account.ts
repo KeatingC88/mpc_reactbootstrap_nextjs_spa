@@ -352,8 +352,7 @@ export const Create_End_User_Email_Account = (dto: {
         }).then( async (response) => {
 
             return await new Promise(async (resolve) => {
-
-                let response_data = response.data.success
+                let response_data = response.data
 
                 await dispatch({
                     type: UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, payload: {

@@ -2,6 +2,7 @@
 import React, { useState, useEffect} from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useSelector } from 'react-redux'
+import Spinner from 'react-bootstrap/Spinner'
 
 import { Row, Col, Card, Form, Button, Alert, Container} from 'react-bootstrap'
 
@@ -20,11 +21,11 @@ const Login_Email_Address_Password = (): React.ReactElement => {
     const [language, region] = props.application.settings.current_language.split(`-`)
     const lbl = props.application.language_dictionaries[language][region]
 
-    const [submit_button_font_color, set_submit_button_font_color] = useState<string>(`primary`)
+    const [submit_button_color, set_submit_button_color] = useState<string>(`primary`)
     const [lock_form_submit_button, set_lock_form_submit_button] = useState<boolean>(false)
     const [alert_text, set_alert_text] = useState<string>(``)
     const [alert_color, set_alert_color] = useState<string>(``)
-    const [submit_button_text, set_submit_button_text] = useState<string>(``)
+    const [submit_button_text, set_submit_button_text] = useState<string>(`${lbl.Login}`)
 
     const [user_email_address, set_user_email_address] = useState<string>(``)
     const [user_password, set_user_password] = useState<string>(``)
@@ -32,7 +33,7 @@ const Login_Email_Address_Password = (): React.ReactElement => {
     const [card_width, set_card_width] = useState<string>(`100%`)
 
     const create_error_alert = (error: string) => {
-        set_submit_button_font_color(`danger`)
+        set_submit_button_color(`danger`)
         set_alert_text(`${error}`)
         set_alert_color(`danger`)
         set_submit_button_text(`Error`)
@@ -41,6 +42,7 @@ const Login_Email_Address_Password = (): React.ReactElement => {
             set_lock_form_submit_button(false)
             set_submit_button_text(`${lbl.Login}`)
             set_alert_text(``)
+            set_submit_button_color(`primary`)
         }, 8000)
     }
 
@@ -99,13 +101,13 @@ const Login_Email_Address_Password = (): React.ReactElement => {
     const validating_login_form = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         set_lock_form_submit_button(true)
-        set_submit_button_font_color(`info`)
+        set_submit_button_color(`info`)
         set_submit_button_text(`${lbl.ValidatingPleaseWait}`)
         set_alert_text(``)
 
         if (anEmail() && aPassword()) {
             set_lock_form_submit_button(true)
-            set_submit_button_font_color(`info`)
+            set_submit_button_color(`info`)
 
             Dispatch(Login_Email_Password_Account({
                 email_address: user_email_address,
@@ -113,7 +115,6 @@ const Login_Email_Address_Password = (): React.ReactElement => {
             }))
 
             setTimeout(() => {
-                set_lock_form_submit_button(false)
                 set_alert_color(``)
                 set_alert_text(``)
                 Navigate.push(`/`)
@@ -204,7 +205,7 @@ const Login_Email_Address_Password = (): React.ReactElement => {
                                                     className="text-center"
                                                 />
                                             </Form.Group>
-                                            <Button variant={submit_button_font_color} type="submit"
+                                            <Button variant={submit_button_color} type="submit"
                                                 className="mx-auto mb-3"
                                                 disabled={lock_form_submit_button}
                                                 style={{
@@ -213,7 +214,19 @@ const Login_Email_Address_Password = (): React.ReactElement => {
                                                     font: `${props.end_user.custom_design.button_font}`
                                                 }}
                                             >
-                                                {submit_button_text === `` ? lbl.Login : submit_button_text}
+                                                {submit_button_color !== "primary" &&
+                                                    <>
+                                                        <Spinner
+                                                            as="span"
+                                                            animation="grow"
+                                                            size="sm"
+                                                            role="status"
+                                                            aria-hidden="true"
+                                                        />
+                                                        <br />
+                                                    </>
+                                                }
+                                                {submit_button_text}
                                             </Button>
                                         </Form>
                                     </Col>

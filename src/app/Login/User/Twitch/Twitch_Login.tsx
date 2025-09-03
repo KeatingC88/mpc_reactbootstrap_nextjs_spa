@@ -1,19 +1,15 @@
 "use client"
-
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useSelector } from 'react-redux'
-import { Row, Col, Card, Form, Button, Alert, Container } from 'react-bootstrap'
+import { Row, Col, Card, Button, Alert, Container, Spinner } from 'react-bootstrap'
 
 import {
     APPLICATION_TWITCH_CLIENT_ID,
-    APPLICATION_TWITCH_REDIRECT_URI,
+    APPLICATION_TWITCH_LOGIN_REDIRECT_URI,
 } from '@Constants'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
-import { useAppDispatch } from '@Redux_Thunk/Provider'
-
-import { usePathname } from 'next/navigation'
 
 const Twitch_Login = (): React.ReactElement => {
 
@@ -44,6 +40,7 @@ const Twitch_Login = (): React.ReactElement => {
             set_lock_form_submit_button(false)
             set_submit_button_text(`${lbl.RegisterEmail}`)
             set_alert_text(``)
+            set_submit_button_color(`primary`)
         }, 8000)
     }
 
@@ -57,7 +54,22 @@ const Twitch_Login = (): React.ReactElement => {
             set_lock_form_submit_button(false)
             set_submit_button_text(`${lbl.RegisterEmail}`)
             set_alert_text(``)
+            set_submit_button_color(`primary`)
         }, 8000)
+    }
+
+    const send_end_user_to_twitch_authenticator = () => {
+        set_submit_button_color(`info`)
+        set_submit_button_text(`${lbl.ValidatingPleaseWait}`)
+
+        if (!APPLICATION_TWITCH_CLIENT_ID ||
+            !APPLICATION_TWITCH_LOGIN_REDIRECT_URI
+        ) {
+            create_error_alert(`Missing Twitch Client`)
+        } else {
+            create_success_alert(`${lbl.Success}`)
+            Navigate.push(`https://id.twitch.tv/oauth2/authorize?client_id=${APPLICATION_TWITCH_CLIENT_ID}&redirect_uri=${APPLICATION_TWITCH_LOGIN_REDIRECT_URI}&response_type=code&scope=user:read:email`)
+        }
     }
 
     useEffect(() => {
@@ -77,21 +89,59 @@ const Twitch_Login = (): React.ReactElement => {
                             minWidth: `${card_width}`
                         }}>
                         <Card.Header className={`${props.application.settings.text_alignment}`}>
-                            <svg onClick={() => { Navigate.push(`/Register/Twitch`) }} xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" className="bi bi-twitch" viewBox="0 0 16 16">
+                            <svg
+                                onClick={() => { Navigate.push(`/Login/User/Twitch`) }}
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="64"
+                                height="64"
+                                fill="currentColor"
+                                className="bi bi-twitch"
+                                viewBox="0 0 16 16"
+                            >
                                 <path d="M3.857 0 1 2.857v10.286h3.429V16l2.857-2.857H9.57L14.714 8V0zm9.714 7.429-2.285 2.285H9l-2 2v-2H4.429V1.143h9.142z" />
                                 <path d="M11.857 3.143h-1.143V6.57h1.143zm-3.143 0H7.571V6.57h1.143z" />
                             </svg>
                             <br />
-                            {`${lbl.LoginWithTwitch}`}
+                            {(!props.end_user.twitch.id && props.end_user.account.id) &&
+                                <>
+                                    {`${lbl.EnableTwitchSSO}`} 
+                                </>
+                            }
+                            {(!props.end_user.twitch.id && !props.end_user.account.id) &&
+                                <>
+                                    {`${lbl.LoginWithTwitchEmail}`}
+                                </>
+                            }
                         </Card.Header>
                         <Card.Body>
                             <Row className="justify-content-center text-center">
                                 <Col lg={10} md={8} sm={9} xs={10}>
-                                    <Button variant="primary" size="lg" onClick={() => {
-                                        (() => {
-                                            Navigate.push(`https://id.twitch.tv/oauth2/authorize?client_id=${APPLICATION_TWITCH_CLIENT_ID}&redirect_uri=${APPLICATION_TWITCH_REDIRECT_URI}&response_type=code&scope=user:read:email`)
-                                        })()
-                                    }}>{lbl.Login}</Button>
+                                    <Button
+                                        variant="primary"
+                                        size="lg"
+                                        onClick={() => { send_end_user_to_twitch_authenticator() }}
+                                        style={{
+                                            backgroundColor: `${props.end_user.custom_design.button_background_color}`,
+                                            color: `${props.end_user.custom_design.button_font_color}`,
+                                            font: `${props.end_user.custom_design.button_font}`
+                                        }}
+                                        disabled={lock_form_submit_button}
+                                    >
+                                        {submit_button_color !== "primary" &&
+                                            <>
+                                                <Spinner
+                                                    as="span"
+                                                    animation="grow"
+                                                    size="sm"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                />
+                                                <br />
+                                            </>
+                                        }
+
+                                        {submit_button_text}
+                                    </Button>
                                 </Col>
                             </Row>
                         </Card.Body>

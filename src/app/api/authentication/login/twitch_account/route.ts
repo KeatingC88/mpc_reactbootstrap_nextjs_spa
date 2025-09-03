@@ -12,8 +12,6 @@ import axios from "axios"
 import { Encrypt } from '@AES/Encryptor'
 import { Decrypt } from '@AES/Decryptor'
 
-import { JWT_Email_Validation } from '@JWT/Decoder'
-
 let iteration = 0
 
 export const POST = async (req: NextRequest) => {
@@ -63,7 +61,6 @@ export const POST = async (req: NextRequest) => {
     }).then(async (response: any) => {
         iteration++
         if (iteration === 2) {
-
             const { headers } = req;
             const protocol = headers.get("x-forwarded-proto") || "http";
             const host = headers.get("host");
@@ -74,7 +71,7 @@ export const POST = async (req: NextRequest) => {
 
             const setCookieHeader = response.headers['set-cookie']
             if (!setCookieHeader) {
-                throw new Error("No Set-Cookie header received from server")
+                throw new Error("Set-Cookie header is missing.")
             }
 
             const jwtMatch: boolean = setCookieHeader[0].match(
@@ -82,7 +79,7 @@ export const POST = async (req: NextRequest) => {
             )
 
             if (!jwtMatch) {
-                throw new Error("JWT token not found in Set-Cookie")
+                throw new Error("JWT Cookie Name does not match .Env-local")
             }
 
             twitch_data = JSON.parse(Decrypt(response.data)).twitch_data
@@ -115,7 +112,7 @@ export const POST = async (req: NextRequest) => {
                 id: Encrypt(`${mpc_data.id}`),
                 online_status: Encrypt(`${mpc_data.online_status}`),
                 custom_lbl: mpc_data.custom_lbl ? Encrypt(`${mpc_data.custom_lbl}`) : Encrypt(``),
-                name: Encrypt(`${twitch_data.display_name}${mpc_data.name}`),
+                name: Encrypt(`${twitch_data.display_name}`),
                 created_on: Encrypt(`${mpc_data.created_on}`),
                 avatar_url_path: twitch_data.profile_image_url ? Encrypt(`${twitch_data.profile_image_url}`) : Encrypt(``),
                 avatar_title: mpc_data.avatar_title ? Encrypt(`${mpc_data.avatar_title}`) : Encrypt(``),
@@ -132,6 +129,7 @@ export const POST = async (req: NextRequest) => {
                 let cookie = await cookies()
                 cookie.set(USERS_SERVER_COOKIE_NAME, token, { httpOnly: true, path: "/" })
             }  
+
         }
     })
 

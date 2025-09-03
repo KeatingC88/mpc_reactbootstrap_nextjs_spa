@@ -3,6 +3,7 @@ export interface End_User_Props {
     account: {
         id: BigInt | null,
         account_type: number
+        login_type: string | null
         public_id: string | null
         roles: string[] | null
         email_address: string | null

@@ -1,9 +1,10 @@
 "use client"
-
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
 import { Row, Col, Card, Form, Button, Alert, Container } from 'react-bootstrap'
+import Spinner from 'react-bootstrap/Spinner'
+
 import {
     Attempt_To_Register_The_End_User_An_Email_Account,
     Notify_Attempted_Registration_To_Same_Email_Account_By_Email_Message,
@@ -18,7 +19,6 @@ import { usePathname } from 'next/navigation'
 const Email_Register = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -28,7 +28,7 @@ const Email_Register = () => {
 
     const [card_width, set_card_width] = useState<string>(`100%`)
 
-    const [submit_button_font_color, set_submit_button_font_color] = useState<string>(`primary`)
+    const [submit_button_color, set_submit_button_color] = useState<string>(`primary`)
     const [lock_form_submit_button, set_lock_form_submit_button] = useState<boolean>(false)
     const [form_submit_complete, set_form_submit_complete] = useState<boolean>(false)
     const [alert_text, set_alert_text] = useState<string>(``)
@@ -38,7 +38,7 @@ const Email_Register = () => {
 
     const create_success_alert = (value: string | null) => {
         set_lock_form_submit_button(true)
-        set_submit_button_font_color(`success`)
+        set_submit_button_color(`success`)
         set_alert_color(`success`)
         set_submit_button_text(`${lbl.Successful}`)
         set_alert_text(`${value}`)
@@ -46,12 +46,13 @@ const Email_Register = () => {
             set_lock_form_submit_button(false)
             set_submit_button_text(`${lbl.RegisterEmail}`)
             set_alert_text(``)
+            set_submit_button_color(`primary`)
         }, 8000)
     }
 
     const create_error_alert = (error: string | null) => {
         set_lock_form_submit_button(true)
-        set_submit_button_font_color(`danger`)
+        set_submit_button_color(`danger`)
         set_alert_color(`danger`)
         set_submit_button_text(`${lbl.Error}`)
         set_alert_text(`${error}`)
@@ -59,6 +60,7 @@ const Email_Register = () => {
             set_lock_form_submit_button(false)
             set_submit_button_text(`${lbl.RegisterEmail}`)
             set_alert_text(``)
+            set_submit_button_color(`primary`)
         }, 8000)
     }
     
@@ -101,7 +103,7 @@ const Email_Register = () => {
 
         event.preventDefault()
         set_lock_form_submit_button(true)
-        set_submit_button_font_color(`info`)
+        set_submit_button_color(`info`)
         set_submit_button_text(`${lbl.ValidatingPleaseWait}`)
         set_alert_text("")
 
@@ -177,7 +179,16 @@ const Email_Register = () => {
                                         <path d="M15.834 12.244c0 1.168-.577 2.025-1.587 2.025-.503 0-1.002-.228-1.12-.648h-.043c-.118.416-.543.643-1.015.643-.77 0-1.259-.542-1.259-1.434v-.529c0-.844.481-1.4 1.26-1.4.585 0 .87.333.953.63h.03v-.568h.905v2.19c0 .272.18.42.411.42.315 0 .639-.415.639-1.39v-.118c0-1.277-.95-2.326-2.484-2.326h-.04c-1.582 0-2.64 1.067-2.64 2.724v.157c0 1.867 1.237 2.654 2.57 2.654h.045c.507 0 .935-.07 1.18-.18v.731c-.219.1-.643.175-1.237.175h-.044C10.438 16 9 14.82 9 12.646v-.214C9 10.36 10.421 9 12.485 9h.035c2.12 0 3.314 1.43 3.314 3.034zm-4.04.21v.227c0 .586.227.8.581.8.31 0 .564-.17.564-.743v-.367c0-.516-.275-.708-.572-.708-.346 0-.573.245-.573.791" />
                                     </svg>
                                     <br />
-                                    {`${lbl.CreateEmailAccount}`}
+                                    {(props.end_user.account.id) &&
+                                        <>
+                                            {`${lbl.CreateLoginWithYourEmailAddress}`}
+                                        </>
+                                    }
+                                    {(!props.end_user.account.id) &&
+                                        <>
+                                            {`${lbl.CreateEmailAccount}`}
+                                        </>
+                                    }
                                 </>
                             ) : (
                                 <>
@@ -186,7 +197,16 @@ const Email_Register = () => {
                                         <path d="M14.247 14.269c1.01 0 1.587-.857 1.587-2.025v-.21C15.834 10.43 14.64 9 12.52 9h-.035C10.42 9 9 10.36 9 12.432v.214C9 14.82 10.438 16 12.358 16h.044c.594 0 1.018-.074 1.237-.175v-.73c-.245.11-.673.18-1.18.18h-.044c-1.334 0-2.571-.788-2.571-2.655v-.157c0-1.657 1.058-2.724 2.64-2.724h.04c1.535 0 2.484 1.05 2.484 2.326v.118c0 .975-.324 1.39-.639 1.39-.232 0-.41-.148-.41-.42v-2.19h-.906v.569h-.03c-.084-.298-.368-.63-.954-.63-.778 0-1.259.555-1.259 1.4v.528c0 .892.49 1.434 1.26 1.434.471 0 .896-.227 1.014-.643h.043c.118.42.617.648 1.12.648m-2.453-1.588v-.227c0-.546.227-.791.573-.791.297 0 .572.192.572.708v.367c0 .573-.253.744-.564.744-.354 0-.581-.215-.581-.8Z" />
                                     </svg>
                                     <br />
-                                    {`${lbl.CreateEmailAccount}`}
+                                    {(props.end_user.account.id) &&
+                                        <>
+                                            {`${lbl.LoginWithEmail}`}
+                                        </>
+                                    }
+                                    {(!props.end_user.account.id) &&
+                                        <>
+                                            {`${lbl.CreateEmailAccount}`}
+                                        </>
+                                    }
                                 </>
                             )}
                         </Card.Header>
@@ -206,8 +226,30 @@ const Email_Register = () => {
                                                 placeholder=""
                                             />
                                         </Form.Group>
-                                        <Button variant={submit_button_font_color} type="submit" className="mx-auto mb-3" disabled={lock_form_submit_button}>
-                                            {submit_button_text}
+                                        <Button
+                                            variant={submit_button_color}
+                                            type="submit"
+                                            className="mx-auto mb-3"
+                                            disabled={lock_form_submit_button}
+                                            style={{
+                                                backgroundColor: `${props.end_user.custom_design.button_background_color}`,
+                                                color: `${props.end_user.custom_design.button_font_color}`,
+                                                font: `${props.end_user.custom_design.button_font}`
+                                            }}
+                                        >
+                                            {submit_button_color !== "primary" &&
+                                                <>
+                                                    <Spinner
+                                                        as="span"
+                                                        animation="grow"
+                                                        size="sm"
+                                                        role="status"
+                                                        aria-hidden="true"
+                                                    />
+                                                    <br />
+                                                </>
+                                            }
+                                            { submit_button_text }
                                         </Button>
                                     </Form>
                                 </Col>

@@ -1,3 +1,8 @@
-.card-header {
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div.card-header {
     text-shadow: black 0px 0px 10px !important;
 }
+
+body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div.card-header {
+    text-shadow: none !important;
+}
+

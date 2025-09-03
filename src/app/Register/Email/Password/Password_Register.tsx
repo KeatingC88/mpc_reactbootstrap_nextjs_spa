@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 
 import { useSearchParams, useRouter } from 'next/navigation';
 
-import { Row, Col, Card, Form, Button, Alert, ListGroup, Container, InputGroup, Modal, Accordion } from 'react-bootstrap'
+import { Row, Col, Card, Form, Button, Alert, ListGroup, Container, InputGroup, Modal, Accordion, Spinner } from 'react-bootstrap'
 
 import { useSelector } from 'react-redux'
 
@@ -44,7 +44,7 @@ const Password_Register = () => {
     const [password, set_password] = useState<string>("")
     const [name, set_name] = useState<string>("")
 
-    const [submit_button_font_color, set_submit_button_font_color] = useState<string>(`primary`)
+    const [submit_button_color, set_submit_button_color] = useState<string>(`primary`)
     const [lock_form_submit_button, set_lock_form_submit_button] = useState<boolean>(false)
     const [alert_text, set_alert_text] = useState<string>(``)
     const [alert_color, set_alert_color] = useState<string>(``)
@@ -122,7 +122,7 @@ const Password_Register = () => {
     }
 
     const create_form_error = (error: string) => {
-        set_submit_button_font_color(`danger`)
+        set_submit_button_color(`danger`)
         set_alert_text(`${error}`)
         set_alert_color(`danger`)
         set_submit_button_text(`Error`)
@@ -134,7 +134,7 @@ const Password_Register = () => {
     }
 
     const create_network_error = (error: string) => {
-        set_submit_button_font_color(`danger`)
+        set_submit_button_color(`danger`)
         set_alert_text(`${error}`)
         set_alert_color(`danger`)
         set_submit_button_text(`Error`)
@@ -193,7 +193,7 @@ const Password_Register = () => {
 
         set_lock_form_submit_button(true)
 
-        set_submit_button_font_color(`info`)
+        set_submit_button_color(`info`)
         set_submit_button_text(`${lbl.ValidatingPleaseWait}`)
 
         if (validate_password_input()) {
@@ -349,7 +349,24 @@ const Password_Register = () => {
                                                                 placeholder=""
                                                             />
                                                         </Form.Group>
-                                                        <Button variant={submit_button_font_color} type="submit" className="mx-auto mb-3" disabled={lock_form_submit_button}>
+                                                        <Button
+                                                            variant={submit_button_color}
+                                                            type="submit"
+                                                            className="mx-auto mb-3"
+                                                            disabled={lock_form_submit_button}
+                                                        >
+                                                            {submit_button_color !== "primary" &&
+                                                                <>
+                                                                    <Spinner
+                                                                        as="span"
+                                                                        animation="grow"
+                                                                        size="sm"
+                                                                        role="status"
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                    <br />
+                                                                </>
+                                                            }
                                                             {submit_button_text}
                                                         </Button>
                                                     </Form>

@@ -1,5 +1,4 @@
 ﻿"use client"
-
 import React, { useEffect, useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
@@ -8,8 +7,7 @@ import { useAppDispatch } from '@Redux_Thunk/Provider'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 
-import { Row, Col, Card, Container, Table, Form } from 'react-bootstrap'
-
+import { Row, Col, Card, Container, Table, Form, Spinner } from 'react-bootstrap'
 import { Load_All_Community_Users } from '@Redux_Thunk/Actions/Community/Load'
 
 const Community = () => {
@@ -40,18 +38,19 @@ const Community = () => {
 
     }
 
-    const sortedUsers = useMemo(() => {
+    const sorted_mpc_community_users = useMemo(() => {
+
         if (!props.application.community.users) return []
 
-        const usersArray = Object.values(props.application.community.users)
+        const mpc_community_users = Object.values(props.application.community.users)
 
         switch (display_name_index) {
+            case 0:
+                return mpc_community_users.sort((a, b) => a.name.localeCompare(b.name))
             case 1:
-                return usersArray.sort((a, b) => a.name.localeCompare(b.name))
-            case 2:
-                return usersArray.sort((a, b) => b.name.localeCompare(a.name))
+                return mpc_community_users.sort((a, b) => b.name.localeCompare(a.name))
             default:
-                return usersArray
+                return mpc_community_users
         }
 
     }, [props.application.community.users, display_name_index])
@@ -85,7 +84,7 @@ const Community = () => {
     }
 
     const build_table_record_rows = () => {
-        return sortedUsers.map((user: any) => (
+        return sorted_mpc_community_users.map((user: any) => (
             <tr key={user.id} onClick={() => go_to_end_user_selected_profile(user.id)}>
                 <td>
                     {user.avatar_url_path && user.avatar_url_path !== "null" && user.avatar_url_path !== "undefined" ? (
@@ -166,17 +165,73 @@ const Community = () => {
                                 fontFamily: `${props.end_user.custom_design?.card_body_font}`
                             }}
                         >
-                            <Table striped bordered hover>
-                                <thead>
-                                    <tr>
-                                        <th style={{ fontSize: '8pt' }} onClick={() => {
-                                            toggle_display_id_sort()
-                                        }}>
+                            {!props.application.community.users &&
+                                <>
+                                    {lbl.Loading}
+                                    <br />
+                                    <Spinner animation="border"
+                                        style={{ maxHeight: 400, maxWidth: 400 }}
+                                    />
+                                </>
+                            }
+                            {props.application.community.users &&
+                                <Table striped bordered hover>
+                                    <thead>
+                                        <tr>
+                                            <th style={{ fontSize: '8pt' }} onClick={() => {
+                                                toggle_display_id_sort()
+                                            }}>
+                                                {
+                                                    (() => {
 
-                                            {
-                                                (() => {
+                                                        if (display_id_index === 0) {
+                                                            return props.application.settings.theme === 0 ? (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                                                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+                                                                </svg>
+                                                            ) : (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
+                                                                    <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
+                                                                </svg>
+                                                            )
+                                                        }
 
-                                                    if (display_id_index === 0) {
+                                                        if (display_id_index === 1) {
+                                                            return props.application.settings.theme === 0 ? (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                                                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                                                                </svg>
+                                                            ) : (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up" viewBox="0 0 16 16">
+                                                                    <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659" />
+                                                                </svg>
+                                                            )
+                                                        }
+
+                                                        if (display_id_index === 2) {
+                                                            return props.application.settings.theme === 0 ? (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                                                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                                                                </svg>
+                                                            ) : (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down" viewBox="0 0 16 16">
+                                                                    <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
+                                                                </svg>
+                                                            )
+                                                        }
+
+                                                        return null
+                                                    })()
+                                                }
+                                                {lbl.Count}:&nbsp;{props.application.community.users ? Object.keys(props.application.community.users).length : `Missingno`}
+
+                                            </th>
+                                            <th style={{ fontSize: '8pt' }} onClick={() => {
+                                                toggle_display_name_sort()
+                                            }}>
+                                                {(() => {
+
+                                                    if (display_name_index === 0) {
                                                         return props.application.settings.theme === 0 ? (
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
                                                                 <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
@@ -188,7 +243,7 @@ const Community = () => {
                                                         )
                                                     }
 
-                                                    if (display_id_index === 1) {
+                                                    if (display_name_index === 1) {
                                                         return props.application.settings.theme === 0 ? (
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
                                                                 <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
@@ -200,7 +255,7 @@ const Community = () => {
                                                         )
                                                     }
 
-                                                    if (display_id_index === 2) {
+                                                    if (display_name_index === 2) {
                                                         return props.application.settings.theme === 0 ? (
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
                                                                 <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
@@ -213,156 +268,110 @@ const Community = () => {
                                                     }
 
                                                     return null
-                                                })()
-                                            }
-                                            {lbl.Count}:&nbsp;{props.application.community.users ? Object.keys(props.application.community.users).length : `Missingno`}
+                                                })()}
+                                                {lbl.Name}
+                                            </th>
+                                            <th style={{ fontSize: '8pt' }} onClick={() => {
+                                                toggle_display_language_sort()
+                                            }}>
+                                                {
+                                                    (() => {
 
-                                        </th>
-                                        <th style={{ fontSize: '8pt' }} onClick={() => {
-                                            toggle_display_name_sort()
-                                        }}>
-                                            {(() => {
+                                                        if (display_language_index === 0) {
+                                                            return props.application.settings.theme === 0 ? (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                                                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+                                                                </svg>
+                                                            ) : (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
+                                                                    <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
+                                                                </svg>
+                                                            )
+                                                        }
 
-                                                if (display_name_index === 0) {
-                                                    return props.application.settings.theme === 0 ? (
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                                            <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-                                                        </svg>
-                                                    ) : (
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
-                                                            <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
-                                                        </svg>
-                                                    )
+                                                        if (display_language_index === 1) {
+                                                            return props.application.settings.theme === 0 ? (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                                                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                                                                </svg>
+                                                            ) : (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up" viewBox="0 0 16 16">
+                                                                    <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659" />
+                                                                </svg>
+                                                            )
+                                                        }
+
+                                                        if (display_language_index === 2) {
+                                                            return props.application.settings.theme === 0 ? (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                                                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                                                                </svg>
+                                                            ) : (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down" viewBox="0 0 16 16">
+                                                                    <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
+                                                                </svg>
+                                                            )
+                                                        }
+
+                                                        return null
+                                                    })()
                                                 }
+                                                {lbl.Language}
+                                            </th>
+                                            <th style={{ fontSize: '8pt' }} onClick={() => {
+                                                toggle_display_region_sort()
+                                            }}>
+                                                {
+                                                    (() => {
 
-                                                if (display_name_index === 1) {
-                                                    return props.application.settings.theme === 0 ? (
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                                                            <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
-                                                        </svg>
-                                                    ) : (
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up" viewBox="0 0 16 16">
-                                                            <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659" />
-                                                        </svg>
-                                                    )
+                                                        if (display_region_index === 0) {
+                                                            return props.application.settings.theme === 0 ? (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                                                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+                                                                </svg>
+                                                            ) : (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
+                                                                    <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
+                                                                </svg>
+                                                            )
+                                                        }
+
+                                                        if (display_region_index === 1) {
+                                                            return props.application.settings.theme === 0 ? (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                                                                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                                                                </svg>
+                                                            ) : (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up" viewBox="0 0 16 16">
+                                                                    <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659" />
+                                                                </svg>
+                                                            )
+                                                        }
+
+                                                        if (display_region_index === 2) {
+                                                            return props.application.settings.theme === 0 ? (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                                                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                                                                </svg>
+                                                            ) : (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down" viewBox="0 0 16 16">
+                                                                    <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
+                                                                </svg>
+                                                            )
+                                                        }
+
+                                                        return null
+                                                    })()
                                                 }
-
-                                                if (display_name_index === 2) {
-                                                    return props.application.settings.theme === 0 ? (
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                                                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-                                                        </svg>
-                                                    ) : (
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down" viewBox="0 0 16 16">
-                                                            <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
-                                                        </svg>
-                                                    )
-                                                }
-
-                                                return null
-                                            })()}
-                                            {lbl.Name}
-                                        </th>
-                                        <th style={{ fontSize: '8pt' }} onClick={() => {
-                                            toggle_display_language_sort()
-                                        }}>
-                                            {
-                                                (() => {
-
-                                                    if (display_language_index === 0) {
-                                                        return props.application.settings.theme === 0 ? (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                                                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-                                                            </svg>
-                                                        ) : (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
-                                                                <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
-                                                            </svg>
-                                                        )
-                                                    }
-
-                                                    if (display_language_index === 1) {
-                                                        return props.application.settings.theme === 0 ? (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                                                                <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
-                                                            </svg>
-                                                        ) : (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up" viewBox="0 0 16 16">
-                                                                <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659" />
-                                                            </svg>
-                                                        )
-                                                    }
-
-                                                    if (display_language_index === 2) {
-                                                        return props.application.settings.theme === 0 ? (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                                                                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-                                                            </svg>
-                                                        ) : (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down" viewBox="0 0 16 16">
-                                                                <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
-                                                            </svg>
-                                                        )
-                                                    }
-
-                                                    return null
-                                                })()
-                                            }
-                                            {lbl.Language}
-                                        </th>
-                                        <th style={{ fontSize: '8pt' }} onClick={() => {
-                                            toggle_display_region_sort()
-                                        }}>
-                                            {
-                                                (() => {
-
-                                                    if (display_region_index === 0) {
-                                                        return props.application.settings.theme === 0 ? (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                                                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-                                                            </svg>
-                                                        ) : (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
-                                                                <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
-                                                            </svg>
-                                                        )
-                                                    }
-
-                                                    if (display_region_index === 1) {
-                                                        return props.application.settings.theme === 0 ? (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                                                                <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
-                                                            </svg>
-                                                        ) : (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up" viewBox="0 0 16 16">
-                                                                <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659" />
-                                                            </svg>
-                                                        )
-                                                    }
-
-                                                    if (display_region_index === 2) {
-                                                        return props.application.settings.theme === 0 ? (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                                                                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-                                                            </svg>
-                                                        ) : (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down" viewBox="0 0 16 16">
-                                                                <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
-                                                            </svg>
-                                                        )
-                                                    }
-
-                                                    return null
-                                                })()
-                                            }
-                                            {lbl.Region}
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {build_table_record_rows()}
-                                </tbody>
-                            </Table>
+                                                {lbl.Region}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {build_table_record_rows()}
+                                    </tbody>
+                                </Table>
+                            }
                         </Card.Body>
                     </Card>
                 </Col>

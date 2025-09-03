@@ -18,8 +18,6 @@ export const POST = async (req: NextRequest) => {
             token = cookie.get(USERS_SERVER_COOKIE_NAME)?.value
 
         if (token) {
-            let dto = await req.json()
-
             const decrypted_end_users_data: {
                 [key: string]: {
                     id: number,

@@ -63,6 +63,7 @@ export interface Application_Props {
         grid_type: number
         navbar_css_display_value: string
     }
+
     websocket: {
         chat_conversations: Record<string, any>
         conversation_received_approvals: {

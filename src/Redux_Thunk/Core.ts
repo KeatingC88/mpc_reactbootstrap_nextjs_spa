@@ -76,6 +76,7 @@ export const Redux_Thunk_Core = createSelector(
                 id: state.End_User_Account_State_Reducer.id,
                 public_id: state.End_User_Account_State_Reducer.public_id,
                 account_type: state.End_User_Account_State_Reducer.account_type,
+                login_type: state.End_User_Account_State_Reducer.login_type,
                 roles: state.End_User_Account_State_Reducer.roles,
                 email_address: state.End_User_Account_State_Reducer.email_address,
                 name: state.End_User_Account_State_Reducer.name,
