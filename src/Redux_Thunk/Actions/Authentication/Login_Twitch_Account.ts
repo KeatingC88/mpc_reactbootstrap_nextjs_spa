@@ -81,7 +81,7 @@ export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getSt
                     'Content-Type': 'application/json'
                 },
                 withCredentials: true,
-            }).catch((error) => {
+            }).catch((error:any) => {
                 return new Promise(async (reject) => {
                     error.id = `Application-Twitch-Login-Call-Failed`
                     await dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -190,11 +190,7 @@ export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getSt
                 region: `${current_language_state.current_language.split(`-`)[1]}`,
                 client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
                 location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-                theme: `${collected_end_user_data.theme}`,
-                alignment: `${converted_to_numerical_values.alignment}`,
-                nav_lock: `${collected_end_user_data.nav_lock}`,
-                text_alignment: `${converted_to_numerical_values.text_alignment}`,
-                grid_type: `${collected_end_user_data.grid_type}`,
+                login_type: current_end_user_state.login_type,
                 jwt_issuer_key: `${JWT_ISSUER_KEY}`,
                 jwt_client_key: `${JWT_CLIENT_KEY}`,
                 jwt_client_address: `${CLIENT_ADDRESS}`,
@@ -216,7 +212,7 @@ export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getSt
                     'Content-Type': 'application/json'
                 },
                 withCredentials: true,
-            }).catch((error) => {
+            }).catch((error: any) => {
                 return new Promise(async (reject) => {
                     error.id = `Application-Twitch-Login-Call-Failed`
                     await dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -293,7 +289,6 @@ export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getSt
         }
     } catch (error: any) {
         return new Promise(async (reject) => {
-            console.error(error)
             error.id = `Application-Twitch-Login-Process-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
             setTimeout(() => {

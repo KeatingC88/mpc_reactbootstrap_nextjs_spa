@@ -24,14 +24,12 @@ export const POST = async (req: NextRequest) => {
         if (token) {
             let dto = await req.json()
 
-            await axios.post(
-                `${USERS_PROFILE_CACHE_SERVER_ADDRESS}/get/user/profile`,
-                {
+            await axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/get/user/profile`, {
                     token: token,
                     id: Encrypt(`${dto.id}`)
-                },
-                { withCredentials: true }
-            ).then(async (response: any) => {
+            }, {
+                withCredentials: true
+            }).then(async (response: any) => {
                 if (response.data) {
                     Object.keys(response.data).forEach((index: any) => {
                         const set_decrypted_string = Decrypt(`${response.data[index]}`)
@@ -40,12 +38,10 @@ export const POST = async (req: NextRequest) => {
                         obj[index] = Number.isNaN(set_decrypted_number) ? set_decrypted_string : set_decrypted_number
                     })
                 }
-            }).then(async () => {
-                await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/get/user`,
-                    {
-                        token: token,
-                        id: Encrypt(`${dto.id}`)
-                    },
+            }).then( async () => {
+
+                await axios.post( `${USERS_CACHE_SERVER_ADDRESS}/get/user`,
+                    { token: token, id: Encrypt(`${dto.id}`) },
                     { withCredentials: true }
                 ).then(async (response: any) => {
                     if (response.data) {
@@ -57,6 +53,7 @@ export const POST = async (req: NextRequest) => {
                         })
                     }
                 })
+
             })
             return NextResponse.json({ obj }, { status: 200 })
         }

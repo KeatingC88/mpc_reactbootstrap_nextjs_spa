@@ -22,7 +22,7 @@ export const PUT = async (req: NextRequest) => {
         let token = null
         let response_data = null
 
-        const res = await axios.put(`${USERS_SERVER_ADDRESS}/Email/Login`, {
+        await axios.put(`${USERS_SERVER_ADDRESS}/Email/Login`, {
             email_address: Encrypt(`${dto.email_address}`),
             password: Encrypt(`${dto.password}`),
             theme: Encrypt(`${dto.theme}`),
@@ -70,7 +70,11 @@ export const PUT = async (req: NextRequest) => {
 
             token = response.headers["set-cookie"][0].split(`${USERS_SERVER_COOKIE_NAME}=`)[1].split(`;`)[0]
             response_data = JSON.parse(Decrypt(response.data)).user_data
-            
+
+            let birth_month = parseInt(response_data.birth_month)
+            let birth_day = parseInt(response_data.birth_day)
+            let birth_year = parseInt(response_data.birth_year)
+
             await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
                 token: token,
                 id: Encrypt(`${response_data.id}`),
@@ -88,10 +92,6 @@ export const PUT = async (req: NextRequest) => {
                 account_type: Encrypt(`${response_data.account_type}`),
                 email_address: Encrypt(`${response_data.email_address}`)
             })
-
-            let birth_month = parseInt(response_data.birth_month)
-            let birth_day = parseInt(response_data.birth_day)
-            let birth_year = parseInt(response_data.birth_year)
 
             await axios.post(`${USERS_PROFILE_CACHE_SERVER_ADDRESS}/set/user/profile`, {
                 token: token,

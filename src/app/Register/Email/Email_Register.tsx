@@ -34,7 +34,7 @@ const Email_Register = () => {
     const [alert_text, set_alert_text] = useState<string>(``)
     const [alert_color, set_alert_color] = useState<string>(``)
     const [submit_button_text, set_submit_button_text] = useState("Register")
-    const [email_address, set_email_address] = useState<string>("")
+    const [email_address, set_email_address] = useState<string>(props.end_user.account.email_address ? props.end_user.account.email_address : "")
 
     const create_success_alert = (value: string | null) => {
         set_lock_form_submit_button(true)
@@ -212,45 +212,62 @@ const Email_Register = () => {
                         </Card.Header>
                         <Card.Body>
                             <Row className="justify-content-center text-center">
-                                <Col lg={10} md={8} sm={9} xs={10}>
+                                <Col sm={9} xs={10} md={8} lg={8} xlg={4}>
                                     <Form noValidate onSubmit={validating_create_email_account_form}>
                                         <Form.Group className="mb-3 mt-3 mx-auto" controlId="email_address">
-                                            <Form.Label>{lbl.EmailAddress}</Form.Label>
-                                            <Form.Control
-                                                type="email_address"
-                                                name="email_address"
-                                                className="text-center mx-auto"
-                                                value={email_address}
-                                                onChange={(e) => set_email_address(e.target.value)}
-                                                disabled={lock_form_submit_button}
-                                                placeholder=""
-                                            />
+                                            <Row className="d-flex justify-content-center">
+                                                <Col xs={12} sm={10}>
+                                                    <Form.Label>{lbl.EmailAddress}</Form.Label>
+                                                    {props.end_user.account.email_address &&
+                                                        <Form.Control
+                                                            type="email_address"
+                                                            name="email_address"
+                                                            className="text-center mx-auto"
+                                                            value={email_address}
+                                                            readOnly
+                                                        />
+                                                    }
+                                                    {!props.end_user.account.email_address &&
+                                                        <Form.Control
+                                                            type="email_address"
+                                                            name="email_address"
+                                                            className="text-center mx-auto"
+                                                            value={email_address}
+                                                            onChange={(e) => set_email_address(e.target.value)}
+                                                        />
+                                                    }
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <Button
+                                                        variant={submit_button_color}
+                                                        type="submit"
+                                                        className="mx-auto mb-3 mt-2"
+                                                        disabled={lock_form_submit_button}
+                                                        style={{
+                                                            backgroundColor: `${props.end_user.custom_design.button_background_color}`,
+                                                            color: `${props.end_user.custom_design.button_font_color}`,
+                                                            font: `${props.end_user.custom_design.button_font}`
+                                                        }}
+                                                    >
+                                                        {submit_button_color !== "primary" &&
+                                                            <>
+                                                                <Spinner
+                                                                    as="span"
+                                                                    animation="grow"
+                                                                    size="sm"
+                                                                    role="status"
+                                                                    aria-hidden="true"
+                                                                />
+                                                                <br />
+                                                            </>
+                                                        }
+                                                        {submit_button_text}
+                                                    </Button>
+                                                </Col>
+                                            </Row>
                                         </Form.Group>
-                                        <Button
-                                            variant={submit_button_color}
-                                            type="submit"
-                                            className="mx-auto mb-3"
-                                            disabled={lock_form_submit_button}
-                                            style={{
-                                                backgroundColor: `${props.end_user.custom_design.button_background_color}`,
-                                                color: `${props.end_user.custom_design.button_font_color}`,
-                                                font: `${props.end_user.custom_design.button_font}`
-                                            }}
-                                        >
-                                            {submit_button_color !== "primary" &&
-                                                <>
-                                                    <Spinner
-                                                        as="span"
-                                                        animation="grow"
-                                                        size="sm"
-                                                        role="status"
-                                                        aria-hidden="true"
-                                                    />
-                                                    <br />
-                                                </>
-                                            }
-                                            { submit_button_text }
-                                        </Button>
                                     </Form>
                                 </Col>
                             </Row>

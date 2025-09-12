@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <PackageJsonName Condition="$(PackageJsonName) == ''">mpc_reactbootstrap_nextjs_spa</PackageJsonName>
+    <PackageJsonVersion Condition="$(PackageJsonVersion) == ''">0.1.0</PackageJsonVersion>
+    <PackageJsonPrivate Condition="$(PackageJsonPrivate) == ''">true</PackageJsonPrivate>
+    <PackageJsonScriptsDev Condition="$(PackageJsonScriptsDev) == ''">next dev -H 0.0.0.0 -p 3000</PackageJsonScriptsDev>
+    <PackageJsonScriptsBuild Condition="$(PackageJsonScriptsBuild) == ''">next build -H 0.0.0.0 -p 3000</PackageJsonScriptsBuild>
+    <PackageJsonScriptsStart Condition="$(PackageJsonScriptsStart) == ''">next start -H 0.0.0.0 -p 3000</PackageJsonScriptsStart>
+    <PackageJsonDependenciesReduxjsToolkit Condition="$(PackageJsonDependenciesReduxjsToolkit) == ''">^2.8.1</PackageJsonDependenciesReduxjsToolkit>
+    <PackageJsonDependenciesAxios Condition="$(PackageJsonDependenciesAxios) == ''">^1.9.0</PackageJsonDependenciesAxios>
+    <PackageJsonDependenciesBootstrap Condition="$(PackageJsonDependenciesBootstrap) == ''">^5.3.6</PackageJsonDependenciesBootstrap>
+    <PackageJsonDependenciesCryptoJs Condition="$(PackageJsonDependenciesCryptoJs) == ''">^4.2.0</PackageJsonDependenciesCryptoJs>
+    <PackageJsonDependenciesDotenv Condition="$(PackageJsonDependenciesDotenv) == ''">^16.5.0</PackageJsonDependenciesDotenv>
+    <PackageJsonDependenciesNext Condition="$(PackageJsonDependenciesNext) == ''">^15.5.2</PackageJsonDependenciesNext>
+    <PackageJsonDependenciesReact Condition="$(PackageJsonDependenciesReact) == ''">^19.1.0</PackageJsonDependenciesReact>
+    <PackageJsonDependenciesReactBootstrap Condition="$(PackageJsonDependenciesReactBootstrap) == ''">^2.10.9</PackageJsonDependenciesReactBootstrap>
+    <PackageJsonDependenciesReactBootstrapIcons Condition="$(PackageJsonDependenciesReactBootstrapIcons) == ''">^1.11.5</PackageJsonDependenciesReactBootstrapIcons>
+    <PackageJsonDependenciesReactRedux Condition="$(PackageJsonDependenciesReactRedux) == ''">^9.2.0</PackageJsonDependenciesReactRedux>
+    <PackageJsonDependenciesReduxThunk Condition="$(PackageJsonDependenciesReduxThunk) == ''">^3.1.0</PackageJsonDependenciesReduxThunk>
+    <PackageJsonDependenciesReselect Condition="$(PackageJsonDependenciesReselect) == ''">^5.1.1</PackageJsonDependenciesReselect>
+    <PackageJsonDependenciesTypescript Condition="$(PackageJsonDependenciesTypescript) == ''">^5.8.3</PackageJsonDependenciesTypescript>
+    <PackageJsonDevdependenciesTypesCryptoJs Condition="$(PackageJsonDevdependenciesTypesCryptoJs) == ''">^4.2.2</PackageJsonDevdependenciesTypesCryptoJs>
+    <PackageJsonDevdependenciesTypesNode Condition="$(PackageJsonDevdependenciesTypesNode) == ''">22.15.17</PackageJsonDevdependenciesTypesNode>
+  </PropertyGroup>
+</Project>

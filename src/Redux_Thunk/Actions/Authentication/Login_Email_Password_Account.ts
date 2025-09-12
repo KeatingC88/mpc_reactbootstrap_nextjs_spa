@@ -76,7 +76,7 @@ export const Login_Email_Password_Account = (dto: {
         rtt: `${Get_Device_Information().rtt}`,
         data_saver: `${Get_Device_Information().saveData}`,
         device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch(async (error) => {
+    }).catch(async (error: any) => {
         return await new Promise((reject) => {
             error.id = `Email-Login-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -85,7 +85,8 @@ export const Login_Email_Password_Account = (dto: {
                 dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
             }, 1)
         })
-    }).then( async (response: any) => {
+    }).then(async (response: any) => {
+
         let response_data = response.data.user_data
 
         dispatch({ type: UPDATE_APPLICATION_SETTINGS_LOCAL_TIME })

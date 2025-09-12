@@ -42,7 +42,7 @@ const Community = () => {
 
         if (!props.application.community.users) return []
 
-        const mpc_community_users = Object.values(props.application.community.users)
+        const mpc_community_users = Object.values(props.application.community.users.users_data)
 
         switch (display_name_index) {
             case 0:
@@ -223,7 +223,7 @@ const Community = () => {
                                                         return null
                                                     })()
                                                 }
-                                                {lbl.Count}:&nbsp;{props.application.community.users ? Object.keys(props.application.community.users).length : `Missingno`}
+                                                {lbl.Count}:&nbsp;{props.application.community.users ? Object.keys(props.application.community.users.users_data).length : `Missingno`}
 
                                             </th>
                                             <th style={{ fontSize: '8pt' }} onClick={() => {

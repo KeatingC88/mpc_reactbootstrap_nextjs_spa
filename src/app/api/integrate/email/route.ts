@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
-import { cookies } from "next/headers"
 import axios from "axios"
-
+import { Decrypt } from '@AES/Decryptor'
 import {
     USERS_SERVER_ADDRESS
 } from '@Constants'
@@ -16,7 +15,7 @@ export const POST = async (req: NextRequest) => {
             { withCredentials: true }
         )
 
-        return NextResponse.json( res.data )
+        return NextResponse.json({status: 204})
     } catch (err: any) {
         return NextResponse.json({ error: err.message }, { status: 500 })
     }

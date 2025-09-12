@@ -301,6 +301,7 @@ export const Create_End_User_Email_Account = (dto: {
 
     if (!state.Network_Error_State_Reducer.id) {
 
+        let current_end_user_state = state.End_User_Account_State_Reducer
         let current_language_state = state.Application_Language_State_Reducer
         let current_settings_state = state.Application_Settings_State_Reducer
 
@@ -349,47 +350,51 @@ export const Create_End_User_Email_Account = (dto: {
             device_ram_gb: Encrypt(`${Get_Device_Information().deviceMemory}`),
         }, {
             withCredentials: true
-        }).then( async (response) => {
+        }).then( async (response: any) => { 
+            
+            if (response.data && response.status === 200 && response.data.status !== 204) {
 
-            return await new Promise(async (resolve) => {
-                let response_data = response.data
+                return await new Promise(async (resolve) => {
 
-                await dispatch({
-                    type: UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, payload: {
-                        current_language: `${response_data.language}-${response_data.region}`
-                    }
-                })
+                    dispatch({
+                        type: UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, payload: {
+                            current_language: `${response.data.language}-${response.data.region}`
+                        }
+                    })
 
-                await dispatch({
-                    type: UPDATE_END_USER_ACCOUNT_STATE, payload: {
-                        account_type: parseInt(response_data.account_type),
-                        created_on: parseInt(response_data.created_on),
-                        email_address: response_data.email_address,
-                        id: parseInt(response_data.id),
-                        login_on: parseInt(response_data.login_on),
-                        name: response_data.name,
-                        roles: response_data.roles,
+                    dispatch({
+                        type: UPDATE_END_USER_ACCOUNT_STATE, payload: {
+                            account_type: parseInt(response.data.account_type),
+                            created_on: parseInt(response.data.created_on),
+                            email_address: response.data.email_address,
+                            id: parseInt(response.data.id),
+                            login_on: parseInt(response.data.login_on),
+                            name: response.data.name,
+                            roles: response.data.roles,
+                            client_address: CLIENT_ADDRESS,
+                            groups: response.data.groups,
+                            login_type: response.data.login_type,
+                            online_status: parseInt(response.data.online_status)
+                        }
+                    })
+
+                    resolve({
+                        account_type: parseInt(response.data.account_type),
+                        created_on: parseInt(response.data.created_on),
+                        email_address: response.data.email_address,
+                        id: parseInt(response.data.id),
+                        login_on: parseInt(response.data.login_on),
+                        name: response.data.name,
+                        roles: response.data.roles,
                         client_address: CLIENT_ADDRESS,
-                        groups: response_data.groups,
-                        login_type: response_data.login_type,
-                        online_status: parseInt(response_data.online_status)
-                    }
+                        groups: response.data.groups,
+                        login_type: response.data.login_type,
+                        online_status: parseInt(response.data.online_status)
+                    })
+
                 })
 
-                await resolve({
-                    account_type: parseInt(response_data.account_type),
-                    created_on: parseInt(response_data.created_on),
-                    email_address: response_data.email_address,
-                    id: parseInt(response_data.id),
-                    login_on: parseInt(response_data.login_on),
-                    name: response_data.name,
-                    roles: response_data.roles,
-                    client_address: CLIENT_ADDRESS,
-                    groups: response_data.groups,
-                    login_type: response_data.login_type,
-                    online_status: parseInt(response_data.online_status)
-                })
-            })
+            }
         })
     }
 }

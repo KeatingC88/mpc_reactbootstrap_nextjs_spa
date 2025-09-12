@@ -11,7 +11,7 @@ export const POST = async (req: NextRequest) => {
 
         let dto = await req.json()
 
-        const response = await axios.get(` https://api.twitch.tv/helix/users?login=${dto.twitch_login}`, {
+        const response = await axios.get(` https://api.twitch.tv/helix/users?login=${dto.twitch_login_id}`, {
             headers: {
                 "Client-Id": APPLICATION_TWITCH_CLIENT_ID,
                 "Authorization": `Bearer ${dto.app_token}`,

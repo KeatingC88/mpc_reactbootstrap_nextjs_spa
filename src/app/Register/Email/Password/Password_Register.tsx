@@ -192,7 +192,6 @@ const Password_Register = () => {
         e.preventDefault()
 
         set_lock_form_submit_button(true)
-
         set_submit_button_color(`info`)
         set_submit_button_text(`${lbl.ValidatingPleaseWait}`)
 
@@ -211,11 +210,11 @@ const Password_Register = () => {
 
             setTimeout( async () => {
 
-                set_lock_form_submit_button(false)
                 set_alert_color(`success`)
                 set_alert_text(`${lbl.Success}`)
 
                 await Dispatch(Create_End_User_Email_Account(obj)).then(() => {
+                    console.log(`create_end_user_email_account finished`)
                     Navigate.push(`/`)
                     Dispatch(Set_Navigation_Menu_Display(` `))
                 })
@@ -248,7 +247,7 @@ const Password_Register = () => {
                                 fontFamily: `${props.end_user.custom_design.card_header_font}`
                             }}
                         >
-                            <h1> {lbl.EmailPasswordRequirement} </h1>
+                            <h1> {lbl.Email} <br /> {lbl.PasswordRequirement} </h1>
                         </Card.Header>
                         <Card.Body
                             style={{

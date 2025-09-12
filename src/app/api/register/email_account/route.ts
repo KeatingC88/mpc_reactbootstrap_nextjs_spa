@@ -36,8 +36,7 @@ export const POST = async (req: NextRequest) => {
                 body
             )
 
-            let account_creation_data = JSON.parse(Decrypt(res.data)).account_creation_data
-            return NextResponse.json(account_creation_data, {status: 200})
+            return NextResponse.json({status: 204})
             
         } else {
 

@@ -15,8 +15,7 @@ interface Redux_Thunk_Core {
 }
 
 export const Redux_Thunk_Core = createSelector(
-    [(state: Current_Redux_State) => state],
-    (state): Redux_Thunk_Core => ({
+    [(state: Current_Redux_State) => state], (state): Redux_Thunk_Core => ({
         application: {
             community: {
                 users: state.Application_Community_State_Reducer.users,

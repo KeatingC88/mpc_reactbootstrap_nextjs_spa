@@ -21,7 +21,7 @@ export const Renew_Session_Token = () => async (dispatch: AppDispatch, getState:
 
     if (current_end_user_account_state.id !== null) {
 
-        await axios.get(`/api/authentication/remove_token`).then(async() => {
+        await axios.get(`/api/authentication/remove_token`).then( async () => {
             await axios.post(`/api/authentication/renew_token`, {
                 id: current_end_user_account_state.id,
                 account_type: current_end_user_account_state.account_type,

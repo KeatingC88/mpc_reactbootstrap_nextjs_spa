@@ -4,15 +4,14 @@ import { cookies } from "next/headers"
 import {
     USERS_SERVER_ADDRESS,
     USERS_SERVER_COOKIE_NAME,
-    USERS_CACHE_SERVER_ADDRESS
+    USERS_CACHE_SERVER_ADDRESS,
+    USERS_TWITCH_CACHE_SERVER_ADDRESS
 } from '@Constants'
 
 import axios from "axios"
 
 import { Encrypt } from '@AES/Encryptor'
 import { Decrypt } from '@AES/Decryptor'
-
-let iteration = 0
 
 export const POST = async (req: NextRequest) => {
 
@@ -21,6 +20,8 @@ export const POST = async (req: NextRequest) => {
     let twitch_data: any = null
     let mpc_data: any = null
     let twitch_data_combined: any = null
+
+    console.log(`sending user to twitch login user api`)
 
     await axios.post(`${USERS_SERVER_ADDRESS}/Twitch/Login`, {
         code: dto.code,
@@ -54,21 +55,23 @@ export const POST = async (req: NextRequest) => {
             'Content-Type': 'application/json'
         },
         withCredentials: true
-    }).catch((error) => {
+    }).catch((error: any) => {
 
         return NextResponse.json({ error: error.message }, { status: 500 })
 
-    }).then(async (response: any) => {
-        iteration++
-        if (iteration === 2) {
-            const { headers } = req;
-            const protocol = headers.get("x-forwarded-proto") || "http";
-            const host = headers.get("host");
-            const baseUrl = `${protocol}://${host}`;
+    }).then( async (response: any) => {
+
+        if (response.data) {
+
+            const { headers } = req
+            const protocol = headers.get("x-forwarded-proto") || "http"
+            const host = headers.get("host")
+            const baseUrl = `${protocol}://${host}`
             
             token = response.headers['set-cookie'][0].split(`;`)[0].split(`${USERS_SERVER_COOKIE_NAME}=`)[1]
-            mpc_data = JSON.parse(Decrypt(response.data)).mpc_data
-
+            let response_data = JSON.parse(Decrypt(response.data))
+            mpc_data = response_data.mpc_data
+            
             const setCookieHeader = response.headers['set-cookie']
             if (!setCookieHeader) {
                 throw new Error("Set-Cookie header is missing.")
@@ -82,20 +85,20 @@ export const POST = async (req: NextRequest) => {
                 throw new Error("JWT Cookie Name does not match .Env-local")
             }
 
-            twitch_data = JSON.parse(Decrypt(response.data)).twitch_data
-            let app_token: string = JSON.parse(Decrypt(response.data)).app_token
+            twitch_data = response_data.twitch_data
+            let app_token: string = response_data.app_token
 
-            let user_channel: any = await axios.post(`${baseUrl}/api/authentication/login/twitch_account/channel_id`, {
-                twitch_login: twitch_data.login,
+            let user_channel: any = await axios.post(`${baseUrl}/api/twitch/channel_id`, {
+                twitch_login_id: twitch_data.login,
                 app_token: app_token
             })
 
-            let follower_count_response: any = await axios.post(`${baseUrl}/api/authentication/login/twitch_account/follower_count`, {
+            let follower_count_response: any = await axios.post(`${baseUrl}/api/twitch/follower_count`, {
                 twitch_channel_id: twitch_data.id,
                 app_token: app_token
             })
 
-            let stream_response: any = await axios.post(`${baseUrl}/api/authentication/login/twitch_account/stream`, {
+            let stream_response: any = await axios.post(`${baseUrl}/api/twitch/stream`, {
                 twitch_channel_id: twitch_data.id,
                 app_token: app_token
             })
@@ -107,29 +110,39 @@ export const POST = async (req: NextRequest) => {
                 stream: stream_response.data,
             }
 
-            await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
-                token: token,
-                id: Encrypt(`${mpc_data.id}`),
-                online_status: Encrypt(`${mpc_data.online_status}`),
-                custom_lbl: mpc_data.custom_lbl ? Encrypt(`${mpc_data.custom_lbl}`) : Encrypt(``),
-                name: Encrypt(`${twitch_data.display_name}`),
-                created_on: Encrypt(`${mpc_data.created_on}`),
-                avatar_url_path: twitch_data.profile_image_url ? Encrypt(`${twitch_data.profile_image_url}`) : Encrypt(``),
-                avatar_title: mpc_data.avatar_title ? Encrypt(`${mpc_data.avatar_title}`) : Encrypt(``),
-                language_code: Encrypt(`${mpc_data.language}`),
-                region_code: Encrypt(`${mpc_data.region}`),
-                login_on: mpc_data.login_on ? Encrypt(`${mpc_data.login_on}`) : Encrypt(``),
-                logout_on: mpc_data.logout_on ? Encrypt(`${mpc_data.logout_on}`) : Encrypt(``),
-                login_type: Encrypt(`TWITCH`),
-                account_type: Encrypt(`${mpc_data.account_type}`),
-                email_address: twitch_data.email === mpc_data.email_address ? Encrypt(`${twitch_data.email}`) : Encrypt(``)
-            })
+            if (twitch_data_combined && mpc_data && twitch_data_combined) {
+                
+                await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
+                    token: token,
+                    id: Encrypt(`${mpc_data.id}`),
+                    online_status: Encrypt(`${mpc_data.online_status}`),
+                    custom_lbl: mpc_data.custom_lbl ? Encrypt(`${mpc_data.custom_lbl}`) : Encrypt(``),
+                    name: Encrypt(`${twitch_data.display_name}`),
+                    created_on: Encrypt(`${mpc_data.created_on}`),
+                    avatar_url_path: twitch_data.profile_image_url ? Encrypt(`${twitch_data.profile_image_url}`) : Encrypt(``),
+                    avatar_title: mpc_data.avatar_title ? Encrypt(`${mpc_data.avatar_title}`) : Encrypt(``),
+                    language_code: Encrypt(`${mpc_data.language}`),
+                    region_code: Encrypt(`${mpc_data.region}`),
+                    login_on: mpc_data.login_on ? Encrypt(`${mpc_data.login_on}`) : Encrypt(``),
+                    logout_on: mpc_data.logout_on ? Encrypt(`${mpc_data.logout_on}`) : Encrypt(``),
+                    login_type: Encrypt(`TWITCH`),
+                    account_type: Encrypt(`${mpc_data.account_type}`),
+                    email_address: twitch_data.email.toUpperCase() === mpc_data.email_address.toUpperCase() ? Encrypt(`${twitch_data.email.toUpperCase()}`) : Encrypt(`ERROR login/twitch/route.ts`)
+                })
 
-            if (USERS_SERVER_COOKIE_NAME) {
-                let cookie = await cookies()
-                cookie.set(USERS_SERVER_COOKIE_NAME, token, { httpOnly: true, path: "/" })
-            }  
+                await axios.post(`${USERS_TWITCH_CACHE_SERVER_ADDRESS}/set/user`, {
+                    token: token,
+                    id: Encrypt(`${mpc_data.id}`),
+                    twitch_id: Encrypt(`${twitch_data.id}`),
+                    twitch_email: Encrypt(`${twitch_data.email}`)
+                })
 
+                if (USERS_SERVER_COOKIE_NAME) {
+                    let cookie = await cookies()
+                    cookie.set(USERS_SERVER_COOKIE_NAME, token, { httpOnly: true, path: "/" })
+                }
+
+            }
         }
     })
 
