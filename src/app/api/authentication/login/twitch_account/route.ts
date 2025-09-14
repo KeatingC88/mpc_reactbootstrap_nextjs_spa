@@ -21,8 +21,6 @@ export const POST = async (req: NextRequest) => {
     let mpc_data: any = null
     let twitch_data_combined: any = null
 
-    console.log(`sending user to twitch login user api`)
-
     await axios.post(`${USERS_SERVER_ADDRESS}/Twitch/Login`, {
         code: dto.code,
         language: Encrypt(`${dto.language}`),
@@ -103,6 +101,8 @@ export const POST = async (req: NextRequest) => {
                 app_token: app_token
             })
 
+            twitch_data['user_name'] = twitch_data.login
+
             twitch_data_combined = {
                 user: twitch_data,
                 channel: user_channel.data,
@@ -134,7 +134,8 @@ export const POST = async (req: NextRequest) => {
                     token: token,
                     id: Encrypt(`${mpc_data.id}`),
                     twitch_id: Encrypt(`${twitch_data.id}`),
-                    twitch_email: Encrypt(`${twitch_data.email}`)
+                    twitch_email: Encrypt(`${twitch_data.email}`),
+                    twitch_user_name: Encrypt(`${twitch_data.login}`),
                 })
 
                 if (USERS_SERVER_COOKIE_NAME) {

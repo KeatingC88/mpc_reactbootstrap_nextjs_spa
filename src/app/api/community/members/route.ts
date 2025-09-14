@@ -69,7 +69,8 @@ export const POST = async (req: NextRequest) => {
                 id: string,
                 twitch_id: string,
                 twitch_email: string,
-                follower_count: number,
+                twitch_user_name: string,
+                follower_count: string,
                 stream_data: {}
             }
         } = {}
@@ -77,7 +78,7 @@ export const POST = async (req: NextRequest) => {
         await axios.post(`${USERS_TWITCH_CACHE_SERVER_ADDRESS}/get/users`, {
             token: token
         }).then(async (response: any) => {
-
+            
             if (response.status !== 200)
                 return {}
 
@@ -86,18 +87,19 @@ export const POST = async (req: NextRequest) => {
 
             response.data = Decrypt(response.data)
 
-
             if (response.data === "null")
                 return {}
 
             response.data = JSON.parse(response.data)
 
             for (const community_user_id in response.data) {
-                const userData = response.data[community_user_id]
 
-                const mpc_user_id = userData[0]
-                const twitch_user_id = userData[1]
-                const twitch_user_email = userData[2].toUpperCase()
+                const userData: string = response.data[community_user_id]
+
+                const mpc_user_id: string = userData[0]
+                const twitch_user_id: string = userData[1]
+                const twitch_user_email: string = userData[2].toUpperCase()
+                const twitch_user_name: string = userData[3]
 
                 const follower_count_response: any = await axios.post(`${baseUrl}/api/twitch/follower_count`, {
                     twitch_channel_id: twitch_user_id,
@@ -113,6 +115,7 @@ export const POST = async (req: NextRequest) => {
                     id: mpc_user_id,
                     twitch_id: twitch_user_id,
                     twitch_email: twitch_user_email,
+                    twitch_user_name: twitch_user_name,
                     follower_count: follower_count_response.data,
                     stream_data: stream_response.data,
                 }

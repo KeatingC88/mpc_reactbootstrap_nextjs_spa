@@ -82,7 +82,7 @@ export const Load_All_Community_Users = () => async (dispatch: AppDispatch, getS
             }, 1000)
             reject(error)
         })
-    }).then(async (response: any) => {
+    }).then( async (response: any) => {
         return await new Promise(async (resolve) => {
             await dispatch({ type: UPDATE_APPLICATION_COMMUNITY_STATE, payload: { users: response.data } })
             resolve(response.data)

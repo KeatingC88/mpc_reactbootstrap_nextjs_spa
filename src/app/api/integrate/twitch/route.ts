@@ -93,7 +93,8 @@ export const POST = async (req: NextRequest) => {
                     token: token,
                     id: Encrypt(`${end_user_id}`),
                     twitch_id: Encrypt(`${twitch_data.id}`),
-                    twitch_email: Encrypt(`${twitch_data.email}`)
+                    twitch_email: Encrypt(`${twitch_data.email}`),
+                    twitch_user_name: Encrypt(`${twitch_data.login}`)
                 })
 
                 twitch_data_combined = {

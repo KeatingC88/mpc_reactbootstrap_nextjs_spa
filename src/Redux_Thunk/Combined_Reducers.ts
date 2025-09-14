@@ -26,7 +26,7 @@ import End_User_Twitch_Followers_State_Reducer from '@Redux_Thunk/Reducers/End_U
 import End_User_Twitch_Clips_State_Reducer from '@Redux_Thunk/Reducers/End_User/Twitch/End_User_Twitch_Clips_State_Reducer'
 import End_User_Twitch_Videos_State_Reducer from '@Redux_Thunk/Reducers/End_User/Twitch/End_User_Twitch_Videos_State_Reducer'
 
-const Combined_Reducers = combineReducers({
+const Combined_Reducers: combineReducers = combineReducers({
     End_User_Custom_CSSDesign_State_Reducer,
     Host_Error_State_Reducer,
     Network_Error_State_Reducer,

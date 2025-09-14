@@ -1,4 +1,5 @@
 ﻿"use client"
+
 import React, { useEffect, useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
@@ -7,13 +8,19 @@ import { useAppDispatch } from '@Redux_Thunk/Provider'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 
-import { Row, Col, Card, Container, Table, Form, Spinner } from 'react-bootstrap'
+import {
+    Row, Col, Card,
+    Container, Table, Form,
+    Spinner, OverlayTrigger,
+    Tooltip, ButtonToolbar, ButtonGroup, Button
+} from 'react-bootstrap'
+
 import { Load_All_Community_Users } from '@Redux_Thunk/Actions/Community/Load'
 
 const Community = () => {
 
-    const props = useSelector(Redux_Thunk_Core)
-
+    const props: any = useSelector(Redux_Thunk_Core)
+    console.log(props)
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -25,6 +32,8 @@ const Community = () => {
     const [display_name_index, set_display_name_index] = useState<number>(0)
     const [display_language_index, set_display_language_index] = useState<number>(0)
     const [display_region_index, set_display_region_index] = useState<number>(0)
+
+    const [open, setOpen] = useState(false);
 
     const [card_width, set_card_width] = useState<string>(`100%`)
 
@@ -83,28 +92,75 @@ const Community = () => {
         set_display_region_index((prev) => (prev + 1) % 3)
     }
 
+    const build_community_user_tool_tip = (id: any) => {
+        let user_data = props.application.community.users.users_data[id]
+        let twitch_data = props.application.community.users.users_twitch_data[id]
+        
+        return (
+            <Tooltip>
+                <Row className="text-start">
+                    <Col>
+                        <strong>Name</strong>: {user_data.name} <br />
+                        {twitch_data?.twitch_user_name &&
+                            <>  
+                                <strong>Twitch</strong>: twitch.tv/{twitch_data?.twitch_user_name} <br />
+                            </>
+                        }
+                    </Col>
+                </Row>
+            </Tooltip>
+        )
+    }
+
+    const build_community_user_social_media_buttons = (id: any) => {
+        let twitch_data = props.application.community.users.users_twitch_data[id]
+
+        return (
+            <>
+                <br />
+                {twitch_data?.twitch_id &&
+                    <a target="_blank" href={`https://www.twitch.tv/${twitch_data.twitch_user_name}`}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#6441A5" className="mt-2 bi bi-twitch" viewBox="0 0 16 16">
+                            <path d="M3.857 0 1 2.857v10.286h3.429V16l2.857-2.857H9.57L14.714 8V0zm9.714 7.429-2.285 2.285H9l-2 2v-2H4.429V1.143h9.142z" />
+                            <path d="M11.857 3.143h-1.143V6.57h1.143zm-3.143 0H7.571V6.57h1.143z" />
+                        </svg>
+                    </a>
+                }
+            </>
+        )
+    }
+
     const build_table_record_rows = () => {
         return sorted_mpc_community_users.map((user: any) => (
-            <tr key={user.id} onClick={() => go_to_end_user_selected_profile(user.id)}>
-                <td>
-                    {user.avatar_url_path && user.avatar_url_path !== "null" && user.avatar_url_path !== "undefined" ? (
-                        <img
-                            src={user.avatar_url_path}
-                            width="84"
-                            height="84"
-                            className="d-inline-block align-top mt-1 rounded-circle"
-                            alt={user.avatar_title}
-                        />
-                    ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" fill="currentColor" className="bi bi-person-circle d-inline-block align-top mt-2 rounded-circle" viewBox="0 0 16 16">
-                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                            <path fill="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-                        </svg>
-                    )}
-                </td>
-                <td>{user.name}</td>
-                <td>{user.language_code}</td>
-                <td>{user.region_code}</td>
+            <tr key={user.id}>
+                <OverlayTrigger placement="right" overlay={build_community_user_tool_tip(user.id)}>
+                    <td>
+                        {user.avatar_url_path && user.avatar_url_path !== "null" && user.avatar_url_path !== "undefined" ? (
+                            <img
+                                src={user.avatar_url_path}
+                                width="84"
+                                height="84"
+                                className="d-inline-block align-top mt-1 rounded-circle"
+                                alt={user.avatar_title}
+                            />
+                        ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" fill="currentColor" className="bi bi-person-circle d-inline-block align-top mt-2 rounded-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                <path fill="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                            </svg>
+                        )}
+                        {build_community_user_social_media_buttons(user.id)}
+                    </td>
+                </OverlayTrigger>
+                <OverlayTrigger placement="right" overlay={build_community_user_tool_tip(user.id)}>
+                    <td onClick={() => go_to_end_user_selected_profile(user.id)}>{user.name}</td>
+                </OverlayTrigger>
+                <OverlayTrigger placement="left" overlay={build_community_user_tool_tip(user.id)}>
+                    <td onClick={() => go_to_end_user_selected_profile(user.id)}>{user.language_code}</td>
+                </OverlayTrigger>
+                <OverlayTrigger placement="left" overlay={build_community_user_tool_tip(user.id)}>
+                    <td onClick={() => go_to_end_user_selected_profile(user.id)}>{user.region_code}</td>
+                </OverlayTrigger>
             </tr>
         ))
     }

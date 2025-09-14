@@ -9,7 +9,7 @@ const Copied_Current_Redux_State_Reducers: Middleware = store => next => action 
     const result = next(action)
     const state = store.getState()
 
-    const sessionSet = (key: string, value: any) => {
+    const sessionSet = (key: string, value: object) => {
         sessionStorage.setItem(key, JSON.stringify({ ...value }))
     }
 
