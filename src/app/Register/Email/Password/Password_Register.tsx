@@ -214,7 +214,6 @@ const Password_Register = () => {
                 set_alert_text(`${lbl.Success}`)
 
                 await Dispatch(Create_End_User_Email_Account(obj)).then(() => {
-                    console.log(`create_end_user_email_account finished`)
                     Navigate.push(`/`)
                     Dispatch(Set_Navigation_Menu_Display(` `))
                 })

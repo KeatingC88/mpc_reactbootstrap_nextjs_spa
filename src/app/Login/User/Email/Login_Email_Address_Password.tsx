@@ -13,7 +13,7 @@ import { Login_Email_Password_Account } from '@Redux_Thunk/Actions/Authenticatio
 const Login_Email_Address_Password = (): React.ReactElement => {
 
     const props = useSelector(Redux_Thunk_Core)
-    console.log(props)
+
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()

@@ -3,7 +3,12 @@
 import React, { useState, useEffect, useMemo, SetStateAction } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
-import { Row, Col, Card, Alert, Container, ListGroup, Accordion, Button, Modal, Form, FloatingLabel, ButtonGroup } from 'react-bootstrap'
+import {
+    Row, Col, Card,
+    Alert, Container, Pagination,
+    Accordion, Button, Modal,
+    Form, FloatingLabel, ButtonGroup, Spinner
+} from 'react-bootstrap'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
@@ -98,9 +103,11 @@ const News_Feed = () => {
     }
 
     const sorted_headlines = useMemo(() => {
-        if (!props.application.community.news) return []
 
-        const headlines = Object.values(props.application.community.news)
+        if (!props.application.community.news?.articles) return []
+
+        const headlines = Object.values(props.application.community.news?.articles)
+
         if (alphabet_index !== 0) {
             return [...headlines].sort((a: any, b: any) => {
                 const nameA = a.headline.toLowerCase()
@@ -119,92 +126,95 @@ const News_Feed = () => {
             })
         }
         return headlines
-    }, [props.application.community.news, alphabet_index, date_index])
+    }, [props.application.community.news?.articles, alphabet_index, date_index])
 
     const build_accordion_headline_record_rows = () => {
-        return sorted_headlines.map((document: any, index: number) => (
-            <Accordion.Item eventKey={`${index}`} key={`${index}`}>
-                <Accordion.Header>
-                    {document.headline}
-                </Accordion.Header>
-                <Accordion.Body>
-                    <Card style={{ minWidth: '100%' }}>
-                        <Card.Header>
-                            <h4>{document.headline}</h4>
-                            <h6 className="text-muted">{document.subheadline}</h6>
-                        </Card.Header>
-                        <Card.Body>
-                            <Row>
-                                <Col>
-                                    <Card.Text>
-                                        {document.body.join("").replace(`.`, `. `)}
-                                    </Card.Text>
-                                </Col>
-                            </Row>
-                            <hr />
-                            <Row>
-                                <Col>
-                                    <h6>{lbl.Tags}</h6>
-                                    {document.tags.length > 0 &&
-                                        document.tags.map((tag: string, index: number) => (
-                                            <span key={index}>[{tag}]</span>
-                                        ))
-                                    }
-                                    <br />
-                                    <span>[{document.language}-{document.region}]</span>
-                                </Col>
-                                <Col>
-                                    <h6>{lbl.URL}</h6>
-                                    {document.source_urls.length > 0 &&
-                                        document.source_urls.map((url: string, index: number) => (
-                                            <div key={index}>
-                                                <Card.Link href={url} key={index}>
-                                                    {url}
-                                                </Card.Link> <br />
-                                            </div>
-                                        ))
-                                    }
-                                </Col>
-                            </Row>
-                        </Card.Body>
-                        <Card.Footer>
-                            <Row className="text-end">
-                                <Col>
-                                    {lbl.By} {document.byline}
-                                    <br />
-                                    {
-                                        (() => {
-                                            const cleaned = document.published_on.replace(/\.\d{6}Z$/, "Z");
-                                            const date = new Date(cleaned);
-                                            return date.toLocaleString();
-                                        })()
-                                    }
-                                    <br />
-                                    {lbl.DocumentID}: {document._id}
-                                </Col>
-                            </Row>
-                            <Row>
-                                <ButtonGroup aria-label="Button Group for Headline Control" size="sm">
-                                    <Button variant="warning" onClick={() => {
-                                        set_edit_news_display_value(true)
-                                        set_edit_document_id(document._id)
-                                    }}>{lbl.Edit}</Button>
-                                    <Button variant="danger" onClick={ async () => {
-                                        set_delete_news_display_value(true)
-                                        set_delete_document_id(document._id)
-                                        set_delete_document_name(document.headline)
-                                    }}>{lbl.Delete}</Button>
-                                </ButtonGroup>
-                            </Row>
-                        </Card.Footer>
-                    </Card>
-                </Accordion.Body>
-            </Accordion.Item>
-        ))
+        
+        if (sorted_headlines) {
+            return sorted_headlines.map((document: any, index: number) => (
+                <Accordion.Item eventKey={`${index}`} key={`${index}`}>
+                    <Accordion.Header>
+                        {document.headline}
+                    </Accordion.Header>
+                    <Accordion.Body>
+                        <Card style={{ minWidth: '100%' }}>
+                            <Card.Header>
+                                <h4>{document.headline}</h4>
+                                <h6 className="text-muted">{document.subheadline}</h6>
+                            </Card.Header>
+                            <Card.Body>
+                                <Row>
+                                    <Col>
+                                        <Card.Text>
+                                            {document.body.join("").replace(`.`, `. `)}
+                                        </Card.Text>
+                                    </Col>
+                                </Row>
+                                <hr />
+                                <Row>
+                                    <Col>
+                                        <h6>{lbl.Tags}</h6>
+                                        {document.tags.length > 0 &&
+                                            document.tags.map((tag: string, index: number) => (
+                                                <span key={index}>[{tag}]</span>
+                                            ))
+                                        }
+                                        <br />
+                                        <span>[{document.language}-{document.region}]</span>
+                                    </Col>
+                                    <Col>
+                                        <h6>{lbl.URL}</h6>
+                                        {document.source_urls.length > 0 &&
+                                            document.source_urls.map((url: string, index: number) => (
+                                                <div key={index}>
+                                                    <Card.Link href={url} key={index}>
+                                                        {url}
+                                                    </Card.Link> <br />
+                                                </div>
+                                            ))
+                                        }
+                                    </Col>
+                                </Row>
+                            </Card.Body>
+                            <Card.Footer>
+                                <Row className="text-end">
+                                    <Col>
+                                        {lbl.By} {document.byline}
+                                        <br />
+                                        {
+                                            (() => {
+                                                const cleaned = document.published_on.replace(/\.\d{6}Z$/, "Z");
+                                                const date = new Date(cleaned);
+                                                return date.toLocaleString();
+                                            })()
+                                        }
+                                        <br />
+                                        {lbl.DocumentID}: {document._id}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <ButtonGroup aria-label="Button Group for Headline Control" size="sm">
+                                        <Button variant="warning" onClick={() => {
+                                            set_edit_news_display_value(true)
+                                            set_edit_document_id(document._id)
+                                        }}>{lbl.Edit}</Button>
+                                        <Button variant="danger" onClick={ async () => {
+                                            set_delete_news_display_value(true)
+                                            set_delete_document_id(document._id)
+                                            set_delete_document_name(document.headline)
+                                        }}>{lbl.Delete}</Button>
+                                    </ButtonGroup>
+                                </Row>
+                            </Card.Footer>
+                        </Card>
+                    </Accordion.Body>
+                </Accordion.Item>
+            ))
+        }
     }
 
     const change_selected_language = (value: SetStateAction<string>) => {
-        set_disabled_submit_button_value(false)
+        //set_disabled_submit_button_value(false)
         set_html_selected_language(value)
         set_edit_language_value(value)
     }
@@ -286,7 +296,6 @@ const News_Feed = () => {
             default:
                 return true
         }
-        return true
     }
      
     const validating_add_form_submission = () => {
@@ -412,7 +421,6 @@ const News_Feed = () => {
             default:
                 return true
         }
-        return true
     }
 
     const validating_edit_form_submission = () => {
@@ -495,9 +503,35 @@ const News_Feed = () => {
         }, 10)
 
     }
+
+    const [active_pagination_number, set_pagination_active_number] = useState(1); 
+
+    const build_pagination_tiles = () => {
+
+        const pagination_html = []
+        const count = props.application.community.news?.count
+
+        if (count) {
+            for (let number = 1; number <= Math.ceil(count / 10); number++) {
+                pagination_html.push(
+                    <Pagination.Item
+                        onClick={() => {
+                            set_pagination_active_number(number)
+                            Dispatch(Load_News_Feed((number - 1) * 10))
+                        }}
+                        key={number}
+                        active={number === active_pagination_number}
+                    >
+                        {number}
+                    </Pagination.Item>
+                )
+            }
+            return <Pagination size="lg">{pagination_html}</Pagination>
+        }
+    }
     
     useEffect(() => {
-        Dispatch(Load_News_Feed())
+        Dispatch(Load_News_Feed(0))
         if (Path === `/`) {
             set_card_width(``)
         }
@@ -621,9 +655,25 @@ const News_Feed = () => {
                         <Card.Body>
                             <Row className="justify-content-center text-center">
                                 <Col lg={10} md={8} sm={9} xs={10}>
-                                    <Accordion>
-                                        {build_accordion_headline_record_rows()}
-                                    </Accordion>
+
+                                    {props.application.community.news?.articles !== null &&
+                                        <>
+                                            <Accordion className="mb-3">
+                                                {build_accordion_headline_record_rows()}
+                                            </Accordion>
+                                            {build_pagination_tiles()}
+                                        </>
+                                    }
+
+                                    {!props.application.community.news?.articles &&
+                                        <>
+                                            {lbl.Loading}
+                                            <br />
+                                            <Spinner animation="border"
+                                                style={{ maxHeight: 400, maxWidth: 400 }}
+                                            />
+                                        </>
+                                    }
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -898,7 +948,6 @@ const News_Feed = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-
 
             <Modal show={delete_news_display_value} onHide={() => { set_delete_news_display_value(false) }}>
                 <Modal.Header closeButton>

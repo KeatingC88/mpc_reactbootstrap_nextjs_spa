@@ -18,13 +18,14 @@ const App = ({ children }: { children: React.ReactNode }) => {
 
     }, [])
 
-    if(!hasMounted) return null
+    if (!hasMounted) return null
 
     return (
         <Redux_Provider>
 
             <header>
                 <Navigation_Menu />
+                <br />
             </header>
             <main className="text-center" id="main">
                 {children}

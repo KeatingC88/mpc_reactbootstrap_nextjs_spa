@@ -10,11 +10,11 @@ import type { AppDispatch } from '@Redux_Thunk/Provider'
 
 import axios from 'axios'
 
-export const Load_News_Feed = () => async (Dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+export const Load_News_Feed = (page_index: number) => async (Dispatch: AppDispatch, getState: () => Current_Redux_State) => {
     await axios.post(`/api/community/news/read`, {
-        withCredentials: true
-    }).catch(async(error) => {
-        return await new Promise(async (reject) => {
+        page_index: page_index
+    }, { withCredentials: true }).catch(async(error) => {
+        return await new Promise( async (reject) => {
             error.id = `Application-News-Feed-Request-Failed`
             await Dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
             setTimeout(() => {

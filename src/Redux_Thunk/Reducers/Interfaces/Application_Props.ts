@@ -20,7 +20,10 @@ export interface Application_Props {
                 Region_code: string
             }[]
         } | null
-        news: [] | null
+        news: {
+            articles: [],
+            count: number
+        } | null
         profile_viewer: {
             id: BigInt | number | null
             birth_date: string | null

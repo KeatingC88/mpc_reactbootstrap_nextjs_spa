@@ -19,7 +19,10 @@ export const Redux_Thunk_Core = createSelector(
         application: {
             community: {
                 users: state.Application_Community_State_Reducer.users,
-                news: state.Application_News_Feed_State_Reducer.news,
+                news: {
+                    articles: state.Application_News_Feed_State_Reducer.news,
+                    count: state.Application_News_Feed_State_Reducer.count,
+                },
                 profile_viewer: {
                     id: state.Application_Profile_Viewer_State_Reducer.id,
                     name: state.Application_Profile_Viewer_State_Reducer.name,

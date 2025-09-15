@@ -12,11 +12,8 @@ export const GET = async (req: NextRequest) => {
 
         if (USERS_SERVER_COOKIE_NAME) {
             token = cookie.get(USERS_SERVER_COOKIE_NAME)?.value
-            console.log(`old token...`)
-            console.log(token)
             if (token) {
                 cookie.delete(USERS_SERVER_COOKIE_NAME)
-                console.log(`deleted cookie`)
             }
         }
 

@@ -32,7 +32,6 @@ export const Load_Profile_Viewer_Data = (value: BigInt) => async (dispatch: AppD
             reject(error)
         })
     }).then(async (response: any) => {
-        console.log(response.data.obj)
         return await new Promise((resolve) => {
             dispatch({ type: UPDATE_APPLICATION_PROFILE_VIEWER_STATE, payload: response.data.obj })
             resolve(response)

@@ -16,7 +16,7 @@ const Profile_Mirror = () => {
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
-    console.log(props)
+
     const [language, region] = props.application.settings.current_language.split(`-`)
     const lbl = props.application.language_dictionaries[language][region]
 

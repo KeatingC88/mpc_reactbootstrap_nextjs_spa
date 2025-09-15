@@ -13,12 +13,17 @@ export const POST = async (req: NextRequest) => {
     try {
         let token = null
         const cookie = await cookies()
+        let dto = await req.json()
 
         if (USERS_SERVER_COOKIE_NAME)
             token = cookie.get(USERS_SERVER_COOKIE_NAME)?.value
 
         if (token) {
-            const res = await axios.post(`${APPLICATION_NEWS_SERVER_ADDRESS}/get/articles/`, { token: token }, { withCredentials: true })
+            
+            const res = await axios.post(`${APPLICATION_NEWS_SERVER_ADDRESS}/get/articles/`, {
+                token: token,
+                page_index: dto.page_index
+            }, { withCredentials: true })
 
             return NextResponse.json(JSON.parse(Decrypt(res.data)), { status: 200 })
         }
