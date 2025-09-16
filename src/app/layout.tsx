@@ -37,6 +37,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <html lang="en">
 
             <head>
+                <meta name="author" content={`${META_TAG_AUTHOR}`} />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <base href={CLIENT_ADDRESS} />
             </head>

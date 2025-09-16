@@ -474,7 +474,7 @@ const Settings = () => {
                                 fontFamily: `${props.end_user.custom_design?.card_body_font}`
                             }}
                         >
-                            <Table striped bordered hover variant="dark" style={{
+                            <Table striped bordered hover variant={`dark`} style={{
                                 backgroundColor: `${props.end_user.custom_design?.card_body_background_color}`,
                                 color: `${props.end_user.custom_design?.card_body_font_color}`,
                                 fontFamily: `${props.end_user.custom_design?.card_body_font}`

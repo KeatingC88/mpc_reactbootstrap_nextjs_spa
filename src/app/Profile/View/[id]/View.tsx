@@ -303,7 +303,7 @@ const Profile_View = () => {
                                     }
                                 </Col>
                                 <Col>
-                                    <Table striped bordered hover>
+                                    <Table striped bordered hover variant="dark">
                                         <thead>
                                             <tr>
                                                 <th>{lbl.ID}#</th>

@@ -125,7 +125,7 @@ const Integration = () => {
                                 fontFamily: `${props.end_user.custom_design?.card_body_font}`
                             }}
                         >
-                            <Table striped bordered hover variant="dark">
+                            <Table striped bordered hover variant={`dark`}>
                                 <tbody>
                                     <tr>
                                         <td>

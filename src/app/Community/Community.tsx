@@ -20,7 +20,7 @@ import { Load_All_Community_Users } from '@Redux_Thunk/Actions/Community/Load'
 const Community = () => {
 
     const props: any = useSelector(Redux_Thunk_Core)
-    
+
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -231,7 +231,7 @@ const Community = () => {
                                 </>
                             }
                             {props.application.community.users &&
-                                <Table striped bordered hover>
+                                <Table striped bordered hover variant={`dark`}>
                                     <thead>
                                         <tr>
                                             <th style={{ fontSize: '8pt' }} onClick={() => {

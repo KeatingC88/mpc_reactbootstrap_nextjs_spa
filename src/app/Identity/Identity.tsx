@@ -556,7 +556,7 @@ const Identity = () => {
                             }}
                         >
                             <Form>
-                                <Table striped bordered hover variant="dark">
+                                <Table striped bordered hover variant={`dark`}>
                                     <tbody>
                                         <tr>
                                             <td>{lbl._1}</td>

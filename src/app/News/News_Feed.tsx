@@ -3,17 +3,32 @@
 import React, { useState, useEffect, useMemo, SetStateAction } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
+
 import {
-    Row, Col, Card,
-    Alert, Container, Pagination,
-    Accordion, Button, Modal,
-    Form, FloatingLabel, ButtonGroup, Spinner
+    Row,
+    Col,
+    Card,
+    Alert,
+    Container,
+    Pagination,
+    Accordion,
+    Button,
+    Modal,
+    Form,
+    FloatingLabel,
+    ButtonGroup,
+    Spinner
 } from 'react-bootstrap'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
 
-import { Load_News_Feed, Submit_Article, Delete_Article_By_ID, Update_Article_By_ID } from '@Redux_Thunk/Actions/Community/News'
+import {
+    Load_News_Feed,
+    Submit_Article,
+    Delete_Article_By_ID,
+    Update_Article_By_ID
+} from '@Redux_Thunk/Actions/Community/News'
 
 import { Get_Nation_Flag_Value } from '@Redux_Thunk/Actions/Misc'
 
@@ -75,6 +90,8 @@ const News_Feed = () => {
     const [alert_text, set_alert_text] = useState<string>(``)
     const [alert_color, set_alert_color] = useState<string>(``)
     const [submit_button_text, set_submit_button_text] = useState<string>(``)
+
+    const [active_pagination_number, set_pagination_active_number] = useState(1)
 
     const create_success_alert = (value: string | null) => {
         set_alert_color(`success`)
@@ -504,8 +521,6 @@ const News_Feed = () => {
 
     }
 
-    const [active_pagination_number, set_pagination_active_number] = useState(1); 
-
     const build_pagination_tiles = () => {
 
         const pagination_html = []
@@ -526,7 +541,7 @@ const News_Feed = () => {
                     </Pagination.Item>
                 )
             }
-            return <Pagination size="lg">{pagination_html}</Pagination>
+            return <Pagination size="lg" className="float-end">{pagination_html}</Pagination>
         }
     }
     
@@ -560,7 +575,11 @@ const News_Feed = () => {
                                 placeholder="Search"
                                 className=" mr-sm-2 w-50 text-center mx-auto"
                             />
-                            <Button variant="secondary" size="sm" onClick={() => { set_add_news_display_value(true) }}>{lbl.Add}</Button>
+
+                            {props.end_user.account.account_type === 1 &&
+                                <Button variant="secondary" size="sm" onClick={() => { set_add_news_display_value(true) }}>{lbl.Add}</Button>
+                            }
+                            
                             <Button variant="secondary" size="sm" onClick={() => { toggle_alphabetically() }}>
                                 {
                                     (() => {
@@ -606,7 +625,7 @@ const News_Feed = () => {
                                 }
                                 {lbl.Alphabetically}
                             </Button>
-                            <Button variant="secondary" size="sm" onClick={() => { toggle_date() }}>
+                            {/*<Button variant="secondary" size="sm" onClick={() => { toggle_date() }}>
                                 {
                                     (() => {
 
@@ -650,7 +669,7 @@ const News_Feed = () => {
                                     })()
                                 }
                                 {lbl.Date}
-                            </Button>
+                            </Button>*/}
                         </Card.Header>
                         <Card.Body>
                             <Row className="justify-content-center text-center">
@@ -674,6 +693,7 @@ const News_Feed = () => {
                                             />
                                         </>
                                     }
+
                                 </Col>
                             </Row>
                         </Card.Body>
