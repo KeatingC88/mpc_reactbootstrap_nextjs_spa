@@ -10,7 +10,12 @@ import RuFlag from '@Image/NavigationMenu/NationFlags/ru.png'
 import ROCFlag from '@Image/NavigationMenu/NationFlags/roc.png'
 import HKFlag from '@Image/NavigationMenu/NationFlags/hongkong.png'
 
-import { UPDATE_APPLICATION_SETTINGS_NAV_SHOW } from '@Constants'
+import {
+    CREATE_APPLICATION_PROGRESS_BAR_STATUS_VALUE,
+    UPDATE_APPLICATION_SETTINGS_NAV_SHOW,
+    NULL_APPLICATION_PROGRESS_BAR_STATUS_VALUE,
+    UPDATE_APPLICATION_PROGRESS_BAR_STATUS_VALUE
+} from '@Constants'
 
 import type { AppDispatch } from '@Redux_Thunk/Provider'
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
@@ -26,6 +31,12 @@ export interface Navigator {
     userAgent: string;
     connection?: Network_Information;
     deviceMemory?: number;
+}
+
+export const Update_Progress_Bar_Value = (value: number) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+    return await new Promise((resolve) => {
+        dispatch({ type: UPDATE_APPLICATION_PROGRESS_BAR_STATUS_VALUE, payload: { percentage_value: value } })
+    })
 }
 
 export const Get_Device_Information = () => {

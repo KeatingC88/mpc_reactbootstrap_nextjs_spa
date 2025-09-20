@@ -47,7 +47,9 @@ export interface Application_Props {
             login_on: number | null
         }
     }
-    
+
+    progress_bar_value: number
+
     language_dictionaries: Language_Dictionaries
     
     settings: {

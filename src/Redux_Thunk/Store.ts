@@ -25,6 +25,7 @@ const Copied_Current_Redux_State_Reducers: Middleware = store => next => action 
     sessionSet('Application_WebSocket_State', state.Application_WebSocket_State_Reducer)
     sessionSet('Application_Notification_State', state.Application_Notification_State_Reducer)
     sessionSet('Application_Community_State', state.Application_Community_State_Reducer)
+    sessionSet('Application_Loading_Progress_State', state.Application_Loading_Progress_State_Reducer)
 
     sessionSet('End_User_Account_State', state.End_User_Account_State_Reducer)
     sessionSet('End_User_Profile_State', state.End_User_Profile_State_Reducer)

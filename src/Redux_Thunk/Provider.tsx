@@ -23,6 +23,7 @@ const get_all_reducers_initial_state_values = (): Partial<Current_Redux_State> =
         Application_WebSocket_State_Reducer: getSession('Application_WebSocket_State'),
         Application_Notification_State_Reducer: getSession('Application_Notification_State'),
         Application_Community_State_Reducer: getSession('Application_Community_State'),
+        Application_Loading_Progress_State_Reducer: getSession('Application_Loading_Progress_State'),
         End_User_Account_State_Reducer: getSession('End_User_Account_State'),
         End_User_Profile_State_Reducer: getSession('End_User_Profile_State'),
         End_User_Discord_Account_State_Reducer: getSession('End_User_Discord_Account_State'),

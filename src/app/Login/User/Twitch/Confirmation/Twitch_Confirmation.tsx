@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
-import { Row, Col, Card, Alert, Container, Button, Spinner } from 'react-bootstrap'
+import { Row, Col, Card, Alert, Container, Button, Spinner, ProgressBar } from 'react-bootstrap'
 
 import {
     Login_End_User_Twitch_Account
@@ -78,6 +78,9 @@ const Twitch_Confirmation = () => {
         }
 
         Dispatch(Login_End_User_Twitch_Account())
+
+        console.log(props.application.progress_bar_value)
+
     }, [props.end_user?.twitch?.id])
 
     return (
@@ -110,6 +113,13 @@ const Twitch_Confirmation = () => {
                                     <Col lg={10} md={8} sm={9} xs={10}>
                                         <Spinner animation="border"
                                             style={{ maxHeight: 400, maxWidth: 400 }}
+                                        />
+                                        <ProgressBar
+                                            striped
+                                            animated
+                                            variant="info"
+                                            now={props.application.progress_bar_value}
+                                            label={`${props.application.progress_bar_value}%`}
                                         />
                                     </Col>
                                 </Row>

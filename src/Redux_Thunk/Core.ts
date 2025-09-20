@@ -17,6 +17,7 @@ interface Redux_Thunk_Core {
 export const Redux_Thunk_Core = createSelector(
     [(state: Current_Redux_State) => state], (state: Partial<Current_Redux_State>): Redux_Thunk_Core => ({
         application: {
+            progress_bar_value: state.Application_Loading_Progress_State_Reducer.percentage_value,
             community: {
                 users: state.Application_Community_State_Reducer.users,
                 news: {

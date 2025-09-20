@@ -9,6 +9,7 @@ import Application_Language_State_Reducer from '@Redux_Thunk/Reducers/Applicatio
 import Application_WebSocket_State_Reducer from '@Redux_Thunk/Reducers/Application/Application_WebSocket_State_Reducer'
 import Application_Settings_State_Reducer from '@Redux_Thunk/Reducers/Application/Application_Settings_State_Reducer'
 import Application_Community_State_Reducer from '@Redux_Thunk/Reducers/Application/Application_Community_State_Reducer'
+import Application_Loading_Progress_State_Reducer from '@Redux_Thunk/Reducers/Application/Application_Loading_Progress_State_Reducer'
 import Application_Profile_Viewer_State_Reducer from '@Redux_Thunk/Reducers/Application/Application_Profile_Viewer_State_Reducer'
 import Application_Notification_State_Reducer from '@Redux_Thunk/Reducers/Application/Application_Notification_State_Reducer'
 import Application_News_Feed_State_Reducer from '@Redux_Thunk/Reducers/Application/Application_News_Feed_State_Reducer'
@@ -37,6 +38,7 @@ const Combined_Reducers: combineReducers = combineReducers({
     Application_Settings_State_Reducer,
     Application_Profile_Viewer_State_Reducer,
     Application_Community_State_Reducer,
+    Application_Loading_Progress_State_Reducer,
     Application_Notification_State_Reducer,
     Application_News_Feed_State_Reducer,
     End_User_Account_State_Reducer,
