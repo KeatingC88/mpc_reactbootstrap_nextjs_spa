@@ -23,6 +23,5 @@
     <PackageJsonDependenciesTypescript Condition="$(PackageJsonDependenciesTypescript) == ''">^5.8.3</PackageJsonDependenciesTypescript>
     <PackageJsonDevdependenciesTypesCryptoJs Condition="$(PackageJsonDevdependenciesTypesCryptoJs) == ''">^4.2.2</PackageJsonDevdependenciesTypesCryptoJs>
     <PackageJsonDevdependenciesTypesNode Condition="$(PackageJsonDevdependenciesTypesNode) == ''">22.15.17</PackageJsonDevdependenciesTypesNode>
-    <PackageJsonDevdependenciesTypesReselect Condition="$(PackageJsonDevdependenciesTypesReselect) == ''">^2.2.0</PackageJsonDevdependenciesTypesReselect>
   </PropertyGroup>
 </Project>

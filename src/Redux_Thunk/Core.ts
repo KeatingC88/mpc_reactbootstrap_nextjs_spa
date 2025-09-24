@@ -17,6 +17,7 @@ interface Redux_Thunk_Core {
 export const Redux_Thunk_Core = createSelector(
     [(state: Current_Redux_State) => state], (state: Partial<Current_Redux_State>): Redux_Thunk_Core => ({
         application: {
+            mobile_mode: state.Application_Notification_State_Reducer.mobile_mode,
             progress_bar_value: state.Application_Loading_Progress_State_Reducer.percentage_value,
             community: {
                 users: state.Application_Community_State_Reducer.users,
@@ -94,6 +95,7 @@ export const Redux_Thunk_Core = createSelector(
                 phone_carrier: state.End_User_Account_State_Reducer.phone_carrier,
                 telephone: state.End_User_Account_State_Reducer.telephone,
             },
+            friends: state.End_User_Friends_State_Reducer.friends,
             notification: {
                 alert_color: ``,
                 alert_text: ``,

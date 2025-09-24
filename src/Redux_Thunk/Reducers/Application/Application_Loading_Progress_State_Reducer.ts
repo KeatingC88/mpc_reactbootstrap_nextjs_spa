@@ -1,6 +1,4 @@
 import {
-    CREATE_APPLICATION_PROGRESS_BAR_STATUS_VALUE,
-    NULL_APPLICATION_PROGRESS_BAR_STATUS_VALUE,
     UPDATE_APPLICATION_PROGRESS_BAR_STATUS_VALUE
 } from '@Constants'
 
@@ -25,20 +23,10 @@ const Application_Loading_Progress_State_Reducer = (
 ): Application_Loading_Progress_State => {
     if (action.type.indexOf(`APPLICATION_PROGRESS_BAR_STATUS_VALUE`) > -1) {
         switch (action.type) {
-            case CREATE_APPLICATION_PROGRESS_BAR_STATUS_VALUE:
-                return {
-                    ...state,
-                    percentage_value: 0
-                }
             case UPDATE_APPLICATION_PROGRESS_BAR_STATUS_VALUE:
                 return {
                     ...state,
                     percentage_value: action.payload?.percentage_value ?? initial_state.percentage_value
-                }
-            case NULL_APPLICATION_PROGRESS_BAR_STATUS_VALUE:
-                return {
-                    ...state,
-                    percentage_value: 0
                 }
             default:
                 break

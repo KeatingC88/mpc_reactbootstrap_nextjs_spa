@@ -60,7 +60,6 @@ export const POST = async (req: NextRequest) => {
     }).then( async (response: any) => {
 
         if (response.data) {
-
             const { headers } = req
             const protocol = headers.get("x-forwarded-proto") || "http"
             const host = headers.get("host")
@@ -68,8 +67,9 @@ export const POST = async (req: NextRequest) => {
             
             token = response.headers['set-cookie'][0].split(`;`)[0].split(`${USERS_SERVER_COOKIE_NAME}=`)[1]
             let response_data = JSON.parse(Decrypt(response.data))
+
             mpc_data = response_data.mpc_data
-            
+
             const setCookieHeader = response.headers['set-cookie']
             if (!setCookieHeader) {
                 throw new Error("Set-Cookie header is missing.")
@@ -111,7 +111,7 @@ export const POST = async (req: NextRequest) => {
             }
 
             if (twitch_data_combined && mpc_data && twitch_data_combined) {
-                
+
                 await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/set/user`, {
                     token: token,
                     id: Encrypt(`${mpc_data.id}`),

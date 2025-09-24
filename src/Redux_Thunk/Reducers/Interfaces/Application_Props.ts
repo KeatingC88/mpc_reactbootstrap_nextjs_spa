@@ -1,6 +1,8 @@
 import { Timestamp } from 'next/dist/server/lib/cache-handlers/types'
 
 export interface Application_Props {
+    mobile_mode: boolean
+
     community: {
         users: {
             [x: string]: any

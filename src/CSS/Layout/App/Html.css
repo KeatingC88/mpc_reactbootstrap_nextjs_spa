@@ -27,3 +27,8 @@
         min-width: 200px !important;
     }
 }
+.bi-arrows-move {
+    position:relative;
+    top: 10px;
+    left: 10px;
+}

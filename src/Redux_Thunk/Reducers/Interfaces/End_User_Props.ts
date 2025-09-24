@@ -20,6 +20,8 @@ export interface End_User_Props {
         telephone: number | null
     }
 
+    friends: [] | null
+
     notification: {
         alert_color: string
         alert_text: string

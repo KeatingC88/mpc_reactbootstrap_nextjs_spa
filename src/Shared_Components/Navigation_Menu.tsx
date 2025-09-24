@@ -32,7 +32,7 @@ import {
 } from '@Redux_Thunk/Actions/Authentication/Logout'
 
 import {
-    Get_Nation_Flag_Value, Delay_Execution
+    Get_Nation_Flag_Value, Delay_Execution, Update_Mobile_Mode
 } from '@Redux_Thunk/Actions/Misc'
 
 let end_user_token_prompt_response = false
@@ -40,6 +40,7 @@ let end_user_token_prompt_response = false
 const Navigation_Menu = () => {
 
     const props = useSelector(Redux_Thunk_Core) 
+    console.log(props)
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
 
@@ -382,6 +383,16 @@ const Navigation_Menu = () => {
                 }, 10000)
             }
         }
+
+        const checkScreenSize = () => {
+            if (window.innerWidth <= 500) {
+                Dispatch(Update_Mobile_Mode(true))
+            } else {
+                Dispatch(Update_Mobile_Mode(false))
+            }
+        }
+        checkScreenSize()
+        window.addEventListener('resize', checkScreenSize)
     }, []) 
 
     return (

@@ -11,16 +11,17 @@ import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import {
     Row, Col, Card,
     Container, Table, Form,
-    Spinner, OverlayTrigger,
+    Spinner, OverlayTrigger, Image,
     Tooltip, ButtonToolbar, ButtonGroup, Button
 } from 'react-bootstrap'
 
 import { Load_All_Community_Users } from '@Redux_Thunk/Actions/Community/Load'
+import { Get_Nation_Flag_Value } from '@Redux_Thunk/Actions/Misc'
 
 const Community = () => {
 
     const props: any = useSelector(Redux_Thunk_Core)
-
+    console.log(props)
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -50,6 +51,8 @@ const Community = () => {
     const sorted_mpc_community_users = useMemo(() => {
 
         if (!props.application.community.users) return []
+
+        console.log(props.application.community.users.users_data)
 
         const mpc_community_users = Object.values(props.application.community.users.users_data)
 
@@ -92,18 +95,46 @@ const Community = () => {
         set_display_region_index((prev) => (prev + 1) % 3)
     }
 
+    const get_status_label = (code: any) => {
+        switch (parseInt(code)) {
+            case 0:
+                return "Offline"
+            case 1:
+                return "Offline"
+            case 2:
+                return "Online"
+            case 3: 
+                return "Away"
+            case 4:
+                return "Dnd"
+            case 5:
+                return props.end_user.account.custom_lbl
+            default:
+                return "error"
+        }
+    }
+
     const build_community_user_tool_tip = (id: any) => {
         let user_data = props.application.community.users.users_data[id]
         let twitch_data = props.application.community.users.users_twitch_data[id]
-        
+
+        const dateFromTimestamp = new Date(user_data.created_on * 1000)
+        const formattedDate = `${(dateFromTimestamp.getMonth() + 1).toString().padStart(2, '0')}/${dateFromTimestamp.getDate().toString().padStart(2, '0')}/${dateFromTimestamp.getFullYear()}`
+
         return (
             <Tooltip>
                 <Row className="text-start">
                     <Col>
                         <strong>Name</strong>: {user_data.name} <br />
+                        <strong>Language</strong>: {user_data.language_code} <br />
+                        <strong>Region</strong>: {user_data.region_code} <br />
+                        <strong>Status</strong>: {get_status_label(user_data.online_status)} <br />
+                        <strong>Created on</strong>: {formattedDate} <br />
+
                         {twitch_data?.twitch_user_name &&
                             <>  
-                                <strong>Twitch</strong>: twitch.tv/{twitch_data?.twitch_user_name} <br />
+                                <strong>Twitch</strong>: twitch.tv/{twitch_data?.twitch_user_name}
+                                <br />
                             </>
                         }
                     </Col>
@@ -112,54 +143,56 @@ const Community = () => {
         )
     }
 
-    const build_community_user_social_media_buttons = (id: any) => {
-        let twitch_data = props.application.community.users.users_twitch_data[id]
+    const build_user_buttons = (user_id: BigInt) => {
+        let twitch_data = props.application.community.users.users_twitch_data[`${user_id}`]
+        let user_data = props.application.community.users.users_data[`${user_id}`]
+        let user_selected_flag_src = Get_Nation_Flag_Value(`${user_data.language_code}-${user_data.region_code}`)
 
         return (
-            <>
-                <br />
+            <div className="mt-1 mx-auto inline">
+                {user_data.language_code.toUpperCase()}&nbsp;
+                <Image src={`${user_selected_flag_src}`} height="24" width="24" />&nbsp;
                 {twitch_data?.twitch_id &&
                     <a target="_blank" href={`https://www.twitch.tv/${twitch_data.twitch_user_name}`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#6441A5" className="mt-2 bi bi-twitch" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#6441A5" className="bi bi-twitch" viewBox="0 0 16 16">
                             <path d="M3.857 0 1 2.857v10.286h3.429V16l2.857-2.857H9.57L14.714 8V0zm9.714 7.429-2.285 2.285H9l-2 2v-2H4.429V1.143h9.142z" />
                             <path d="M11.857 3.143h-1.143V6.57h1.143zm-3.143 0H7.571V6.57h1.143z" />
                         </svg>
                     </a>
                 }
-            </>
+            </div>
         )
     }
 
     const build_table_record_rows = () => {
         return sorted_mpc_community_users.map((user: any) => (
-            <tr key={user.id}>
-                <OverlayTrigger placement="right" overlay={build_community_user_tool_tip(user.id)}>
+            <tr key={user.id} className="text-center">
+                <OverlayTrigger placement="top" overlay={build_community_user_tool_tip(user.id)}>
                     <td>
-                        {user.avatar_url_path && user.avatar_url_path !== "null" && user.avatar_url_path !== "undefined" ? (
-                            <img
-                                src={user.avatar_url_path}
-                                width="84"
-                                height="84"
-                                className="d-inline-block align-top mt-1 rounded-circle"
-                                alt={user.avatar_title}
-                            />
-                        ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" fill="currentColor" className="bi bi-person-circle d-inline-block align-top mt-2 rounded-circle" viewBox="0 0 16 16">
-                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                                <path fill="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-                            </svg>
-                        )}
-                        {build_community_user_social_media_buttons(user.id)}
+                        <Row>
+                            <Col>
+                                {user.avatar_url_path && user.avatar_url_path !== "null" && user.avatar_url_path !== "undefined" ? (
+                                    <img
+                                        src={user.avatar_url_path}
+                                        width="84"
+                                        height="84"
+                                        className="d-inline-block align-top mt-1 rounded-circle"
+                                        alt={user.avatar_title}
+                                    />
+                                ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" fill="currentColor" className="bi bi-person-circle d-inline-block align-top mt-2 rounded-circle" viewBox="0 0 16 16">
+                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                        <path fill="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                                    </svg>
+                                )}
+                            </Col>
+                            <Col>
+                                <span className="mt-1" onClick={() => go_to_end_user_selected_profile(user.id)}>{user.name}</span> <br />
+                                {get_status_label(user.online_status)}
+                                {build_user_buttons(user.id)}
+                            </Col>
+                        </Row>
                     </td>
-                </OverlayTrigger>
-                <OverlayTrigger placement="right" overlay={build_community_user_tool_tip(user.id)}>
-                    <td onClick={() => go_to_end_user_selected_profile(user.id)}>{user.name}</td>
-                </OverlayTrigger>
-                <OverlayTrigger placement="left" overlay={build_community_user_tool_tip(user.id)}>
-                    <td onClick={() => go_to_end_user_selected_profile(user.id)}>{user.language_code}</td>
-                </OverlayTrigger>
-                <OverlayTrigger placement="left" overlay={build_community_user_tool_tip(user.id)}>
-                    <td onClick={() => go_to_end_user_selected_profile(user.id)}>{user.region_code}</td>
                 </OverlayTrigger>
             </tr>
         ))
@@ -184,6 +217,13 @@ const Community = () => {
                             minWidth: `${card_width}`
                         }}
                     >
+
+                        {!props.application.mobile_mode &&
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrows-move" viewBox="0 0 16 16">
+                                <path fillRule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10M.146 8.354a.5.5 0 0 1 0-.708l2-2a.5.5 0 1 1 .708.708L1.707 7.5H5.5a.5.5 0 0 1 0 1H1.707l1.147 1.146a.5.5 0 0 1-.708.708zM10 8a.5.5 0 0 1 .5-.5h3.793l-1.147-1.146a.5.5 0 0 1 .708-.708l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L14.293 8.5H10.5A.5.5 0 0 1 10 8" />
+                            </svg>
+                        }
+
                         <Card.Header className={`${props.application.settings.text_alignment} p-4`}
                             style={{
                                 backgroundColor: `${props.end_user.custom_design?.card_header_background_color}`,
@@ -234,192 +274,8 @@ const Community = () => {
                                 <Table striped bordered hover variant={`dark`}>
                                     <thead>
                                         <tr>
-                                            <th style={{ fontSize: '8pt' }} onClick={() => {
-                                                toggle_display_id_sort()
-                                            }}>
-                                                {
-                                                    (() => {
-
-                                                        if (display_id_index === 0) {
-                                                            return props.application.settings.theme === 0 ? (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                                                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-                                                                </svg>
-                                                            ) : (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
-                                                                    <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
-                                                                </svg>
-                                                            )
-                                                        }
-
-                                                        if (display_id_index === 1) {
-                                                            return props.application.settings.theme === 0 ? (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                                                                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
-                                                                </svg>
-                                                            ) : (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up" viewBox="0 0 16 16">
-                                                                    <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659" />
-                                                                </svg>
-                                                            )
-                                                        }
-
-                                                        if (display_id_index === 2) {
-                                                            return props.application.settings.theme === 0 ? (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                                                                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-                                                                </svg>
-                                                            ) : (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down" viewBox="0 0 16 16">
-                                                                    <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
-                                                                </svg>
-                                                            )
-                                                        }
-
-                                                        return null
-                                                    })()
-                                                }
+                                            <th style={{ fontSize: '8pt' }}>
                                                 {lbl.Count}:&nbsp;{props.application.community.users ? Object.keys(props.application.community.users.users_data).length : `Missingno`}
-
-                                            </th>
-                                            <th style={{ fontSize: '8pt' }} onClick={() => {
-                                                toggle_display_name_sort()
-                                            }}>
-                                                {(() => {
-
-                                                    if (display_name_index === 0) {
-                                                        return props.application.settings.theme === 0 ? (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                                                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-                                                            </svg>
-                                                        ) : (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
-                                                                <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
-                                                            </svg>
-                                                        )
-                                                    }
-
-                                                    if (display_name_index === 1) {
-                                                        return props.application.settings.theme === 0 ? (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                                                                <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
-                                                            </svg>
-                                                        ) : (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up" viewBox="0 0 16 16">
-                                                                <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659" />
-                                                            </svg>
-                                                        )
-                                                    }
-
-                                                    if (display_name_index === 2) {
-                                                        return props.application.settings.theme === 0 ? (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                                                                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-                                                            </svg>
-                                                        ) : (
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down" viewBox="0 0 16 16">
-                                                                <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
-                                                            </svg>
-                                                        )
-                                                    }
-
-                                                    return null
-                                                })()}
-                                                {lbl.Name}
-                                            </th>
-                                            <th style={{ fontSize: '8pt' }} onClick={() => {
-                                                toggle_display_language_sort()
-                                            }}>
-                                                {
-                                                    (() => {
-
-                                                        if (display_language_index === 0) {
-                                                            return props.application.settings.theme === 0 ? (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                                                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-                                                                </svg>
-                                                            ) : (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
-                                                                    <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
-                                                                </svg>
-                                                            )
-                                                        }
-
-                                                        if (display_language_index === 1) {
-                                                            return props.application.settings.theme === 0 ? (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                                                                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
-                                                                </svg>
-                                                            ) : (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up" viewBox="0 0 16 16">
-                                                                    <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659" />
-                                                                </svg>
-                                                            )
-                                                        }
-
-                                                        if (display_language_index === 2) {
-                                                            return props.application.settings.theme === 0 ? (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                                                                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-                                                                </svg>
-                                                            ) : (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down" viewBox="0 0 16 16">
-                                                                    <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
-                                                                </svg>
-                                                            )
-                                                        }
-
-                                                        return null
-                                                    })()
-                                                }
-                                                {lbl.Language}
-                                            </th>
-                                            <th style={{ fontSize: '8pt' }} onClick={() => {
-                                                toggle_display_region_sort()
-                                            }}>
-                                                {
-                                                    (() => {
-
-                                                        if (display_region_index === 0) {
-                                                            return props.application.settings.theme === 0 ? (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                                                                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-                                                                </svg>
-                                                            ) : (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-right" viewBox="0 0 16 16">
-                                                                    <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753" />
-                                                                </svg>
-                                                            )
-                                                        }
-
-                                                        if (display_region_index === 1) {
-                                                            return props.application.settings.theme === 0 ? (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up-fill" viewBox="0 0 16 16">
-                                                                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
-                                                                </svg>
-                                                            ) : (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-up" viewBox="0 0 16 16">
-                                                                    <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659" />
-                                                                </svg>
-                                                            )
-                                                        }
-
-                                                        if (display_region_index === 2) {
-                                                            return props.application.settings.theme === 0 ? (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                                                                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-                                                                </svg>
-                                                            ) : (
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-caret-down" viewBox="0 0 16 16">
-                                                                    <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659" />
-                                                                </svg>
-                                                            )
-                                                        }
-
-                                                        return null
-                                                    })()
-                                                }
-                                                {lbl.Region}
                                             </th>
                                         </tr>
                                     </thead>

@@ -1,5 +1,16 @@
 <Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.2752196">
   <ItemGroup>
+    <None Remove="src\Redux_Thunk\Reducers\End_User\Social_Media\**" />
+    <TypeScriptConfiguration Remove="src\Redux_Thunk\Reducers\End_User\Social_Media\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\app\api\user\social\connection\friends\approved\" />
+    <Folder Include="src\app\api\user\social\connection\friends\blocked\" />
+    <Folder Include="src\app\api\user\social\connection\friends\requested\" />
+    <Folder Include="src\app\api\user\social\connection\friends\rejected\" />
+    <Folder Include="src\app\api\user\social\connection\friends\reported\" />
+    <Folder Include="src\app\api\user\social\events\" />
+    <Folder Include="src\app\api\user\video_games\" />
     <Folder Include="src\app\Login\Mod\" />
     <Folder Include="src\app\Login\Admin\" />
     <Folder Include="src\app\Login\User\Facebook\" />

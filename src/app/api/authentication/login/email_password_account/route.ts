@@ -50,9 +50,10 @@ export const PUT = async (req: NextRequest) => {
             rtt: Encrypt(`${dto.rtt}`),
             data_saver: Encrypt(`${dto.data_saver}`),
             device_ram_gb: Encrypt(`${dto.device_ram_gb}`),
-        }, {withCredentials: true}).catch((error) => {
+        }, { withCredentials: true }
+        ).catch((error: any) => {
             return NextResponse.json({ error: error.message }, { status: 500 })
-        }).then(async (response: any) => {
+        }).then( async (response: any) => {
 
             const setCookieHeader = response.headers['set-cookie']
             if (!setCookieHeader) {
@@ -110,6 +111,7 @@ export const PUT = async (req: NextRequest) => {
             if (!JWT_Email_Validation({ token: jwt_token, comparable_data: response_data })) {
                 throw new Error("JWT Mis-Match Data")
             }
+
             let cookie = await cookies()
             await cookie.set(cookieName, jwt_token, { httpOnly: true, path: "/" })
 
@@ -117,6 +119,7 @@ export const PUT = async (req: NextRequest) => {
 
         return NextResponse.json({ user_data: response_data }, { status: 200 })
     } catch (err: any) {
+        console.error(err)
         return NextResponse.json({ error: err.message }, { status: 500 })
     }
 }

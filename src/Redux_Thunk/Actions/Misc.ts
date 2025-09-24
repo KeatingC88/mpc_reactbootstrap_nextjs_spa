@@ -11,14 +11,14 @@ import ROCFlag from '@Image/NavigationMenu/NationFlags/roc.png'
 import HKFlag from '@Image/NavigationMenu/NationFlags/hongkong.png'
 
 import {
-    CREATE_APPLICATION_PROGRESS_BAR_STATUS_VALUE,
     UPDATE_APPLICATION_SETTINGS_NAV_SHOW,
-    NULL_APPLICATION_PROGRESS_BAR_STATUS_VALUE,
-    UPDATE_APPLICATION_PROGRESS_BAR_STATUS_VALUE
+    UPDATE_APPLICATION_PROGRESS_BAR_STATUS_VALUE,
+    UPDATE_APPLICATION_MOBILE_STATE
 } from '@Constants'
 
 import type { AppDispatch } from '@Redux_Thunk/Provider'
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
+import { finished } from 'stream'
 
 interface Network_Information extends EventTarget {
     downlink: number;
@@ -71,6 +71,43 @@ export const Get_Device_Information = () => {
         window_height: window_exists ? window.innerHeight : null,
         orientation_type: screenOrientation?.type ?? null,
     }
+}
+
+export const Update_Mobile_Mode = (value: boolean) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+    dispatch({ type: UPDATE_APPLICATION_MOBILE_STATE, payload: {mobile_mode: value} })
+}
+
+export const Map_Database_Values_For_TypeScript = (obj: any): any => {
+    const finished_obj: any = {}
+
+    for (const key in obj) {
+
+        let object = obj[key]
+
+        for (const property_name in object) {
+
+            let value = object[property_name]
+
+            switch (true) {
+                case property_name === "gender":
+                    finished_obj[property_name] = parseInt(value)
+                    break
+                case (!isNaN(value) || !isNaN(parseFloat(value))) && /^\d+$/.test(value):
+                    finished_obj[property_name] = BigInt(value)
+                    break
+                case value === "" || value === "null" || value === null:
+                    finished_obj[property_name] = null
+                    break
+                case value === "" || value === "undefined" || value === undefined:
+                    finished_obj[property_name] = undefined
+                    break
+                default:
+                    finished_obj[property_name] = value
+            }
+        }
+    }
+    console.log(finished_obj)
+    return finished_obj
 }
 
 export const Get_Nation_Flag_Value = (value: string) => {
@@ -129,6 +166,7 @@ export interface Map_Database_Values_For_ReactBootstrap {
 }
 
 export const Map_Database_Values_For_ReactBootstrap = (dto: Map_Database_Values_For_ReactBootstrap) => {
+
     switch (true) {
         case dto.alignment === 0:
             dto.alignment = `justify-content-start`
@@ -141,6 +179,7 @@ export const Map_Database_Values_For_ReactBootstrap = (dto: Map_Database_Values_
             break
         default:
     }
+
     switch (true) {
         case dto.text_alignment === 0:
             dto.text_alignment = `text-start`
@@ -153,6 +192,7 @@ export const Map_Database_Values_For_ReactBootstrap = (dto: Map_Database_Values_
             break
         default:
     }
+
     return {
         alignment: dto.alignment as string,
         text_alignment: dto.text_alignment as string,
@@ -220,6 +260,7 @@ export const Delay_Execution = (time: number, Action: () => void): void => {
         }
     }, 1000)
 }
+
 export class Moveable_Card_2D {
 
     private observer: MutationObserver | null = null

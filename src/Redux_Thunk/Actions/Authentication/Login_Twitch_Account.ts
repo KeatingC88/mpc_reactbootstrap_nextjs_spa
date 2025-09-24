@@ -56,35 +56,35 @@ export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getSt
 
             setTimeout(() => {
                 dispatch(Update_Progress_Bar_Value(30))
-            }, 1000)
-
-            setTimeout(() => {
-                dispatch(Update_Progress_Bar_Value(40))
-            }, 2000)
-
-            setTimeout(() => {
-                dispatch(Update_Progress_Bar_Value(50))
             }, 3000)
 
             setTimeout(() => {
-                dispatch(Update_Progress_Bar_Value(60))
-            }, 4000)
-
-            setTimeout(() => {
-                dispatch(Update_Progress_Bar_Value(70))
-            }, 5000)
-
-            setTimeout(() => {
-                dispatch(Update_Progress_Bar_Value(80))
+                dispatch(Update_Progress_Bar_Value(40))
             }, 6000)
 
             setTimeout(() => {
+                dispatch(Update_Progress_Bar_Value(50))
+            }, 9000)
+
+            setTimeout(() => {
+                dispatch(Update_Progress_Bar_Value(60))
+            }, 11000)
+
+            setTimeout(() => {
+                dispatch(Update_Progress_Bar_Value(70))
+            }, 15000)
+
+            setTimeout(() => {
+                dispatch(Update_Progress_Bar_Value(80))
+            }, 18000)
+
+            setTimeout(() => {
                 dispatch(Update_Progress_Bar_Value(90))
-            }, 7000)
+            }, 19000)
 
             setTimeout(() => {
                 dispatch(Update_Progress_Bar_Value(100))
-            }, 8000)
+            }, 20000)
 
             axios.post(`/api/authentication/login/twitch_account`, {
                 code: code,
@@ -220,7 +220,41 @@ export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getSt
             })
 
         } else if (code && current_end_user_state.id) {
-            //2
+
+            dispatch(Update_Progress_Bar_Value(20))
+
+            setTimeout(() => {
+                dispatch(Update_Progress_Bar_Value(30))
+            }, 1000)
+
+            setTimeout(() => {
+                dispatch(Update_Progress_Bar_Value(40))
+            }, 2000)
+
+            setTimeout(() => {
+                dispatch(Update_Progress_Bar_Value(50))
+            }, 3000)
+
+            setTimeout(() => {
+                dispatch(Update_Progress_Bar_Value(60))
+            }, 4000)
+
+            setTimeout(() => {
+                dispatch(Update_Progress_Bar_Value(70))
+            }, 5000)
+
+            setTimeout(() => {
+                dispatch(Update_Progress_Bar_Value(80))
+            }, 6000)
+
+            setTimeout(() => {
+                dispatch(Update_Progress_Bar_Value(90))
+            }, 7000)
+
+            setTimeout(() => {
+                dispatch(Update_Progress_Bar_Value(100))
+            }, 8000)
+
             axios.post(`/api/integrate/twitch`, {
                 code: code,
                 language: `${current_language_state.current_language.split(`-`)[0]}`,
@@ -267,7 +301,6 @@ export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getSt
                     const twitch_id: bigint = BigInt(twitch_data.user.id)
 
                     return await new Promise((resolve) => {
-                        //10..
                         dispatch({
                             type: UPDATE_END_USER_TWITCH_ACCOUNT_STATE, payload: {
                                 id: parseInt(`${twitch_id}`),
@@ -277,7 +310,7 @@ export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getSt
                                 profile_image_url: twitch_data.user.profile_image_url
                             }
                         })
-                        //9
+
                         dispatch({
                             type: UPDATE_END_USER_TWITCH_CHANNEL_STATE, payload: {
                                 channel_id: twitch_data.channel.twitch_channel_id,
@@ -292,13 +325,13 @@ export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getSt
                                 created_at: twitch_data.channel.twitch_created_at
                             }
                         })
-                        //9
+
                         dispatch({
                             type: UPDATE_END_USER_TWITCH_FOLLOWERS_STATE, payload: {
                                 total: twitch_data.follower_count
                             }
                         })
-                        //9
+
                         dispatch({
                             type: UPDATE_END_USER_TWITCH_STREAM_STATE, payload: {
                                 id: twitch_data.stream.id,
@@ -325,7 +358,7 @@ export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getSt
             })
         }
     } catch (error: any) {
-        return new Promise(async (reject) => {
+        return new Promise( async (reject) => {
             error.id = `Application-Twitch-Login-Process-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
             setTimeout(() => {

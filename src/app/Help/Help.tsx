@@ -336,6 +336,13 @@ const Help_Menu = () => {
                             minWidth: `${card_width}`
                         }}
                     >
+
+                        {!props.application.mobile_mode &&
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrows-move" viewBox="0 0 16 16">
+                                <path fillRule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10M.146 8.354a.5.5 0 0 1 0-.708l2-2a.5.5 0 1 1 .708.708L1.707 7.5H5.5a.5.5 0 0 1 0 1H1.707l1.147 1.146a.5.5 0 0 1-.708.708zM10 8a.5.5 0 0 1 .5-.5h3.793l-1.147-1.146a.5.5 0 0 1 .708-.708l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L14.293 8.5H10.5A.5.5 0 0 1 10 8" />
+                            </svg>
+                        }
+
                         <Card.Header
                             className={`${props.application.settings.text_alignment} p-4`}
                             style={{
@@ -346,7 +353,7 @@ const Help_Menu = () => {
                         >
                             {props.application.settings.theme === 0 ? (
                                 <>
-                                    <svg onClick={() => { Navigate.push(`/Help`) }} xmlns="http://www.w3.org/2000/svg" width="364" height="64" fill="currentColor" className="bi bi-info-circle-fill d-inline-block align-top mt-2 rounded-circle" viewBox="0 0 16 16">
+                                    <svg onClick={() => { Navigate.push(`/Help`) }} xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" className="bi bi-info-circle-fill d-inline-block align-top mt-2 rounded-circle" viewBox="0 0 16 16">
                                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
                                     </svg>
                                     <br />

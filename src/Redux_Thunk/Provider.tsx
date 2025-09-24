@@ -42,7 +42,6 @@ export const Redux_Store = CreateStore(get_all_reducers_initial_state_values())
 export const dispatch = Redux_Store.dispatch
 export type AppDispatch = ReturnType<typeof CreateStore>['dispatch']
 export const useAppDispatch = () => useDispatch<AppDispatch>()
-
 export default function Redux_Provider({ children }: { children: React.ReactNode }) {
     return <Provider store={Redux_Store}>{children}</Provider>
 }

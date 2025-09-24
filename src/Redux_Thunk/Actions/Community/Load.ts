@@ -14,7 +14,10 @@ import type { AppDispatch } from '@Redux_Thunk/Provider'
 
 import axios from 'axios'
 
-import { Get_Device_Information } from '@Redux_Thunk/Actions/Misc'
+import {
+    Get_Device_Information,
+    Map_Database_Values_For_TypeScript
+} from '@Redux_Thunk/Actions/Misc'
 
 export const Load_Profile_Viewer_Data = (value: BigInt) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
     await axios.post(
@@ -82,6 +85,15 @@ export const Load_All_Community_Users = () => async (dispatch: AppDispatch, getS
             reject(error)
         })
     }).then( async (response: any) => {
+
+        console.log(response.data)
+
+/*        response.data.users_data = Map_Database_Values_For_TypeScript(response.data.users_data)
+        response.data.users_profile_data = Map_Database_Values_For_TypeScript(response.data.users_profile_data)
+        response.data.users_twitch_data = Map_Database_Values_For_TypeScript(response.data.users_twitch_data)*/
+
+        console.log(response.data)
+
         return await new Promise(async (resolve) => {
             await dispatch({ type: UPDATE_APPLICATION_COMMUNITY_STATE, payload: { users: response.data } })
             resolve(response.data)

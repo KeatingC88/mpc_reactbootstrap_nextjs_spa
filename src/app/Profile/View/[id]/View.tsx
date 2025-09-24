@@ -89,6 +89,8 @@ const Profile_View = () => {
 
     const [chat_modal_visibility_value, set_chat_modal_visibility_value] = useState<boolean>(false)
 
+    const [friend_modal_visibility_value, set_friend_modal_visibility_value] = useState<boolean>(false)
+
     const close_end_user_chat_modal = () => {
 
         set_chat_modal_visibility_value(false)
@@ -146,6 +148,8 @@ const Profile_View = () => {
         }
 
     }
+
+    const show_the_end_user_the_add_friend_modal = async () => { }
 
     const DecreaseChatFont = () => {
         //DecreaseChatFont()
@@ -270,6 +274,13 @@ const Profile_View = () => {
                             minWidth: `${card_width}`
                         }}
                     >
+
+                        {!props.application.mobile_mode &&
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrows-move" viewBox="0 0 16 16">
+                                <path fillRule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10M.146 8.354a.5.5 0 0 1 0-.708l2-2a.5.5 0 1 1 .708.708L1.707 7.5H5.5a.5.5 0 0 1 0 1H1.707l1.147 1.146a.5.5 0 0 1-.708.708zM10 8a.5.5 0 0 1 .5-.5h3.793l-1.147-1.146a.5.5 0 0 1 .708-.708l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L14.293 8.5H10.5A.5.5 0 0 1 10 8" />
+                            </svg>
+                        }
+
                         <Card.Header className={`${props.application.settings.text_alignment} p-4`}
                             style={{
                                 backgroundColor: `${props.end_user.custom_design.card_header_background_color}`,
@@ -348,6 +359,16 @@ const Profile_View = () => {
                                                         )}
                                                     </Button>
                                                 </td>
+                                                <td>
+                                                    <Button variant="success" onClick={() => { set_friend_modal_visibility_value(true) }}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16">
+                                                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+                                                            <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
+                                                        </svg>
+                                                        <br />
+                                                        {lbl.AddToFriendsList}
+                                                    </Button>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </Table>
@@ -404,6 +425,59 @@ const Profile_View = () => {
             <Modal show={chat_modal_visibility_value} onHide={() => { close_end_user_chat_modal() }}>
                 <Modal.Header closeButton>
                     <Modal.Title>{lbl.ChatWithUser} ({props.application.community.profile_viewer.name})</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Row>
+                        <Col lg={10} md={8} sm={9} xs={10}>
+                            <ListGroup id="wsprofileviewer-modal-chatbox" style={{ maxHeight: 200, minWidth: 475, overflow: `auto` }}></ListGroup>
+                        </Col>
+                    </Row>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Row>
+                        <Col className="text-center">
+                            <Form noValidate onSubmit={(e) => { prepare_end_user_message_to_be_sent(e) }}>
+                                <InputGroup className="mb-3">
+                                    <Form.Control
+                                        as="textarea"
+                                        rows={3}
+                                        name="websocket-input-textbox"
+                                        value={end_user_message_input_value}
+                                        className="mx-auto"
+                                        onChange={(e) => update_inputs(e)} />
+                                </InputGroup>
+                                <Button variant="info" name="submit-button" className="mx-auto" onClick={(e) => { prepare_end_user_message_to_be_sent(e) }}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
+                                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
+                                    </svg> {lbl.Send}
+                                </Button>
+                                <Button variant="info" name="submit-button" className="mx-auto" onClick={() => { IncreaseChatFont() }}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus-lg" viewBox="0 0 16 16">
+                                        <path fillRule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                    </svg>
+                                </Button>
+                                <Button variant="info" name="submit-button" className="mx-auto" onClick={() => { DecreaseChatFont() }}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-dash-lg" viewBox="0 0 16 16">
+                                        <path fillRule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8" />
+                                    </svg>
+                                </Button>
+                                <Button variant="danger" onClick={() => { block_chat_for_end_user() }}>
+                                    {lbl.Block}
+                                </Button>
+                                <Button variant="danger" onClick={() => { report_spam_content_for_end_user() }}>
+                                    {lbl.Spam}
+                                </Button>
+                                <Button variant="danger" onClick={() => { report_abusive_content_for_end_user() }}>
+                                    {lbl.Abuse}
+                                </Button>
+                            </Form>
+                        </Col>
+                    </Row>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={friend_modal_visibility_value} onHide={() => { set_friend_modal_visibility_value(false) }}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{lbl.AddToFriendsList} ({props.application.community.profile_viewer.name})</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Row>
