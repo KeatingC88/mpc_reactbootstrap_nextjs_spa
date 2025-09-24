@@ -47,6 +47,9 @@ export interface Application_Props {
             logout_on: number | null
             login_type: string | null
             login_on: number | null
+            twitch_email_address: string | null
+            twitch_id: BigInt | null
+            twitch_user_name: string | null
         }
     }
 

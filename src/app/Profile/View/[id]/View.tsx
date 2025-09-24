@@ -27,7 +27,7 @@ import { Delay_Execution } from '@Redux_Thunk/Actions/Misc'
 const Profile_View = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-    
+    console.log(props)
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -250,7 +250,7 @@ const Profile_View = () => {
     useEffect(() => {
         Dispatch(Load_Profile_Viewer_Data(profile_id)).then(() => {
             if (props.application.community.profile_viewer?.created_on)
-                set_created_on_value(new Date(props.application.community.profile_viewer?.created_on * 1000).toString())
+                set_created_on_value(new Date(props.application.community.profile_viewer.created_on * 1000).toString())
         })
 
         if (profile_id === props.end_user.account.id) {
@@ -288,7 +288,7 @@ const Profile_View = () => {
                                 fontFamily: `${props.end_user.custom_design.card_header_font}`
                             }}
                         >
-                            <h1>{props.application.community.profile_viewer.name}</h1>
+                            <h1>{lbl.ViewingProfile}</h1>
                         </Card.Header>
                         <Card.Body
                             style={{
@@ -298,13 +298,15 @@ const Profile_View = () => {
                             }}
                         >
                             <Row>
-                                <Col style={{ margin: `auto` }}>
-                                    {props.end_user.account.avatar_url_path &&
+                                <Col>
+
+                                    {props.application.community.profile_viewer.avatar_url_path &&
                                         <center>
-                                            <Image src={`${props.end_user.account.avatar_url_path}`} thumbnail height="124" width="124" />
+                                            <Image src={`${props.application.community.profile_viewer.avatar_url_path}`} roundedCircle height="124" width="124" className="mb-3" />
                                         </center>
                                     }
-                                    {!props.end_user.account.avatar_url_path &&
+
+                                    {!props.application.community.profile_viewer.avatar_url_path &&
                                         <center>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="124" height="124" fill="currentColor" className="bi-person-circle d-inline-block align-top mt-2 rounded-circle" viewBox="0 0 16 16">
                                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
@@ -312,27 +314,29 @@ const Profile_View = () => {
                                             </svg>
                                         </center>
                                     }
+
                                 </Col>
                                 <Col>
-                                    <Table striped bordered hover variant="dark">
-                                        <thead>
-                                            <tr>
-                                                <th>{lbl.ID}#</th>
-                                                <th>{lbl.DisplayName}</th>
-                                                <th>{lbl.CreatedOn}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>{props.application.community.profile_viewer.id?.toString()}</td>
-                                                <td>{props.application.community.profile_viewer.name}</td>
-                                                <td>{created_on_value}</td>
-                                            </tr>
-                                        </tbody>
-                                    </Table>
+                                    <Row className="text-start">
+                                        <Col>
+                                            <strong>{lbl.Name}</strong>: {props.application.community.profile_viewer.name} <br />
+                                            <hr />
+                                            <strong>{lbl.ID}</strong>: {props.application.community.profile_viewer.id?.toString()} <br />
+                                            <hr />
+                                            {props.application.community.profile_viewer?.twitch_user_name &&
+                                                <>
+                                                <strong>{lbl.Twitch}</strong>: <a target="_blank" href={'https://twitch.tv/' + props.application.community.profile_viewer.twitch_user_name?.toString()}>{'https://twitch.tv/' + props.application.community.profile_viewer.twitch_user_name?.toString()}</a> < br />
+                                                    <hr />
+                                                </>
+                                            }
+                                        </Col>
+                                        <Col>
+                                            <strong>{lbl.CreatedOn}</strong>: <br /> {created_on_value} <br />
+                                        </Col>
+                                    </Row>
                                 </Col>
                             </Row>
-                            <Row>
+                            <Row className="mt-5">
                                 <Col>
                                     {alert_text ? <Row><Col><Alert className="text-center" variant={alert_color}>{alert_text}.</Alert></Col></Row> : null}
                                     <Table striped bordered hover variant="dark">
@@ -358,15 +362,20 @@ const Profile_View = () => {
                                                             </>
                                                         )}
                                                     </Button>
-                                                </td>
-                                                <td>
                                                     <Button variant="success" onClick={() => { set_friend_modal_visibility_value(true) }}>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16">
                                                             <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
                                                             <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
                                                         </svg>
                                                         <br />
-                                                        {lbl.AddToFriendsList}
+                                                        {lbl.Friend}
+                                                    </Button>
+                                                    <Button onClick={() => { set_report_chat_modal_value(true) }}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-ban" viewBox="0 0 16 16">
+                                                            <path d="M15 8a6.97 6.97 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0" />
+                                                        </svg>
+                                                        <br />
+                                                        {lbl.Report}
                                                     </Button>
                                                 </td>
                                             </tr>
@@ -375,17 +384,6 @@ const Profile_View = () => {
                                 </Col>
                             </Row>
                         </Card.Body>
-                        <Card.Footer>
-                            <Row>
-                                <Col className="text-center">
-                                    <Button onClick={() => { set_report_chat_modal_value(true) }}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-ban" viewBox="0 0 16 16">
-                                            <path d="M15 8a6.97 6.97 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0" />
-                                        </svg><h6>{lbl.ReportUser}</h6>
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </Card.Footer>
                     </Card>
                 </Col>
             </Row>

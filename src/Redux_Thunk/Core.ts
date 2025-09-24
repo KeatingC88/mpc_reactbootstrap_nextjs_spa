@@ -45,7 +45,10 @@ export const Redux_Thunk_Core = createSelector(
                     first_name: state.Application_Profile_Viewer_State_Reducer.first_name,
                     last_name: state.Application_Profile_Viewer_State_Reducer.last_name,
                     maiden_name: state.Application_Profile_Viewer_State_Reducer.maiden_name,
-                    middle_name: state.Application_Profile_Viewer_State_Reducer.middle_name
+                    middle_name: state.Application_Profile_Viewer_State_Reducer.middle_name,
+                    twitch_id: state.Application_Profile_Viewer_State_Reducer.twitch_id,
+                    twitch_user_name: state.Application_Profile_Viewer_State_Reducer.twitch_user_name,
+                    twitch_email_address: state.Application_Profile_Viewer_State_Reducer.twitch_email_address,
                 },
             },
             language_dictionaries: state.Application_Language_State_Reducer.language_dictionaries,

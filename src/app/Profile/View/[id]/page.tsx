@@ -25,7 +25,7 @@ const End_User_Profile_Viewer_Page = async(): Promise<React.ReactElement> => {
 
     let jwt_data = JWT_Decoder(token)
 
-    if (jwt_data[`exp`] >= Math.floor(Date.now() / 1000))
+    if (jwt_data[`exp`] <= Math.floor(Date.now() / 1000))
         redirect("/Logout")
 
     return <Profile_Viewer />

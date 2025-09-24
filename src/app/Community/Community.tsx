@@ -21,7 +21,7 @@ import { Get_Nation_Flag_Value } from '@Redux_Thunk/Actions/Misc'
 const Community = () => {
 
     const props: any = useSelector(Redux_Thunk_Core)
-    console.log(props)
+
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -51,8 +51,6 @@ const Community = () => {
     const sorted_mpc_community_users = useMemo(() => {
 
         if (!props.application.community.users) return []
-
-        console.log(props.application.community.users.users_data)
 
         const mpc_community_users = Object.values(props.application.community.users.users_data)
 

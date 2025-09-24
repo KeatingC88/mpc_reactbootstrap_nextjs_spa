@@ -24,6 +24,9 @@ interface Application_Profile_Viewer_State {
     logout_on: number | null
     login_type: string | null
     login_on: number | null
+    twitch_email_address: string | null
+    twitch_id: BigInt | null
+    twitch_user_name: string | null
 }
 
 interface Application_Profile_Viewer_Action {
@@ -52,6 +55,9 @@ const initial_state: Application_Profile_Viewer_State = {
     login_type: null,
     login_on: null,
     gender: null,
+    twitch_email_address: null,
+    twitch_id: null,
+    twitch_user_name: null
 }
 
 const Application_Profile_Viewer_State_Reducer = (
@@ -82,8 +88,10 @@ const Application_Profile_Viewer_State_Reducer = (
                         name: action.payload?.name ?? initial_state.name,
                         logout_on: action.payload?.logout_on ?? initial_state.logout_on,
                         login_type: action.payload?.login_type ?? initial_state.login_type,
-                        login_on: action.payload?.login_on ?? initial_state.login_on
-
+                        login_on: action.payload?.login_on ?? initial_state.login_on,
+                        twitch_id: action.payload?.twitch_id ?? initial_state.twitch_id,
+                        twitch_email_address: action.payload?.twitch_email_address ?? initial_state.twitch_email_address,
+                        twitch_user_name: action.payload?.twitch_user_name ?? initial_state.twitch_user_name
                     }
                 }
             case NULL_APPLICATION_PROFILE_VIEWER_STATE:
@@ -116,7 +124,10 @@ const Application_Profile_Viewer_State_Reducer = (
         name: state.name ?? initial_state.name,
         logout_on: state.logout_on ?? initial_state.logout_on,
         login_type: state.login_type ?? initial_state.login_type,
-        login_on: state.login_on ?? initial_state.login_on
+        login_on: state.login_on ?? initial_state.login_on,
+        twitch_id: state.twitch_id ?? initial_state.twitch_id,
+        twitch_email_address: state.twitch_email_address ?? initial_state.twitch_email_address,
+        twitch_user_name: state.twitch_user_name ?? initial_state.twitch_user_name
     }
 }
 
