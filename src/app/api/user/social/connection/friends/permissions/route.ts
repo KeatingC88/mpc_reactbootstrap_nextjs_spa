@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 
 import axios from "axios"
-
 import { Encrypt } from '@AES/Encryptor'
-import { Decrypt } from '@AES/Decryptor'
 
 import {
     USERS_SERVER_ADDRESS,
@@ -14,6 +12,7 @@ import {
 
 export const POST = async (req: NextRequest) => {
     try {
+
         let token = null
         const cookie = await cookies()
 
@@ -23,10 +22,9 @@ export const POST = async (req: NextRequest) => {
         if (!token) {
             return NextResponse.redirect("/Logout")
         }
-
         let dto = await req.json()
 
-        let response: any = await axios.post(`${USERS_SERVER_ADDRESS}/Friend/Request`, {
+        let response: any = await axios.post(`${USERS_SERVER_ADDRESS}/Friend/Permissions`, {
             token: token,
             end_user_id: Encrypt(`${dto.end_user_id}`),
             participant_id: Encrypt(`${dto.participant_id}`),
@@ -56,7 +54,9 @@ export const POST = async (req: NextRequest) => {
             return NextResponse.json({ error: error.message }, { status: 500 })
         })
 
-        return NextResponse.json({data: Decrypt(response.data), status: 200 })
+        if (response)
+            return NextResponse.json(response.data)
+
     } catch (err: any) {
         return NextResponse.json({ error: err.message }, { status: 500 })
     }

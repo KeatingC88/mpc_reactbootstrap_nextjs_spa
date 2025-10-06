@@ -98,7 +98,14 @@ export const Redux_Thunk_Core = createSelector(
                 phone_carrier: state.End_User_Account_State_Reducer.phone_carrier,
                 telephone: state.End_User_Account_State_Reducer.telephone,
             },
-            friends: state.End_User_Friends_State_Reducer.friends,
+            people: {
+                friends: {
+                    sent_requests: state.End_User_Friends_State_Reducer.sent_requests,
+                    blocked: state.End_User_Friends_State_Reducer.blocked,
+                    received_requests: state.End_User_Friends_State_Reducer.received_requests,
+                    time_stamped: state.End_User_Friends_State_Reducer.time_stamped
+                }
+            },
             notification: {
                 alert_color: ``,
                 alert_text: ``,

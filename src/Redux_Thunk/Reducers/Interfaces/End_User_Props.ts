@@ -20,8 +20,28 @@ export interface End_User_Props {
         telephone: number | null
     }
 
-    friends: [] | null
+    people: {
+        friends: {
+            sent_requests: [{
+                participant_id: BigInt,
+                request: boolean,
+                block: boolean,
+                approve: boolean,
+                time_stamp: BigInt
+            }] | null,
+            blocked: [{
 
+            }] | null,
+            received_requests: [{
+                participant_id: BigInt,
+                request: boolean,
+                block: boolean,
+                approve: boolean,
+                time_stamp: BigInt
+            }],
+            time_stamped: BigInt
+        } | null
+    } | null
     notification: {
         alert_color: string
         alert_text: string

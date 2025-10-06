@@ -1675,7 +1675,7 @@ export const Update_End_User_Selected_Custom_Label = (value: string | null) => a
     let current_language_state = state.Application_Language_State_Reducer
 
     if (end_user_account.account_type !== 0)
-        await axios.put(`${USERS_SERVER_ADDRESS}/Selected/Custom_Label`, {
+        await axios.put(`/api/user/settings/status/custom_label`, {
             custom_lbl: `${value}`,
             id: `${end_user_account.id}`,
             account_type: `${end_user_account.account_type}`,

@@ -6,7 +6,7 @@ import { Encrypt } from '@AES/Encryptor'
 
 import {
     USERS_SERVER_ADDRESS,
-    USERS_FRIENDS_LIST_CACHE_SERVER_URL,
+    USERS_FRIENDS_LIST_CACHE_SERVER,
     USERS_SERVER_COOKIE_NAME
 } from '@Constants'
 

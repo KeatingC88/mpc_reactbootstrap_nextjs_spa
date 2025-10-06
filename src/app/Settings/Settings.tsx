@@ -402,7 +402,6 @@ const Settings = () => {
                 id: props.end_user.account.id,
                 language: props.application.settings.current_language.split(`-`)[0],
                 region: props.application.settings.current_language.split(`-`)[1],
-                token: props.end_user.account.token,
                 password: old_password,
                 new_password: new_password
             }))

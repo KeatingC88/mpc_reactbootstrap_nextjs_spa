@@ -30,6 +30,7 @@ const Email_Register = () => {
 
     const [submit_button_color, set_submit_button_color] = useState<string>(`primary`)
     const [lock_form_submit_button, set_lock_form_submit_button] = useState<boolean>(false)
+    const [input_is_disabled, set_input_is_disabled] = useState<boolean>(false)
     const [form_submit_complete, set_form_submit_complete] = useState<boolean>(false)
     const [alert_text, set_alert_text] = useState<string>(``)
     const [alert_color, set_alert_color] = useState<string>(``)
@@ -103,6 +104,7 @@ const Email_Register = () => {
 
         event.preventDefault()
         set_lock_form_submit_button(true)
+        set_input_is_disabled(true)
         set_submit_button_color(`info`)
         set_submit_button_text(`${lbl.ValidatingPleaseWait}`)
         set_alert_text("")
@@ -115,6 +117,8 @@ const Email_Register = () => {
 
                     await Dispatch(Attempt_To_Register_The_End_User_An_Email_Account(email_address)).then(() => {
                         set_form_submit_complete(true)
+                        set_input_is_disabled(false)
+                        set_lock_form_submit_button(false)
                     })
 
                 })()
@@ -240,6 +244,7 @@ const Email_Register = () => {
                                                             name="email_address"
                                                             className="text-center mx-auto"
                                                             value={email_address}
+                                                            disabled={input_is_disabled}
                                                             onChange={(e) => set_email_address(e.target.value)}
                                                         />
                                                     }

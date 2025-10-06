@@ -19,7 +19,7 @@ import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
 import { usePathname } from 'next/navigation'
 
-import { Load_End_User_Approved_Friends } from '@Redux_Thunk/Actions/User/Friends'
+import { Load_End_User_Friend_Permissions } from '@Redux_Thunk/Actions/User/Friends'
 
 const End_User_Friends = () => {
 
@@ -59,6 +59,24 @@ const End_User_Friends = () => {
     }
 
     const build_friends_list = () => {
+
+        console.log(props.end_user.friends)
+
+        if (!props.end_user.friends) return <> </>
+
+        return (
+            <ListGroup variant="flush text-start">
+                {props.end_user.friends.map((x, index) => {
+                    return (
+                        <ListGroup.Item key={index}>{`${x}`}</ListGroup.Item>
+                    )
+                })}
+            </ListGroup>
+        )
+    }
+
+    const build_friend_request_list = () => {
+
         console.log(props.end_user.friends)
 
         if (!props.end_user.friends) return <> </>
@@ -75,7 +93,7 @@ const End_User_Friends = () => {
     }
 
     useEffect(() => {
-        Dispatch(Load_End_User_Approved_Friends())
+        Dispatch(Load_End_User_Friend_Permissions())
 
         if (Path === `/`) {
             set_card_width(``)

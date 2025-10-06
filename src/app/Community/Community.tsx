@@ -260,13 +260,15 @@ const Community = () => {
                             }}
                         >
                             {!props.application.community.users &&
-                                <>
-                                    {lbl.Loading}
-                                    <br />
-                                    <Spinner animation="border"
-                                        style={{ maxHeight: 400, maxWidth: 400 }}
-                                    />
-                                </>
+                                <Row>
+                                    <Col>
+                                        {lbl.Loading}
+                                        <br />
+                                        <Spinner animation="border"
+                                            style={{ maxHeight: 400, maxWidth: 400 }}
+                                        />
+                                    </Col>
+                                </Row>
                             }
                             {props.application.community.users &&
                                 <Table striped bordered hover variant={`dark`}>
