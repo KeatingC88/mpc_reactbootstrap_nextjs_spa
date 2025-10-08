@@ -22,24 +22,24 @@ export interface End_User_Props {
 
     people: {
         friends: {
-            sent_requests: [{
+            approved: BigInt[] | null
+            sent_requests: {
                 participant_id: BigInt,
                 request: boolean,
                 block: boolean,
                 approve: boolean,
                 time_stamp: BigInt
-            }] | null,
-            blocked: [{
-
-            }] | null,
-            received_requests: [{
+            }[] | null,
+            blocked: BigInt[] | null,
+            received_requests: {
                 participant_id: BigInt,
                 request: boolean,
                 block: boolean,
                 approve: boolean,
                 time_stamp: BigInt
-            }],
+            }[] | null,
             time_stamped: BigInt
+            reported: BigInt[] | null
         } | null
     } | null
     notification: {

@@ -5,10 +5,11 @@ import {
     CLIENT_ADDRESS,
     DEFAULT_HOST_ERROR_STATE,
     DEFAULT_NETWORK_ERROR_STATE,
-    UPDATE_END_USER_FRIENDS_STATE,
     UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
-    UPDATE_END_USER_FRIENDS_SENT_PERMISSION_STATE,
-    UPDATE_END_USER_FRIENDS_RECEIVED_PERMISSION_STATE
+    UPDATE_END_USER_FRIENDS_RECEIVED_PERMISSION_STATE,
+    UPDATE_END_USER_FRIENDS_BLOCKED_PERMISSION_STATE,
+    UPDATE_END_USER_FRIENDS_APPROVED_PERMISSION_STATE,
+    UPDATE_END_USER_FRIENDS_REPORTED_PERMISSION_STATE
 } from '@Constants'
 import axios from 'axios'
 
@@ -81,8 +82,9 @@ export const Approve_Friend = (value: BigInt) => async (dispatch: AppDispatch, g
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
     let current_language_state = state.Application_Language_State_Reducer
+    let current_end_user_friend_list_state = state.End_User_Friends_State_Reducer
 
-    await axios.post(`/api/user/social/connection/friend/approve`, {
+    await axios.put(`/api/user/social/connection/friend/approve`, {
         end_user_id: `${end_user_account.id.toString()}`,
         participant_id: `${value.toString()}`,
         account_type: `${end_user_account.account_type}`,
@@ -109,7 +111,7 @@ export const Approve_Friend = (value: BigInt) => async (dispatch: AppDispatch, g
         device_ram_gb: `${Get_Device_Information().deviceMemory}`,
     }).catch(async (error) => {
         return await new Promise((reject) => {
-            error.id = `Contact-Us-Submission-Failed`
+            error.id = `Approved-Friend-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
             setTimeout(() => {
                 dispatch({ type: DEFAULT_HOST_ERROR_STATE })
@@ -118,8 +120,20 @@ export const Approve_Friend = (value: BigInt) => async (dispatch: AppDispatch, g
             reject(error)
         })
     }).then(async (response: any) => {
-        console.log(`friend approved`)
-        console.log(response.data)
+        delete current_end_user_friend_list_state.received_requests[value.toString()]
+
+        if (!current_end_user_friend_list_state.friends) {
+            let approved = []
+            approved.push(value)
+            dispatch({ type: UPDATE_END_USER_FRIENDS_APPROVED_PERMISSION_STATE, payload: { approved: approved } })
+        } else {
+            current_end_user_friend_list_state.approved.push(value)
+            dispatch({ type: UPDATE_END_USER_FRIENDS_APPROVED_PERMISSION_STATE, payload: { approved: current_end_user_friend_list_state.approved } })
+        }
+
+        return await new Promise((resolve) => {
+            resolve(response.data)
+        })
     })
 }
 
@@ -127,8 +141,9 @@ export const Block_Friend = (value: BigInt) => async (dispatch: AppDispatch, get
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
     let current_language_state = state.Application_Language_State_Reducer
+    let current_end_user_friend_list_state = state.End_User_Friends_State_Reducer
 
-    await axios.post(`/api/user/social/connection/friend/block`, {
+    await axios.put(`/api/user/social/connection/friend/block`, {
         end_user_id: `${end_user_account.id.toString()}`,
         participant_id: `${value.toString()}`,
         account_type: `${end_user_account.account_type}`,
@@ -155,7 +170,7 @@ export const Block_Friend = (value: BigInt) => async (dispatch: AppDispatch, get
         device_ram_gb: `${Get_Device_Information().deviceMemory}`,
     }).catch(async (error) => {
         return await new Promise((reject) => {
-            error.id = `Contact-Us-Submission-Failed`
+            error.id = `Block-Friend-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
             setTimeout(() => {
                 dispatch({ type: DEFAULT_HOST_ERROR_STATE })
@@ -163,14 +178,21 @@ export const Block_Friend = (value: BigInt) => async (dispatch: AppDispatch, get
             }, 1)
             reject(error)
         })
-    }).then(async (response: any) => {
-        console.log(`block friend`)
-        console.log(response)
-        /*        
-            return await new Promise((resolve) => {
-                    
-            })
-        */
+    }).then( async (response: any) => {
+        delete current_end_user_friend_list_state.received_requests[value.toString()]
+
+        if (!current_end_user_friend_list_state.blocked) {
+            let blocked = []
+            blocked.push(value)
+            dispatch({ type: UPDATE_END_USER_FRIENDS_BLOCKED_PERMISSION_STATE, payload: { blocked: blocked } })
+        } else {
+            current_end_user_friend_list_state.blocked.push(value)
+            dispatch({ type: UPDATE_END_USER_FRIENDS_BLOCKED_PERMISSION_STATE, payload: { blocked: current_end_user_friend_list_state.blocked } })
+        }
+
+        return await new Promise((resolve) => {
+            resolve(response.data)
+        })
     })
 }
 
@@ -207,7 +229,7 @@ export const Request_Friend = (value: BigInt) => async (dispatch: AppDispatch, g
         device_ram_gb: `${Get_Device_Information().deviceMemory}`,
     }).catch( async (error) => {
         return await new Promise((reject) => {
-            error.id = `Contact-Us-Submission-Failed`
+            error.id = `Request-Friend-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
             setTimeout(() => {
                 dispatch({ type: DEFAULT_HOST_ERROR_STATE })
@@ -215,11 +237,11 @@ export const Request_Friend = (value: BigInt) => async (dispatch: AppDispatch, g
             }, 1)
             reject(error)
         })
-    }).then( async (response: any) => {
-        current_end_user_friend_list_state.sent_requests[value.toString()] = { ...JSON.parse(response.data.data) }
+    }).then( async (response:any) => {
+        current_end_user_friend_list_state.sent_requests[value.toString()] = {...JSON.parse(response.data.data)}
         return await new Promise((resolve) => {
-            dispatch({ type: UPDATE_END_USER_FRIENDS_SENT_PERMISSION_STATE, payload: { sent_requests: current_end_user_friend_list_state.sent_requests } })
-            resolve(response.data)
+            dispatch({ type: UPDATE_END_USER_FRIENDS_RECEIVED_PERMISSION_STATE, payload: { sent_requests: current_end_user_friend_list_state.sent_requests } })
+            resolve(response.data.data)
         })
     })
 }
@@ -257,7 +279,7 @@ export const Reject_Friend = (value: BigInt) => async (dispatch: AppDispatch, ge
         device_ram_gb: `${Get_Device_Information().deviceMemory}`,
     }).catch( async (error) => {
         return await new Promise((reject) => {
-            error.id = `Contact-Us-Submission-Failed`
+            error.id = `Reject-Friend-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
             setTimeout(() => {
                 dispatch({ type: DEFAULT_HOST_ERROR_STATE })
@@ -278,6 +300,7 @@ export const Report_Friend = (value: string) => async (dispatch: AppDispatch, ge
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
     let current_language_state = state.Application_Language_State_Reducer
+    let current_end_user_friend_list_state = state.End_User_Friends_State_Reducer
 
     await axios.post(`/api/user/social/connection/friend/report`, {
         account_type: `${end_user_account.account_type}`,
@@ -303,9 +326,9 @@ export const Report_Friend = (value: string) => async (dispatch: AppDispatch, ge
         rtt: `${Get_Device_Information().rtt}`,
         data_saver: `${Get_Device_Information().saveData}`,
         device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch(async (error) => {
+    }).catch( async (error) => {
         return await new Promise((reject) => {
-            error.id = `Contact-Us-Submission-Failed`
+            error.id = `Report-Friend-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
             setTimeout(() => {
                 dispatch({ type: DEFAULT_HOST_ERROR_STATE })
@@ -313,12 +336,18 @@ export const Report_Friend = (value: string) => async (dispatch: AppDispatch, ge
             }, 1)
             reject(error)
         })
-    }).then(async (response: any) => {
-        console.log(`report friend complete`)
-        console.log(response)
-        /*  return await new Promise((resolve) => {
-                    
-            })
-        */
+    }).then( async (response: any) => {
+        if (!current_end_user_friend_list_state.reported) {
+            let reported = []
+            reported.push(value)
+            dispatch({ type: UPDATE_END_USER_FRIENDS_REPORTED_PERMISSION_STATE, payload: { reported: reported } })
+        } else {
+            current_end_user_friend_list_state.reported.push(value)
+            dispatch({ type: UPDATE_END_USER_FRIENDS_REPORTED_PERMISSION_STATE, payload: { reported: current_end_user_friend_list_state.reported } })
+        }
+
+        return await new Promise((resolve) => {
+            resolve(response.data)
+        })
     })
 }

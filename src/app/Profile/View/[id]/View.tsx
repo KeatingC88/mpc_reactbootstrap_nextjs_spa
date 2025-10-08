@@ -41,6 +41,8 @@ import { Delay_Execution } from '@Redux_Thunk/Actions/Misc'
 import {
     Request_Friend,
     Reject_Friend,
+    Block_Friend,
+    Approve_Friend,
     Load_End_User_Friend_Permissions
 } from '@Redux_Thunk/Actions/User/Friends'
 
@@ -68,8 +70,12 @@ const Profile_View = () => {
     const [friend_notification_complete, set_friend_notification_complete] = useState<boolean>(false)
     const [submit_button_text, set_submit_button_text] = useState<string>(lbl.ReportUser)
 
-    const [disable_end_user_profile_button, set_disable_end_user_profile_button] = useState<boolean>(false)
+    const [disable_profile_modal_chat_button, set_disable_profile_modal_chat_button] = useState<boolean>(false)
     const [disable_friend_button, set_disable_friend_button] = useState<boolean>(false)
+    const [disable_approve_button, set_disable_approve_button] = useState<boolean>(false)
+    const [disable_reject_button, set_disable_reject_button] = useState<boolean>(false)
+    const [disable_block_button, set_disable_block_button] = useState<boolean>(false)
+    const [disable_report_button, set_disable_report_button] = useState<boolean>(false)
     const [end_user_message_input_value, set_end_user_message_input_value] = useState<string>(``)
 
     const [profile_id, set_profile_id] = useState<bigint>(() => {
@@ -265,20 +271,73 @@ const Profile_View = () => {
                 set_submit_button_text(`${lbl.Success}`)
                 setTimeout(() => {
                     set_report_chat_modal_value(false)
+                    set_disable_profile_modal_chat_button(true)
+                    set_disable_friend_button(true)
+                    set_disable_block_button(true)
+                    set_disable_report_button(true)
                 }, 2000)
         }
     }
 
     const send_friend_request = () => {
         set_disable_friend_button(true)
+        set_disable_block_button(true)
+        set_disable_report_button(true)
+        set_disable_profile_modal_chat_button(true)
+        set_disable_profile_modal_chat_button(true)
         create_information_alert(`${lbl.FriendInviteSent}`)
-        Dispatch(Request_Friend(profile_id))
+        Dispatch(Request_Friend(profile_id)).then(() => {
+            set_disable_block_button(false)
+            set_disable_report_button(false)
+            set_disable_profile_modal_chat_button(false)
+        })
     }
 
     const reject_friend_request = () => {
-        set_disable_friend_button(false)
+        set_disable_friend_button(true)
+        set_disable_block_button(true)
+        set_disable_report_button(true)
+        set_disable_profile_modal_chat_button(true)
+        set_disable_approve_button(true)
+        set_disable_reject_button(true)
         create_success_alert(`${lbl.FriendRejectionSent}`)
-        Dispatch(Reject_Friend(profile_id))
+        Dispatch(Reject_Friend(profile_id)).then(() => {
+            set_disable_friend_button(false)
+            set_disable_block_button(false)
+            set_disable_report_button(false)
+            set_disable_profile_modal_chat_button(false)
+            set_disable_approve_button(false)
+            set_disable_reject_button(false)
+        })
+    }
+
+    const block_friend_requests = () => {
+        set_disable_friend_button(true)
+        set_disable_block_button(true)
+        set_disable_report_button(true)
+        set_disable_profile_modal_chat_button(true)
+        set_disable_approve_button(true)
+        set_disable_reject_button(true)
+        create_information_alert(`${lbl.Blocking}`)
+        Dispatch(Block_Friend(profile_id)).then(() => {
+            set_disable_friend_button(false)
+            set_disable_block_button(true)
+            set_disable_report_button(false)
+            create_success_alert(`${lbl.BlockedProfile}`)
+        })
+    }
+
+    const approve_friend_requests = () => {
+        set_disable_friend_button(true)
+        set_disable_block_button(true)
+        set_disable_report_button(true)
+        set_disable_profile_modal_chat_button(true)
+        create_information_alert(`${lbl.AcceptingFriendInvite}`)
+        Dispatch(Approve_Friend(profile_id)).then(() => {
+            set_disable_block_button(false)
+            set_disable_report_button(false)
+            create_success_alert(`${lbl.SuccessfullyApproved}`)
+        })
     }
 
     ( async () => {
@@ -305,7 +364,7 @@ const Profile_View = () => {
         Dispatch(Load_End_User_Friend_Permissions())
         
         if (profile_id === props.end_user.account.id) {
-            set_disable_end_user_profile_button(true)
+            set_disable_profile_modal_chat_button(true)
         }
 
         if (Path === `/`) {
@@ -409,7 +468,10 @@ const Profile_View = () => {
                                                 <tbody>
                                                     <tr>
                                                         <td>
-                                                            <Button variant="success" onClick={() => { show_the_end_user_the_profile_chat_modal() }} disabled={disable_end_user_profile_button}>
+                                                        <Button variant="success"
+                                                            onClick={() => { show_the_end_user_the_profile_chat_modal() }}
+                                                            disabled={disable_profile_modal_chat_button}
+                                                        >
                                                                 {props.application.settings.theme === 0 ? (
                                                                     <>
                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-chat-fill" viewBox="0 0 16 16">
@@ -430,16 +492,16 @@ const Profile_View = () => {
                                                             </Button>
 
                                                             {props.end_user.people?.friends?.received_requests?.hasOwnProperty(profile_id.toString()) && (
-                                                                    <>
-                                                                        <Button variant="success" disabled={false}>
+                                                            <>
+                                                                        <Button variant="success" disabled={disable_approve_button} onClick={()=> approve_friend_requests()}>
                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-check" viewBox="0 0 16 16">
                                                                                 <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                                                                                 <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
                                                                             </svg>
                                                                             <br />
-                                                                        {lbl.ApproveFriendInvite}
+                                                                            {lbl.ApproveFriendInvite}
                                                                         </Button>
-                                                                        <Button variant="success" disabled={false} onClick={() => { reject_friend_request() }}>
+                                                                        <Button variant="success" disabled={disable_reject_button} onClick={() => { reject_friend_request() }}>
                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-x" viewBox="0 0 16 16">
                                                                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
                                                                                 <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708" />
@@ -477,7 +539,21 @@ const Profile_View = () => {
                                                                 </Button>
                                                             )}
 
-                                                            <Button onClick={() => { set_report_chat_modal_value(true) }}>
+                                                            <Button
+                                                                onClick={() => { block_friend_requests() }}
+                                                                disabled={disable_block_button}
+                                                            >
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-slash" viewBox="0 0 16 16">
+                                                                    <path d="M13.879 10.414a2.501 2.501 0 0 0-3.465 3.465zm.707.707-3.465 3.465a2.501 2.501 0 0 0 3.465-3.465m-4.56-1.096a3.5 3.5 0 1 1 4.949 4.95 3.5 3.5 0 0 1-4.95-4.95ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
+                                                                </svg>
+                                                                <br />
+                                                                {lbl.Block}
+                                                            </Button>
+
+                                                            <Button
+                                                                onClick={() => { set_report_chat_modal_value(true) }}
+                                                                disabled={disable_report_button}
+                                                            >
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-exclamation" viewBox="0 0 16 16">
                                                                     <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
                                                                     <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-3.5-2a.5.5 0 0 0-.5.5v1.5a.5.5 0 0 0 1 0V11a.5.5 0 0 0-.5-.5m0 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
@@ -485,13 +561,7 @@ const Profile_View = () => {
                                                                 <br />
                                                                 {lbl.Report}
                                                             </Button>
-                                                            <Button onClick={() => { set_report_chat_modal_value(true) }}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-slash" viewBox="0 0 16 16">
-                                                                    <path d="M13.879 10.414a2.501 2.501 0 0 0-3.465 3.465zm.707.707-3.465 3.465a2.501 2.501 0 0 0 3.465-3.465m-4.56-1.096a3.5 3.5 0 1 1 4.949 4.95 3.5 3.5 0 0 1-4.95-4.95ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
-                                                                </svg>
-                                                                <br />
-                                                                {lbl.Block}
-                                                            </Button>
+
                                                         </td>
                                                     </tr>
                                                 </tbody>

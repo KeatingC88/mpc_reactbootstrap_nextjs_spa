@@ -3,6 +3,7 @@ import { cookies } from "next/headers"
 
 import axios from "axios"
 import { Encrypt } from '@AES/Encryptor'
+import { Decrypt } from '@AES/Decryptor'
 
 import {
     USERS_SERVER_ADDRESS,
@@ -55,7 +56,7 @@ export const PUT = async (req: NextRequest) => {
             return NextResponse.json({ error: error.message }, { status: 500 }) 
         })
 
-        return NextResponse.json(response.data, { status: 200 })
+        return NextResponse.json({ data: Decrypt(response.data), status: 200 })
     } catch (err: any) {
         return NextResponse.json({ error: err.message }, { status: 500 })
     }
