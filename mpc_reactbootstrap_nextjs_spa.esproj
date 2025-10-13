@@ -11,6 +11,7 @@
     <Folder Include="src\app\api\user\social\connection\friends\reported\" />
     <Folder Include="src\app\api\user\social\events\" />
     <Folder Include="src\app\api\user\video_games\" />
+    <Folder Include="src\app\api\websocket\notification\" />
     <Folder Include="src\app\Login\Mod\" />
     <Folder Include="src\app\Login\Admin\" />
     <Folder Include="src\app\Login\User\Facebook\" />

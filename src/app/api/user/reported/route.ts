@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation";
 
 import axios from "axios"
 import { Encrypt } from '@AES/Encryptor'
@@ -21,11 +20,12 @@ export const POST = async (req: NextRequest) => {
         if (token) {
             let dto = await req.json()
 
-            await axios.post(`${USERS_SERVER_ADDRESS}/WebSocket/Report_User`, {
+            await axios.post(`${USERS_SERVER_ADDRESS}/Report/User`, {
                 token: token,
                 report_type: Encrypt(`${dto.report_type}`),
-                user: Encrypt(`${dto.user}`),
-                id: Encrypt(`${dto.id}`),
+                report_reason: Encrypt(`${dto.report_reason}`),
+                end_user_id: Encrypt(`${dto.end_user_id}`),
+                participant_id: Encrypt(`${dto.participant_id}`),
                 account_type: Encrypt(`${dto.account_type}`),
                 login_type: Encrypt(`${dto.login_type}`),
                 language: Encrypt(`${dto.language}`),

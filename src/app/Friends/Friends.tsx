@@ -60,13 +60,13 @@ const End_User_Friends = () => {
 
     const build_friends_list = () => {
 
-        console.log(props.end_user.friends)
+        console.log(props.end_user.people?.friends)
 
-        if (!props.end_user.friends) return <> </>
+        if (!props.end_user.people?.friends) return <> </>
 
         return (
             <ListGroup variant="flush text-start">
-                {props.end_user.friends.map((x, index) => {
+                {props.end_user.people.friends.approved?.map((x, index) => {
                     return (
                         <ListGroup.Item key={index}>{`${x}`}</ListGroup.Item>
                     )
@@ -77,13 +77,13 @@ const End_User_Friends = () => {
 
     const build_friend_request_list = () => {
 
-        console.log(props.end_user.friends)
+        console.log(props.end_user.people?.friends)
 
-        if (!props.end_user.friends) return <> </>
+        if (!props.end_user.people?.friends) return <> </>
 
         return (
             <ListGroup variant="flush text-start">
-                {props.end_user.friends.map((x, index) => {
+                {props.end_user.people.friends.approved?.map((x, index) => {
                     return (
                         <ListGroup.Item key={index}>{`${x}`}</ListGroup.Item>
                     )

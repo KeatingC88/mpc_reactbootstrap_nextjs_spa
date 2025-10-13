@@ -17,6 +17,10 @@ import {
     Read_Both_Conversation_Participants_WebSocket_Conversation_Permissions_And_Profile_Data_For_Chat_Menu,
     Get_End_User_Chat_History_With_Other_User_ID,
     Authenticate_End_Users_Permissions,
+    Reject_Chat_For_End_User
+} from '@Redux_Thunk/Actions/WebSocket/Direct_Chat'
+
+import {
     Report_Spam_Content,
     Report_Abusive_Content,
     Report_Disruptive_Behavior,
@@ -28,8 +32,7 @@ import {
     Report_Nudity_Content,
     Report_Fake_Account,
     Report_Hate_Content,
-    Reject_Chat_For_End_User
-} from '@Redux_Thunk/Actions/WebSocket/Direct_Chat'
+} from '@Redux_Thunk/Actions/User/Reported'
 
 import {
     Delay_Execution
@@ -190,83 +193,83 @@ const WebSocket_Chat = () => {
         })
     }
 
-    const approve_chat_for_end_user = async (id: BigInt) => {
-        await Dispatch(Approve_Chat_For_End_User(id))
+    const approve_chat_for_end_user = async (participant_id: BigInt) => {
+        await Dispatch(Approve_Chat_For_End_User(participant_id))
         set_end_user_action_modal(false)
         create_success_alert(`${lbl.SuccessfullyApproved}`)
     }
 
-    const reject_chat_for_end_user = async (id: BigInt) => {
-        await Dispatch(Reject_Chat_For_End_User(id))
+    const reject_chat_for_end_user = async (participant_id: BigInt) => {
+        await Dispatch(Reject_Chat_For_End_User(participant_id))
         set_end_user_action_modal(false)
         create_information_alert(`${lbl.ChatInvitationWasRejected}`)
     }
 
-    const report_spam_content = async (id: BigInt) => {
-        await Dispatch(Report_Spam_Content(id))
+    const report_spam_content = async (participant_id: BigInt) => {
+        await Dispatch(Report_Spam_Content({participant_id: participant_id, reason: undefined}))
         set_end_user_action_modal(false)
-        create_success_alert(`${lbl.SuccessfullyReported} ${id}.`)
+        create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
-    const report_abusive_content = async (id: BigInt) => {
-        await Dispatch(Report_Abusive_Content(id))
+    const report_abusive_content = async (participant_id: BigInt) => {
+        await Dispatch(Report_Abusive_Content({participant_id: participant_id, reason: undefined}))
         set_end_user_action_modal(false)
-        create_success_alert(`${lbl.SuccessfullyReported} ${id}.`)
+        create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
-    const report_disruptive_behavior = async (id: BigInt) => {
-        await Dispatch(Report_Disruptive_Behavior(id))
-        create_success_alert(`${lbl.SuccessfullyReported} ${id}.`)
+    const report_disruptive_behavior = async (participant_id: BigInt) => {
+        await Dispatch(Report_Disruptive_Behavior({participant_id: participant_id, reason: undefined}))
+        create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
-    const block_chat_for_end_user = async (id: BigInt) => {
-        await Dispatch(Block_Chat_For_End_User(id))
+    const block_chat_for_end_user = async (participant_id: BigInt) => {
+        await Dispatch(Block_Chat_For_End_User(participant_id))
         set_end_user_action_modal(false)
-        create_success_alert(`${lbl.SuccessfullyBlocked} ${id}.`)
+        create_success_alert(`${lbl.SuccessfullyBlocked} ${participant_id}.`)
     }
 
-    const report_self_harm_content = async (id: BigInt) => {
-        await Dispatch(Report_Self_Harm_Content(id))
+    const report_self_harm_content = async (participant_id: BigInt) => {
+        await Dispatch(Report_Self_Harm_Content({participant_id: participant_id, reason: undefined}))
         set_end_user_action_modal(false)
-        create_success_alert(`${lbl.SuccessfullyReported} ${id}.`)
+        create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
-    const report_illegal_content = async (id: BigInt) => {
-        await Dispatch(Report_Illegal_Content(id))
-        create_success_alert(`${lbl.SuccessfullyReported} ${id}.`)
+    const report_illegal_content = async (participant_id: BigInt) => {
+        await Dispatch(Report_Illegal_Content({participant_id: participant_id, reason: undefined}))
+        create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
-    const report_harass_chat = async (id: BigInt) => {
-        await Dispatch(Report_Harrass_Chat(id))
+    const report_harass_chat = async (participant_id: BigInt) => {
+        await Dispatch(Report_Harrass_Chat({participant_id: participant_id, reason: undefined}))
         set_end_user_action_modal(false)
-        create_success_alert(`${lbl.SuccessfullyReported} ${id}.`)
+        create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
-    const report_misleading_chat = async (id: BigInt) => {
-        await Dispatch(Report_Misleading_Chat(id))
-        create_success_alert(`${lbl.SuccessfullyReported} ${id}.`)
+    const report_misleading_chat = async (participant_id: BigInt) => {
+        await Dispatch(Report_Misleading_Chat({participant_id: participant_id, reason: undefined}))
+        create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
-    const report_threat_chat = async (id: BigInt) => {
-        await Dispatch(Report_Threat_Chat(id))
+    const report_threat_chat = async (participant_id: BigInt) => {
+        await Dispatch(Report_Threat_Chat({participant_id: participant_id, reason: undefined}))
         set_end_user_action_modal(false)
-        create_success_alert(`${lbl.SuccessfullyReported} ${id}.`)
+        create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
-    const report_nudity_content = async (id: BigInt) => {
-        await Dispatch(Report_Nudity_Content(id))
-        create_success_alert(`${lbl.SuccessfullyReported} ${id}.`)
+    const report_nudity_content = async (participant_id: BigInt) => {
+        await Dispatch(Report_Nudity_Content({participant_id: participant_id, reason: undefined}))
+        create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
-    const report_fake_account = async (id: BigInt) => {
-        await Dispatch(Report_Fake_Account(id))
+    const report_fake_account = async (participant_id: BigInt) => {
+        await Dispatch(Report_Fake_Account({participant_id: participant_id, reason: undefined}))
         set_end_user_action_modal(false)
-        create_success_alert(`${lbl.SuccessfullyReported} ${id}.`)
+        create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
-    const report_hate_content = async (id: BigInt) => {
-        await Dispatch(Report_Hate_Content(id))
-        create_success_alert(`${lbl.SuccessfullyReported} ${id}.`)
+    const report_hate_content = async (participant_id: BigInt) => {
+        await Dispatch(Report_Hate_Content({participant_id: participant_id, reason: undefined}))
+        create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
     (() => {

@@ -23,25 +23,21 @@ export interface End_User_Props {
     people: {
         friends: {
             approved: BigInt[] | null
-            sent_requests: {
-                participant_id: BigInt,
-                request: boolean,
-                block: boolean,
-                approve: boolean,
-                time_stamp: BigInt
-            }[] | null,
-            blocked: BigInt[] | null,
-            received_requests: {
-                participant_id: BigInt,
-                request: boolean,
-                block: boolean,
-                approve: boolean,
-                time_stamp: BigInt
-            }[] | null,
+            sent_requests: BigInt[] | null,
+            blocked: {
+                by_other_user_ids: BigInt[] | null,
+                user_ids: BigInt[] | null
+            },
+            received_requests: BigInt[] | null,
             time_stamped: BigInt
-            reported: BigInt[] | null
         } | null
     } | null
+
+    reported: {
+        by_other_user_ids: BigInt[] | null,
+        user_ids: BigInt[] | null
+    } | null
+
     notification: {
         alert_color: string
         alert_text: string

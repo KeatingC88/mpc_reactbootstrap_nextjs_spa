@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, SetStateAction } from 'react'
 
 import {
     Alert,
@@ -15,7 +15,8 @@ import {
     Modal,
     InputGroup,
     Container,
-    Spinner
+    Spinner,
+    FloatingLabel
 } from 'react-bootstrap'
 
 import { Load_Profile_Viewer_Data } from '@Redux_Thunk/Actions/Community/Load'
@@ -31,10 +32,22 @@ import {
     Authenticate_End_Users_Permissions,
     Get_End_User_Chat_History_With_Other_User_ID,
     WebSocket_Direct_Chat_Connection,
-    Block_Chat_For_End_User,
-    Report_Abusive_Content,
-    Report_Spam_Content
+    Block_Chat_For_End_User
 } from '@Redux_Thunk/Actions/WebSocket/Direct_Chat'
+
+import {
+    Report_Abusive_Content,
+    Report_Spam_Content,
+    Report_Disruptive_Behavior,
+    Report_Self_Harm_Content,
+    Report_Illegal_Content,
+    Report_Harrass_Chat,
+    Report_Misleading_Chat,
+    Report_Threat_Chat,
+    Report_Nudity_Content,
+    Report_Fake_Account,
+    Report_Hate_Content
+} from '@Redux_Thunk/Actions/User/Reported'
 
 import { Delay_Execution } from '@Redux_Thunk/Actions/Misc'
 
@@ -50,8 +63,6 @@ const Profile_View = () => {
 
     const props = useSelector(Redux_Thunk_Core)
 
-    console.log(props)
-
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -63,22 +74,24 @@ const Profile_View = () => {
     const [alert_text, set_alert_text] = useState<string>(``)
     const [alert_color, set_alert_color] = useState<string>(``)
 
-    const [reported_reason_from_end_user_input, set_reported_reason_from_end_user_input] = useState<string | null>(null)
+    const [reported_reason_from_end_user_input, set_reported_reason_from_end_user_input] = useState<string>('')
 
     const [submit_button_color, set_submit_button_color] = useState<string>(`primary`)
     const [lock_submit_button_value, set_lock_submit_button_value] = useState<boolean>(false)
     const [friend_notification_complete, set_friend_notification_complete] = useState<boolean>(false)
     const [submit_button_text, set_submit_button_text] = useState<string>(lbl.ReportUser)
 
-    const [disable_profile_modal_chat_button, set_disable_profile_modal_chat_button] = useState<boolean>(false)
-    const [disable_friend_button, set_disable_friend_button] = useState<boolean>(false)
-    const [disable_approve_button, set_disable_approve_button] = useState<boolean>(false)
-    const [disable_reject_button, set_disable_reject_button] = useState<boolean>(false)
-    const [disable_block_button, set_disable_block_button] = useState<boolean>(false)
-    const [disable_report_button, set_disable_report_button] = useState<boolean>(false)
+    const [disable_profile_modal_chat_button, set_disable_profile_modal_chat_button] = useState<boolean>(true)
+    const [disable_friend_button, set_disable_friend_button] = useState<boolean>(true)
+    const [disable_approve_button, set_disable_approve_button] = useState<boolean>(true)
+    const [disable_reject_button, set_disable_reject_button] = useState<boolean>(true)
+    const [disable_block_button, set_disable_block_button] = useState<boolean>(true)
+    const [disable_report_button, set_disable_report_button] = useState<boolean>(true)
+    const [permissions_are_complete, set_permissions_are_complete] = useState<boolean>(false)
+
     const [end_user_message_input_value, set_end_user_message_input_value] = useState<string>(``)
 
-    const [profile_id, set_profile_id] = useState<bigint>(() => {
+    const [profile_id, set_profile_id] = useState<BigInt>(() => {
         const last = Path.split("/").pop();
         return last !== undefined ? BigInt(last) : BigInt("0n");
     })
@@ -115,7 +128,7 @@ const Profile_View = () => {
         }, 3000)
     }
 
-    const [report_chat_modal_value, set_report_chat_modal_value] = useState<boolean>(false)
+    const [report_modal_display_value, set_report_modal_display_value] = useState<boolean>(false)
 
     const [chat_modal_visibility_value, set_chat_modal_visibility_value] = useState<boolean>(false)
 
@@ -177,8 +190,6 @@ const Profile_View = () => {
 
     }
 
-    const show_the_end_user_the_add_friend_modal = async () => { }
-
     const DecreaseChatFont = () => {
         //DecreaseChatFont()
     }
@@ -195,7 +206,7 @@ const Profile_View = () => {
             const participant_id = BigInt(participant_id_from_url)
             Dispatch(Block_Chat_For_End_User(participant_id))
             close_end_user_chat_modal()
-            set_report_chat_modal_value(false)
+            set_report_modal_display_value(false)
             Navigate.push('/community')
         }
 
@@ -207,9 +218,9 @@ const Profile_View = () => {
 
         if (participant_id_from_url) {
             const participant_id = BigInt(participant_id_from_url)
-            Dispatch(Report_Abusive_Content(participant_id))
+            Dispatch(Report_Abusive_Content({ participant_id: participant_id, reason: undefined }))
             close_end_user_chat_modal()
-            set_report_chat_modal_value(false)
+            set_report_modal_display_value(false)
             Navigate.push('/community')
         }
 
@@ -221,9 +232,9 @@ const Profile_View = () => {
 
         if (participant_id_from_url) {
             const participant_id = BigInt(participant_id_from_url)
-            Dispatch(Report_Spam_Content(participant_id))
+            Dispatch(Report_Spam_Content({ participant_id: participant_id, reason: undefined }))
             close_end_user_chat_modal()
-            set_report_chat_modal_value(false)
+            set_report_modal_display_value(false)
             Navigate.push('/community')
         }
 
@@ -231,13 +242,9 @@ const Profile_View = () => {
 
     const update_inputs = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const input = e.target
-
         switch (input.name) {
             case 'websocket-input-textbox':
                 set_end_user_message_input_value(input.value)
-                break
-            case 'report-reason-input-textbox':
-                set_reported_reason_from_end_user_input(input.value)
                 break
             default:
         }
@@ -256,26 +263,188 @@ const Profile_View = () => {
         }
     }
 
-    const report_abuse_from_profile_viewer_page = () => {
+    const report_profile = () => {
+        console.log(`reporting profile...`)
         set_lock_submit_button_value(true)
         set_submit_button_color(`info`)
         set_submit_button_text(`${lbl.ValidatingPleaseWait}`)
-        switch (true) {
-/*            case reported_reason_from_end_user_input.length <= 20:
-                create_error_alert(`${lbl.SummaryRequiresAtleastAParagraph}`)
-                break*/
-            default:
+        console.log(html_selected_report_type)
+        switch (html_selected_report_type) {
+            case "ABUSIVE":
                 set_alert_text(``)
-                Dispatch(Report_Abusive_Content(profile_id))
-                set_submit_button_color(`success`)
-                set_submit_button_text(`${lbl.Success}`)
-                setTimeout(() => {
-                    set_report_chat_modal_value(false)
+                Dispatch(Report_Abusive_Content({
+                    participant_id: profile_id,
+                    reason: reported_reason_from_end_user_input
+                })).then(() => {
+                    set_submit_button_color(`success`)
+                    set_submit_button_text(`${lbl.Success}`)
+                    set_report_modal_display_value(false)
                     set_disable_profile_modal_chat_button(true)
                     set_disable_friend_button(true)
                     set_disable_block_button(true)
                     set_disable_report_button(true)
-                }, 2000)
+                })
+                break
+
+            case "SPAM":
+                set_alert_text(``)
+                Dispatch(Report_Spam_Content({
+                    participant_id: profile_id,
+                    reason: reported_reason_from_end_user_input
+                })).then(() => {
+                    set_submit_button_color(`success`)
+                    set_submit_button_text(`${lbl.Success}`)
+                    set_report_modal_display_value(false)
+                    set_disable_profile_modal_chat_button(true)
+                    set_disable_friend_button(true)
+                    set_disable_block_button(true)
+                    set_disable_report_button(true)
+                })
+                break
+
+            case "DISRUPTIVE":
+                set_alert_text(``)
+                Dispatch(Report_Disruptive_Behavior({
+                    participant_id: profile_id,
+                    reason: reported_reason_from_end_user_input
+                })).then(() => {
+                    set_submit_button_color(`success`)
+                    set_submit_button_text(`${lbl.Success}`)
+                    set_report_modal_display_value(false)
+                    set_disable_profile_modal_chat_button(true)
+                    set_disable_friend_button(true)
+                    set_disable_block_button(true)
+                    set_disable_report_button(true)
+                })
+                break
+
+            case "SELF_HARM":
+                set_alert_text(``)
+                Dispatch(Report_Self_Harm_Content({
+                    participant_id: profile_id,
+                    reason: reported_reason_from_end_user_input
+                })).then(() => {
+                    set_submit_button_color(`success`)
+                    set_submit_button_text(`${lbl.Success}`)
+                    set_report_modal_display_value(false)
+                    set_disable_profile_modal_chat_button(true)
+                    set_disable_friend_button(true)
+                    set_disable_block_button(true)
+                    set_disable_report_button(true)
+                })
+                break
+
+            case "ILLEGAL":
+                set_alert_text(``)
+                Dispatch(Report_Illegal_Content({
+                    participant_id: profile_id,
+                    reason: reported_reason_from_end_user_input
+                })).then(() => {
+                    set_submit_button_color(`success`)
+                    set_submit_button_text(`${lbl.Success}`)
+                    set_report_modal_display_value(false)
+                    set_disable_profile_modal_chat_button(true)
+                    set_disable_friend_button(true)
+                    set_disable_block_button(true)
+                    set_disable_report_button(true)
+                })
+                break
+
+            case "HARASSMENT":
+                set_alert_text(``)
+                Dispatch(Report_Harrass_Chat({
+                    participant_id: profile_id,
+                    reason: reported_reason_from_end_user_input
+                })).then(() => {
+                    set_submit_button_color(`success`)
+                    set_submit_button_text(`${lbl.Success}`)
+                    set_report_modal_display_value(false)
+                    set_disable_profile_modal_chat_button(true)
+                    set_disable_friend_button(true)
+                    set_disable_block_button(true)
+                    set_disable_report_button(true)
+                })
+                break
+
+            case "MISLEADING":
+                set_alert_text(``)
+                Dispatch(Report_Misleading_Chat({
+                    participant_id: profile_id,
+                    reason: reported_reason_from_end_user_input
+                })).then(() => {
+                    set_submit_button_color(`success`)
+                    set_submit_button_text(`${lbl.Success}`)
+                    set_report_modal_display_value(false)
+                    set_disable_profile_modal_chat_button(true)
+                    set_disable_friend_button(true)
+                    set_disable_block_button(true)
+                    set_disable_report_button(true)
+                })
+                break
+
+            case "THREAT":
+                set_alert_text(``)
+                Dispatch(Report_Threat_Chat({
+                    participant_id: profile_id,
+                    reason: reported_reason_from_end_user_input
+                })).then(() => {
+                    set_submit_button_color(`success`)
+                    set_submit_button_text(`${lbl.Success}`)
+                    set_report_modal_display_value(false)
+                    set_disable_profile_modal_chat_button(true)
+                    set_disable_friend_button(true)
+                    set_disable_block_button(true)
+                    set_disable_report_button(true)
+                })
+                break
+
+            case "NUDITY":
+                set_alert_text(``)
+                Dispatch(Report_Nudity_Content({
+                    participant_id: profile_id,
+                    reason: reported_reason_from_end_user_input
+                })).then(() => {
+                    set_submit_button_color(`success`)
+                    set_submit_button_text(`${lbl.Success}`)
+                    set_report_modal_display_value(false)
+                    set_disable_profile_modal_chat_button(true)
+                    set_disable_friend_button(true)
+                    set_disable_block_button(true)
+                    set_disable_report_button(true)
+                })
+                break
+
+            case "FAKE_ACCOUNT":
+                set_alert_text(``)
+                Dispatch(Report_Fake_Account({
+                    participant_id: profile_id,
+                    reason: reported_reason_from_end_user_input
+                })).then(() => {
+                    set_submit_button_color(`success`)
+                    set_submit_button_text(`${lbl.Success}`)
+                    set_report_modal_display_value(false)
+                    set_disable_profile_modal_chat_button(true)
+                    set_disable_friend_button(true)
+                    set_disable_block_button(true)
+                    set_disable_report_button(true)
+                })
+                break
+
+            case "HATE_SPEECH":
+                set_alert_text(``)
+                Dispatch(Report_Hate_Content({
+                    participant_id: profile_id,
+                    reason: reported_reason_from_end_user_input
+                })).then(() => {
+                    set_submit_button_color(`success`)
+                    set_submit_button_text(`${lbl.Success}`)
+                    set_report_modal_display_value(false)
+                    set_disable_profile_modal_chat_button(true)
+                    set_disable_friend_button(true)
+                    set_disable_block_button(true)
+                    set_disable_report_button(true)
+                })
+                break
         }
     }
 
@@ -332,12 +501,21 @@ const Profile_View = () => {
         set_disable_block_button(true)
         set_disable_report_button(true)
         set_disable_profile_modal_chat_button(true)
+        set_disable_reject_button(true) 
+        set_disable_approve_button(true) 
         create_information_alert(`${lbl.AcceptingFriendInvite}`)
         Dispatch(Approve_Friend(profile_id)).then(() => {
             set_disable_block_button(false)
             set_disable_report_button(false)
+            set_disable_profile_modal_chat_button(false)
             create_success_alert(`${lbl.SuccessfullyApproved}`)
         })
+    }
+
+    const [html_selected_report_type, set_html_selected_report_type] = useState<string>("")
+
+    const change_selected_report_type = (value: SetStateAction<string>) => {
+        set_html_selected_report_type(value)
     }
 
     ( async () => {
@@ -355,13 +533,19 @@ const Profile_View = () => {
     useEffect(() => {
 
         Dispatch(Load_Profile_Viewer_Data(profile_id)).then(() => {
-            (() => {
-                if (props.application.community.profile_viewer?.created_on)
-                    set_created_on_value(new Date(props.application.community.profile_viewer.created_on * 1000).toString())
-            })()
+            if (props.application.community.profile_viewer?.created_on)
+                set_created_on_value(new Date(props.application.community.profile_viewer.created_on * 1000).toString())
         })
 
-        Dispatch(Load_End_User_Friend_Permissions())
+        Dispatch(Load_End_User_Friend_Permissions()).then(() => {
+            set_disable_profile_modal_chat_button(false)
+            set_disable_friend_button(false)
+            set_disable_block_button(false)
+            set_disable_report_button(false)
+            set_disable_approve_button(false)
+            set_disable_reject_button(false)
+            set_permissions_are_complete(true)
+        })
         
         if (profile_id === props.end_user.account.id) {
             set_disable_profile_modal_chat_button(true)
@@ -398,9 +582,17 @@ const Profile_View = () => {
                                 fontFamily: `${props.end_user.custom_design.card_header_font}`
                             }}
                         >
-                            <h1>{lbl.Profile}</h1>
+                            {props.end_user.people?.friends?.blocked?.by_other_user_ids &&
+                             props.end_user.people?.friends?.blocked?.by_other_user_ids?.indexOf(profile_id) === -1 && (
+                                <h1>{lbl.Profile}</h1>
+                            )}
+                            {props.end_user.people?.friends?.blocked?.by_other_user_ids &&
+                             props.end_user.people?.friends?.blocked?.by_other_user_ids?.indexOf(profile_id) > -1 && (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="124" height="124" fill="currentColor" className="bi bi-person-fill-slash" viewBox="0 0 16 16">
+                                    <path d="M13.879 10.414a2.501 2.501 0 0 0-3.465 3.465zm.707.707-3.465 3.465a2.501 2.501 0 0 0 3.465-3.465m-4.56-1.096a3.5 3.5 0 1 1 4.949 4.95 3.5 3.5 0 0 1-4.95-4.95ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
+                                </svg>
+                            )}
                         </Card.Header>
-
                         <Card.Body
                             style={{
                                 backgroundColor: `${props.end_user.custom_design.card_body_background_color}`,
@@ -408,7 +600,65 @@ const Profile_View = () => {
                                 fontFamily: `${props.end_user.custom_design.card_body_font}`
                             }}
                         >
-                            {!props.application.community.profile_viewer.id &&
+                            {props.end_user.people?.friends?.blocked.by_other_user_ids &&
+                             props.end_user.people?.friends?.blocked?.by_other_user_ids?.indexOf(profile_id) > -1 && (
+                                <Row>
+                                    <Col>
+                                        <Spinner
+                                            as="span"
+                                            animation="grow"
+                                            size="sm"
+                                            role="status"
+                                            aria-hidden="true"
+                                        />
+                                        &nbsp;{lbl.Blocked}&nbsp;{lbl.By}:&nbsp;{props.application.community.profile_viewer.name}
+                                        <br />
+                                        <Button
+                                            className="mt-5"
+                                            onClick={() => { set_report_modal_display_value(true) }}
+                                            disabled={disable_report_button}
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-exclamation" viewBox="0 0 16 16">
+                                                <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
+                                                <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-3.5-2a.5.5 0 0 0-.5.5v1.5a.5.5 0 0 0 1 0V11a.5.5 0 0 0-.5-.5m0 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+                                            </svg>
+                                            <br />
+                                            {lbl.Report}
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            )}
+
+                            {props.end_user.people?.friends?.blocked.user_ids &&
+                             props.end_user.people?.friends?.blocked?.user_ids?.indexOf(profile_id) > -1 && (
+                                <Row>
+                                    <Col>
+                                        <Spinner
+                                            as="span"
+                                            animation="grow"
+                                            size="sm"
+                                            role="status"
+                                            aria-hidden="true"
+                                        />
+                                        &nbsp;{lbl.Blocking}&nbsp;{lbl.AccountName}:&nbsp;{props.application.community.profile_viewer.name}
+                                        <br />
+                                        <Button
+                                            className="mt-5"
+                                            onClick={() => { set_report_modal_display_value(true) }}
+                                            disabled={disable_report_button}
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-gear" viewBox="0 0 16 16">
+                                                <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4m9.886-3.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
+                                            </svg>
+
+                                            <br />
+                                            {lbl.Unblock}
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            )}
+
+                            {!props.application.community.profile_viewer.id && !permissions_are_complete &&
                                 <Row>
                                     <Col>
                                         {lbl.Loading}
@@ -418,13 +668,18 @@ const Profile_View = () => {
                                             style={{ maxHeight: 500, maxWidth: 500 }}
                                         />
                                     </Col>
-                                </Row> 
+                                </Row>
                             }
 
                             {props.application.community.profile_viewer.id &&
+                             permissions_are_complete &&
+                             props.end_user.people?.friends?.blocked.user_ids &&
+                             props.end_user.people?.friends?.blocked?.user_ids?.indexOf(profile_id) === -1 &&
+                             props.end_user.people?.friends?.blocked.by_other_user_ids &&
+                             props.end_user.people?.friends?.blocked?.by_other_user_ids?.indexOf(profile_id) === -1 &&
                                 <>
                                     <Row>
-                                        <Col>
+                                        <Col lg={2} md={4} sm={12} xs={12}>
                                             {props.application.community.profile_viewer.avatar_url_path &&
                                                 <center>
                                                     <Image src={`${props.application.community.profile_viewer.avatar_url_path}`} roundedCircle height="124" width="124" className="mb-3" />
@@ -441,8 +696,8 @@ const Profile_View = () => {
                                             }
 
                                         </Col>
-                                        <Col>
-                                            <Row className="text-start">
+                                        <Col lg={10} md={8} sm={12} xs={12}>
+                                            <Row className="text-start p-3">
                                                 <Col>
                                                     <strong>{lbl.Name}</strong>: {props.application.community.profile_viewer.name} <br />
                                                     <hr />
@@ -468,10 +723,11 @@ const Profile_View = () => {
                                                 <tbody>
                                                     <tr>
                                                         <td>
-                                                        <Button variant="success"
-                                                            onClick={() => { show_the_end_user_the_profile_chat_modal() }}
-                                                            disabled={disable_profile_modal_chat_button}
-                                                        >
+
+                                                            <Button variant="success"
+                                                                onClick={() => { show_the_end_user_the_profile_chat_modal() }}
+                                                                disabled={disable_profile_modal_chat_button}
+                                                            >
                                                                 {props.application.settings.theme === 0 ? (
                                                                     <>
                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-chat-fill" viewBox="0 0 16 16">
@@ -491,8 +747,8 @@ const Profile_View = () => {
                                                                 )}
                                                             </Button>
 
-                                                            {props.end_user.people?.friends?.received_requests?.hasOwnProperty(profile_id.toString()) && (
-                                                            <>
+                                                            {props.end_user.people?.friends?.received_requests?.includes(profile_id) && (
+                                                                    <>
                                                                         <Button variant="success" disabled={disable_approve_button} onClick={()=> approve_friend_requests()}>
                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-check" viewBox="0 0 16 16">
                                                                                 <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
@@ -512,7 +768,7 @@ const Profile_View = () => {
                                                                     </>
                                                             )}
 
-                                                            {props.end_user.people?.friends?.sent_requests?.hasOwnProperty(profile_id.toString()) && (
+                                                            {props.end_user.people?.friends?.sent_requests?.includes(profile_id) && (
                                                                 <Button variant="success" disabled={true} >
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-check" viewBox="0 0 16 16">
                                                                         <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
@@ -523,35 +779,49 @@ const Profile_View = () => {
                                                                 </Button>
                                                             )}
 
-                                                        {!props.end_user.people?.friends?.sent_requests?.hasOwnProperty(profile_id.toString()) &&
-                                                            !props.end_user.people?.friends?.received_requests?.hasOwnProperty(profile_id.toString()) && (
-                                                                <Button
-                                                                    variant="success"
-                                                                    onClick={() => { send_friend_request() }}
-                                                                    disabled={disable_friend_button}
-                                                                >
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16">
-                                                                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
-                                                                        <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
-                                                                    </svg>
-                                                                    <br />
-                                                                    {lbl.Friend}
-                                                                </Button>
+                                                            {props.end_user.people?.friends?.sent_requests?.length === 0 &&
+                                                                props.end_user.people?.friends?.received_requests?.length === 0 &&
+                                                                props.end_user.people?.friends?.approved?.length === 0  && (
+                                                                    <Button
+                                                                        variant="success"
+                                                                        onClick={() => { send_friend_request() }}
+                                                                        disabled={disable_friend_button}
+                                                                    >
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16">
+                                                                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+                                                                            <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
+                                                                        </svg>
+                                                                        <br />
+                                                                        {lbl.Friend}
+                                                                    </Button>
                                                             )}
 
-                                                            <Button
-                                                                onClick={() => { block_friend_requests() }}
-                                                                disabled={disable_block_button}
-                                                            >
+                                                            {props.end_user.people?.friends?.approved?.length !== undefined &&
+                                                             props.end_user.people?.friends?.approved?.length > 0 && (
+                                                                    <Button
+                                                                        variant="success"
+                                                                        onClick={() => { send_friend_request() }}
+                                                                        disabled={true}
+                                                                    >
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-check" viewBox="0 0 16 16">
+                                                                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                                                            <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
+                                                                        </svg>
+                                                                        <br />
+                                                                        {lbl.Friends}
+                                                                    </Button>
+                                                            )}
+
+                                                            <Button onClick={() => { block_friend_requests() }} disabled={disable_block_button}>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-slash" viewBox="0 0 16 16">
                                                                     <path d="M13.879 10.414a2.501 2.501 0 0 0-3.465 3.465zm.707.707-3.465 3.465a2.501 2.501 0 0 0 3.465-3.465m-4.56-1.096a3.5 3.5 0 1 1 4.949 4.95 3.5 3.5 0 0 1-4.95-4.95ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
                                                                 </svg>
                                                                 <br />
                                                                 {lbl.Block}
                                                             </Button>
-
+                                                            
                                                             <Button
-                                                                onClick={() => { set_report_chat_modal_value(true) }}
+                                                                onClick={() => { set_report_modal_display_value(true) }}
                                                                 disabled={disable_report_button}
                                                             >
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-exclamation" viewBox="0 0 16 16">
@@ -574,20 +844,41 @@ const Profile_View = () => {
                     </Card>
                 </Col>
             </Row>
-            <Modal size="lg" show={report_chat_modal_value} onHide={() => { set_report_chat_modal_value(false) }}>
+            <Modal size="lg" show={report_modal_display_value} onHide={() => { set_report_modal_display_value(false) }}>
                 <Modal.Header closeButton>
                     <h3>{lbl.ReportUser}?</h3>
                 </Modal.Header>
                 <Modal.Body>
-                    <Row>
+                    <Row className="mb-3">
                         <Col>
+                            <Form.Select
+                                aria-label="Report Selection Menu"
+                                onChange={(event) => { change_selected_report_type(event.target.value) }}
+                                value={html_selected_report_type}
+                                className="report-selection-form mb-5"
+                            >
+                                <option value="">{lbl.Select}</option>
+                                <option value="SPAM">{lbl.Spam}</option>
+                                <option value="ABUSE">{lbl.Abuse}</option>
+                                <option value="HATE_SPEECH">{lbl.HateSpeech}</option>
+                                <option value="FAKE_ACCOUNT">{lbl.FakeAccount}</option>
+                                <option value="NUDITY">{lbl.Nudity}</option>
+                                <option value="THREAT">{lbl.Threat}</option>
+                                <option value="MISLEADING">{lbl.Misleading}</option>
+                                <option value="HARRASSING">{lbl.Harrassing}</option>
+                                <option value="ILLEGAL">{lbl.Illegal}</option>
+                                <option value="SELF_HARM">{lbl.SelfHarm}</option>
+                                <option value="DISRUPTIVE">{lbl.Disruptive}</option>
+                            </Form.Select>
                             <InputGroup className="mb-3">
-                                <InputGroup.Text id="report-user-reason-input">
-                                    {lbl.Summary}:
-                                </InputGroup.Text>
-                                <Form.Control as="textarea" rows={3} name="report-reason-input-textbox" aria-describedby="report internal broken link text input" onChange={(e) => update_inputs(e)} />
+                                <FloatingLabel controlId="Report-Text-Area" label={lbl.Summary}>
+                                    <Form.Control
+                                        as="textarea"
+                                        rows={4}
+                                        onChange={(e) => set_reported_reason_from_end_user_input(e.target.value)}
+                                    />
+                                </FloatingLabel>
                             </InputGroup>
-                            <h5>{lbl.PleaseIncludeDescriptiveDetailSummaryWithImagesAndShortAudioOrVideoAndDateAndTimeIfPossible}.</h5>
                         </Col>
                     </Row>
                 </Modal.Body>
@@ -596,8 +887,8 @@ const Profile_View = () => {
                         <Row>
                             <Col>
                                 <center>
-                                    <Button onClick={() => { report_abuse_from_profile_viewer_page() }}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-ban" viewBox="0 0 16 16">
+                                    <Button onClick={() => { report_profile() }}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-ban" viewBox="0 0 16 16">
                                             <path d="M15 8a6.97 6.97 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0" />
                                         </svg><h6>{lbl.Report}</h6>
                                     </Button>

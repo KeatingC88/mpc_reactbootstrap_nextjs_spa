@@ -29,6 +29,7 @@ import End_User_Twitch_Clips_State_Reducer from '@Redux_Thunk/Reducers/End_User/
 import End_User_Twitch_Videos_State_Reducer from '@Redux_Thunk/Reducers/End_User/Social/Media/Twitch/End_User_Twitch_Videos_State_Reducer'
 
 import End_User_Friends_State_Reducer from '@Redux_Thunk/Reducers/End_User/Social/Connections/End_User_Friends_State_Reducer'
+import End_User_Reported_User_State_Reducer from '@Redux_Thunk/Reducers/End_User/Reported/End_User_Reported_User_State_Reducer'
 
 const Combined_Reducers: combineReducers = combineReducers({
     End_User_Custom_CSSDesign_State_Reducer,
@@ -53,7 +54,8 @@ const Combined_Reducers: combineReducers = combineReducers({
     End_User_Twitch_Followers_State_Reducer,
     End_User_Twitch_Clips_State_Reducer,
     End_User_Twitch_Videos_State_Reducer,
-    End_User_Friends_State_Reducer
+    End_User_Friends_State_Reducer,
+    End_User_Reported_User_State_Reducer
 })
 
 export type Current_Redux_State = ReturnType<typeof Combined_Reducers>
