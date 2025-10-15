@@ -56,7 +56,10 @@ export const POST = async (req: NextRequest) => {
             return NextResponse.json({ error: error.message }, { status: 500 })
         })
 
-        return NextResponse.json({data: Decrypt(response.data), status: 200 })
+        response.data = Decrypt(response.data)
+        response.data = JSON.parse(response.data)
+
+        return NextResponse.json(response.data)
     } catch (err: any) {
         return NextResponse.json({ error: err.message }, { status: 500 })
     }

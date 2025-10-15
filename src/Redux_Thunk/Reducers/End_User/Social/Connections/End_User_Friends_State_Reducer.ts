@@ -50,7 +50,7 @@ const End_User_Friends_State_Reducer = (
     action: End_User_Friends_Action
 ): End_User_Friends_State => {
 
-    if (action.type.includes('END_USER_FRIENDS')) {  
+    if (action.type.includes('END_USER_FRIENDS')) {
         switch (action.type) {
             case UPDATE_END_USER_FRIENDS_PERMISSION_STATE:
                 return {

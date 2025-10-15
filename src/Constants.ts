@@ -82,6 +82,8 @@ export const APPLICATION_TWITCH_LOGIN_REDIRECT_URI = `${process.env.NEXT_PUBLIC_
 export const USERS_TWITCH_CACHE_SERVER_ADDRESS = `${process.env.NEXT_PUBLIC_META_USERS_TWITCH_CACHE_SERVER_URL}`
 
 export const USERS_FRIENDS_LIST_CACHE_SERVER = `${process.env.NEXT_PUBLIC_META_USERS_FRIENDS_LIST_CACHE_SERVER}`
+export const USERS_BLOCKED_LIST_CACHE_SERVER = `${process.env.NEXT_PUBLIC_META_USERS_BLOCKED_LIST_CACHE_SERVER}`
+export const USERS_REPORTED_LIST_CACHE_SERVER = `${process.env.NEXT_PUBLIC_META_USERS_REPORTED_LIST_CACHE_SERVER}`
 
 export const APPLICATION_DISCORD_CLIENT_ID = `${process.env.NEXT_PUBLIC_META_DISCORD_CLIENT_ID}`
 export const APPLICATION_DISCORD_REDIRECT_URI = `${process.env.NEXT_PUBLIC_META_DISCORD_CLIENT_REDIRECT_URI}`
@@ -106,11 +108,13 @@ export const Host_Error_State = "Host_Error_State"
 export const Network_Error_State = "Network_Error_State"
 export const Twitch_API_State = "Twitch_API_State"
 export const Discord_API_State = "Discord_API_State"
+
 export const Application_Settings_State = "Application_Settings_State"
 export const Application_Profile_Viewer_State = "Application_Profile_Viewer_State"
 export const Application_WebSocket_State = "Application_WebSocket_State"
 export const Application_Notification_State = "Application_Notification_State"
 export const Application_Language_State = "Application_Language_State"
+
 export const End_User_Account_State = "End_User_Account_State"
 export const End_User_Profile_State = "End_User_Profile_State"
 export const Application_Community_State = "Application_Community_State"

@@ -8,6 +8,7 @@ import { Decrypt } from '@AES/Decryptor'
 import {
     USERS_SERVER_ADDRESS,
     USERS_FRIENDS_LIST_CACHE_SERVER,
+    USERS_BLOCKED_LIST_CACHE_SERVER,
     USERS_SERVER_COOKIE_NAME
 } from '@Constants'
 
@@ -26,7 +27,7 @@ export const PUT = async (req: NextRequest) => {
 
         let dto = await req.json()
 
-        let response:any = await axios.put(`${USERS_SERVER_ADDRESS}/Friend/Reject`, {
+        let response: any = await axios.put(`${USERS_SERVER_ADDRESS}/Friend/Unblock`, {
             token: token,
             end_user_id: Encrypt(`${dto.end_user_id}`),
             participant_id: Encrypt(`${dto.participant_id}`),
@@ -58,6 +59,14 @@ export const PUT = async (req: NextRequest) => {
 
         response.data = Decrypt(response.data)
         response.data = JSON.parse(response.data)
+
+        await axios.post(`${USERS_BLOCKED_LIST_CACHE_SERVER}/delete/blocked/user/id`, {
+            token: token,
+            id: Encrypt(`${response.data.end_user_id}`),
+            blocked_user_id: Encrypt(`${response.data.participant_id}`)
+        }).catch((error) => {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        })
 
         return NextResponse.json(response.data)
     } catch (err: any) {

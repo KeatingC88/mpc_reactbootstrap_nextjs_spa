@@ -3,6 +3,7 @@ import { cookies } from "next/headers"
 
 import axios from "axios"
 import { Encrypt } from '@AES/Encryptor'
+import { Decrypt } from '@AES/Decryptor'
 
 import {
     USERS_SERVER_ADDRESS,
@@ -23,7 +24,7 @@ export const POST = async (req: NextRequest) => {
             return NextResponse.redirect("/Logout")
         }
         let dto = await req.json()
-
+        //Can be changed to cache server for blocked, friends, and reported data...
         let response: any = await axios.post(`${USERS_SERVER_ADDRESS}/Friend/Permissions`, {
             token: token,
             end_user_id: Encrypt(`${dto.end_user_id}`),
@@ -55,7 +56,7 @@ export const POST = async (req: NextRequest) => {
         })
 
         if (response)
-            return NextResponse.json(response.data)
+            return NextResponse.json(JSON.parse(Decrypt(response.data)))
 
     } catch (err: any) {
         return NextResponse.json({ error: err.message }, { status: 500 })

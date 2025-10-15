@@ -75,9 +75,26 @@ const End_User_Friends = () => {
         )
     }
 
-    const build_friend_request_list = () => {
+    const build_blocked_list = () => {
 
         console.log(props.end_user.people?.friends)
+
+        if (!props.end_user.people?.friends) return <> </>
+
+        return (
+            <ListGroup variant="flush text-start">
+                {props.end_user.people.friends.approved?.map((x, index) => {
+                    return (
+                        <ListGroup.Item key={index}>{`${x}`}</ListGroup.Item>
+                    )
+                })}
+            </ListGroup>
+        )
+    }
+
+    const build_reported_list = () => {
+
+        console.log(props.end_user.people?.friends.reported)
 
         if (!props.end_user.people?.friends) return <> </>
 
@@ -123,20 +140,24 @@ const End_User_Friends = () => {
                                 <path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5z" />
                                 <path d="M2 3h10v2H2zm0 3h4v3H2zm0 4h4v1H2zm0 2h4v1H2zm5-6h2v1H7zm3 0h2v1h-2zM7 8h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2z" />
                             </svg>
-
                             <br />
                             {`${lbl.Friends}`}
-                            <br />
-
-                            {props.end_user.account.account_type === 1 &&
-                                <Button variant="secondary" size="sm">{lbl.Add}</Button>
-                            }
                             
                         </Card.Header>
                         <Card.Body>
                             <Row className="justify-content-center text-center mb-5">
                                 <Col lg={10} md={8} sm={9} xs={10}>
                                     {build_friends_list()}
+                                </Col>
+                            </Row>
+                            <Row className="justify-content-center text-center mb-5">
+                                <Col lg={10} md={8} sm={9} xs={10}>
+                                    {build_blocked_list()}
+                                </Col>
+                            </Row>
+                            <Row className="justify-content-center text-center mb-5">
+                                <Col lg={10} md={8} sm={9} xs={10}>
+                                    {build_reported_list()}
                                 </Col>
                             </Row>
                         </Card.Body>

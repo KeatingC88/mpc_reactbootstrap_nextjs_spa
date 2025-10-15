@@ -92,7 +92,7 @@ export const Report_Spam_Content = (dto: { participant_id: BigInt, reason: strin
                 type: UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
                 payload: {
                     blocked: current_friends.blocked.user_ids.push(dto.participant_id),
-                    time_stamped: response.data.time_stamped
+                    
                 }
             })
 
@@ -144,7 +144,7 @@ export const Report_Abusive_Content = (dto:{ participant_id: BigInt, reason: str
                 type: UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
                 payload: {
                     blocked: current_friends.blocked.user_ids.push(dto.participant_id),
-                    time_stamped: response.data.time_stamped
+                    
                 }
             })
 
@@ -258,7 +258,7 @@ export const Report_Illegal_Content = (dto:{ participant_id: BigInt, reason: str
                 type: UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
                 payload: {
                     blocked: current_friends.blocked.user_ids.push(dto.participant_id),
-                    time_stamped: response.data.time_stamped
+                    
                 }
             })
 
@@ -311,7 +311,7 @@ export const Report_Harrass_Chat = (dto:{ participant_id: BigInt, reason: string
                 type: UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
                 payload: {
                     blocked: current_friends.blocked.user_ids.push(dto.participant_id),
-                    time_stamped: response.data.time_stamped
+                    
                 }
             })
 
@@ -363,7 +363,7 @@ export const Report_Misleading_Chat = (dto:{ participant_id: BigInt, reason: str
                 type: UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
                 payload: {
                     blocked: current_friends.blocked.user_ids.push(dto.participant_id),
-                    time_stamped: response.data.time_stamped
+                    
                 }
             })
 
@@ -415,7 +415,7 @@ export const Report_Threat_Chat = (dto:{ participant_id: BigInt, reason: string 
                 type: UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
                 payload: {
                     blocked: current_friends.blocked.user_ids.push(dto.participant_id),
-                    time_stamped: response.data.time_stamped
+                    
                 }
             })
 
@@ -467,7 +467,7 @@ export const Report_Nudity_Content = (dto:{ participant_id: BigInt, reason: stri
                 type: UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
                 payload: {
                     blocked: current_friends.blocked.user_ids.push(dto.participant_id),
-                    time_stamped: response.data.time_stamped
+                    
                 }
             })
 
@@ -519,7 +519,7 @@ export const Report_Fake_Account = (dto:{ participant_id: BigInt, reason: string
                 type: UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
                 payload: {
                     blocked: current_friends.blocked.user_ids.push(dto.participant_id),
-                    time_stamped: response.data.time_stamped
+                    
                 }
             })
 
@@ -569,7 +569,7 @@ export const Report_Hate_Content = (dto:{ participant_id: BigInt, reason: string
                 type: UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
                 payload: {
                     blocked: current_friends.blocked.user_ids.push(dto.participant_id),
-                    time_stamped: response.data.time_stamped
+                    
                 }
             })
 

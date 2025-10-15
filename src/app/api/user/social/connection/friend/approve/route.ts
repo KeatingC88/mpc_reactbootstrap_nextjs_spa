@@ -26,7 +26,7 @@ export const PUT = async (req: NextRequest) => {
 
         let dto = await req.json()
 
-        let response:any = await axios.put(`${USERS_SERVER_ADDRESS}/Friend/Approve`, {
+        let response: any = await axios.put(`${USERS_SERVER_ADDRESS}/Friend/Approve`, {
             token: token,
             end_user_id: Encrypt(`${dto.end_user_id}`),
             participant_id: Encrypt(`${dto.participant_id}`),
@@ -56,7 +56,29 @@ export const PUT = async (req: NextRequest) => {
             return NextResponse.json({ error: error.message }, { status: 500 }) 
         })
 
-        return NextResponse.json({ data: Decrypt(response.data), status: 200 })
+        response.data = Decrypt(response.data)
+        response.data = JSON.parse(response.data)
+
+        let end_user_id_from_main_server = Encrypt(`${response.data.end_user_id}`)
+        let participant_id_from_main_server = Encrypt(`${response.data.participant_id}`)
+
+        await axios.post(`${USERS_FRIENDS_LIST_CACHE_SERVER}/set/friend/user/id`, {
+            token: token,
+            id: end_user_id_from_main_server,
+            friend_id: participant_id_from_main_server
+        }).catch((error) => {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        })
+
+        await axios.post(`${USERS_FRIENDS_LIST_CACHE_SERVER}/set/friend/user/id`, {
+            token: token,
+            id: participant_id_from_main_server,
+            friend_id: end_user_id_from_main_server
+        }).catch((error) => {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        })
+
+        return NextResponse.json(response.data)
     } catch (err: any) {
         return NextResponse.json({ error: err.message }, { status: 500 })
     }

@@ -46,7 +46,7 @@ export const Load_End_User_Friend_Permissions = () => async (dispatch: AppDispat
         device_ram_gb: `${Get_Device_Information().deviceMemory}`,
     }).catch( async (error) => {
         return await new Promise((reject) => {
-            error.id = `Contact-Us-Submission-Failed`
+            error.id = `Load-End-User-Permissions-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
             setTimeout(() => {
                 dispatch({ type: DEFAULT_HOST_ERROR_STATE })
@@ -54,8 +54,8 @@ export const Load_End_User_Friend_Permissions = () => async (dispatch: AppDispat
             }, 1)
             reject(error)
         })
-    }).then(async (response: any) => {
-        if (response?.data) {
+    }).then( async (response: any) => {
+        return await new Promise((resolve) => {
 
             let approved_user_ids = []
             let sent_request_ids = []
@@ -94,7 +94,7 @@ export const Load_End_User_Friend_Permissions = () => async (dispatch: AppDispat
                             approved_user_ids.push(BigInt(id))
                             break
                         case response?.data.sent_permissions[id].block === true:
-                            if (response?.data.sent_permissions[id].updated_by === end_user_account.id) {
+                            if (response?.data.sent_permissions[id].record_updated_by === end_user_account.id) {
                                 blocking_these_user_ids.push(BigInt(id))
                             } else {
                                 blocked_by_other_user_ids.push(BigInt(id))
@@ -120,19 +120,12 @@ export const Load_End_User_Friend_Permissions = () => async (dispatch: AppDispat
                     time_stamped: response.data.time_stamped
                 }
             })
-
-            return await new Promise((resolve) => {
-                setTimeout(() => {
-                    dispatch({ type: DEFAULT_HOST_ERROR_STATE })
-                    dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-                }, 1)
-                resolve(true)
-            })
-        }
+            resolve(true)
+        })
     })
 }
 
-export const Approve_Friend = (value: BigInt) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+export const Approve_Friend = (participant_id: BigInt) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
     let current_language_state = state.Application_Language_State_Reducer
@@ -140,7 +133,62 @@ export const Approve_Friend = (value: BigInt) => async (dispatch: AppDispatch, g
 
     await axios.put(`/api/user/social/connection/friend/approve`, {
         end_user_id: `${end_user_account.id.toString()}`,
-        participant_id: `${value.toString()}`,
+        participant_id: `${participant_id.toString()}`,
+        account_type: `${end_user_account.account_type}`,
+        login_type: `${end_user_account.login_type}`,
+        language: `${current_language_state.language}`,
+        region: `${current_language_state.region}`,
+        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
+        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
+        jwt_client_key: `${JWT_CLIENT_KEY}`,
+        jwt_client_address: `${CLIENT_ADDRESS}`,
+        user_agent: `${Get_Device_Information().userAgent}`,
+        orientation: `${Get_Device_Information().orientation_type}`,
+        screen_width: `${Get_Device_Information().screen_width}`,
+        screen_height: `${Get_Device_Information().screen_height}`,
+        color_depth: `${Get_Device_Information().color_depth}`,
+        pixel_depth: `${Get_Device_Information().pixel_depth}`,
+        window_width: `${Get_Device_Information().window_width}`,
+        window_height: `${Get_Device_Information().window_height}`,
+        connection_type: `${Get_Device_Information().effectiveType}`,
+        down_link: `${Get_Device_Information().downlink}`,
+        rtt: `${Get_Device_Information().rtt}`,
+        data_saver: `${Get_Device_Information().saveData}`,
+        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
+    }).catch( async (error) => {
+        return await new Promise((reject) => {
+            error.id = `Approved-Friend-Failed`
+            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
+            setTimeout(() => {
+                dispatch({ type: DEFAULT_HOST_ERROR_STATE })
+                dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
+            }, 1)
+            reject(error)
+        })
+    }).then(async (response: any) => {
+        return await new Promise((resolve) => {
+            var if_value_in_received_requests_remove_it = current_friends.received_requests.indexOf(participant_id)
+            if (if_value_in_received_requests_remove_it != -1) {
+                current_friends.received_requests.splice(if_value_in_received_requests_remove_it, 1)
+            }
+            dispatch({ type: UPDATE_END_USER_FRIENDS_RECEIVED_PERMISSION_STATE, payload: { received_requests: current_friends.received_requests } })
+            current_friends.approved.push(participant_id)
+            dispatch({ type: UPDATE_END_USER_FRIENDS_APPROVED_PERMISSION_STATE, payload: { approved: current_friends.approved } })
+            resolve(response.data)
+        })
+    })
+}
+
+export const Unfriend = (participant_id: BigInt) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+    let state = getState()
+    let end_user_account = state.End_User_Account_State_Reducer
+    let current_language_state = state.Application_Language_State_Reducer
+    let current_friends = state.End_User_Friends_State_Reducer
+
+    await axios.put(`/api/user/social/connection/friend/unfriend`, {
+        end_user_id: `${end_user_account.id.toString()}`,
+        participant_id: `${participant_id.toString()}`,
         account_type: `${end_user_account.account_type}`,
         login_type: `${end_user_account.login_type}`,
         language: `${current_language_state.language}`,
@@ -174,8 +222,9 @@ export const Approve_Friend = (value: BigInt) => async (dispatch: AppDispatch, g
             reject(error)
         })
     }).then( async (response: any) => {
-        dispatch({ type: UPDATE_END_USER_FRIENDS_APPROVED_PERMISSION_STATE, payload: { approved: current_friends.approved.push(value) } })
         return await new Promise((resolve) => {
+            current_friends.approved.splice(current_friends.approved.indexOf(participant_id), 1)
+            dispatch({ type: UPDATE_END_USER_FRIENDS_APPROVED_PERMISSION_STATE, payload: { approved: current_friends.approved } })
             resolve(response.data)
         })
     })
@@ -223,11 +272,8 @@ export const Block_Friend = (participant_id: BigInt) => async (dispatch: AppDisp
             reject(error)
         })
     }).then( async (response: any) => {
-
-        Remove_Friend_Permissions_From_State_Reducer(participant_id)
-
-        return await new Promise(() => {
-
+        return await new Promise((resolve) => {
+            Remove_Friend_Permissions_From_State_Reducer(participant_id)
             current_friends.blocked.user_ids.push(participant_id)
 
             dispatch({
@@ -240,7 +286,68 @@ export const Block_Friend = (participant_id: BigInt) => async (dispatch: AppDisp
                     time_stamped: response.data.time_stamped
                 }
             })
+            resolve(response.data)
+        })
+    })
+}
 
+export const Unblock_Friend = (participant_id: BigInt) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+    let state = getState()
+    let end_user_account = state.End_User_Account_State_Reducer
+    let current_language_state = state.Application_Language_State_Reducer
+    let current_friends = state.End_User_Friends_State_Reducer
+
+    await axios.put(`/api/user/social/connection/friend/unblock`, {
+        end_user_id: `${end_user_account.id.toString()}`,
+        participant_id: `${participant_id.toString()}`,
+        account_type: `${end_user_account.account_type}`,
+        login_type: `${end_user_account.login_type}`,
+        language: `${current_language_state.language}`,
+        region: `${current_language_state.region}`,
+        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
+        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
+        jwt_client_key: `${JWT_CLIENT_KEY}`,
+        jwt_client_address: `${CLIENT_ADDRESS}`,
+        user_agent: `${Get_Device_Information().userAgent}`,
+        orientation: `${Get_Device_Information().orientation_type}`,
+        screen_width: `${Get_Device_Information().screen_width}`,
+        screen_height: `${Get_Device_Information().screen_height}`,
+        color_depth: `${Get_Device_Information().color_depth}`,
+        pixel_depth: `${Get_Device_Information().pixel_depth}`,
+        window_width: `${Get_Device_Information().window_width}`,
+        window_height: `${Get_Device_Information().window_height}`,
+        connection_type: `${Get_Device_Information().effectiveType}`,
+        down_link: `${Get_Device_Information().downlink}`,
+        rtt: `${Get_Device_Information().rtt}`,
+        data_saver: `${Get_Device_Information().saveData}`,
+        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
+    }).catch(async (error) => {
+        return await new Promise((reject) => {
+            error.id = `Block-Friend-Failed`
+            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
+            setTimeout(() => {
+                dispatch({ type: DEFAULT_HOST_ERROR_STATE })
+                dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
+            }, 1)
+            reject(error)
+        })
+    }).then( async (response: any) => {
+        return await new Promise((resolve) => {
+            var remove_blocked_id = current_friends.sent_requests.indexOf(participant_id)
+            current_friends.blocked.user_ids.splice(remove_blocked_id, 1)
+
+            dispatch({
+                type: UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
+                payload: {
+                    approved: current_friends.approved,
+                    blocked: current_friends.blocked,
+                    sent_requests: current_friends.sent_requests,
+                    received_requests: current_friends.received_requests,
+                    time_stamped: response.data.time_stamped
+                }
+            })
+            resolve(response.data)
         })
     })
 }
@@ -286,13 +393,13 @@ export const Request_Friend = (value: BigInt) => async (dispatch: AppDispatch, g
             }, 1)
             reject(error)
         })
-    }).then( async (response: any) => {
+    }).then(async (response: any) => {
         return await new Promise((resolve) => {
             dispatch({
                 type: UPDATE_END_USER_FRIENDS_RECEIVED_PERMISSION_STATE,
                 payload: { sent_requests: current_friends.sent_requests.push(value) }
             })
-            resolve(response.data.data)
+            resolve(response.data)
         })
     })
 }

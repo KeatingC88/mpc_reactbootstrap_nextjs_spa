@@ -56,7 +56,9 @@ import {
     Reject_Friend,
     Block_Friend,
     Approve_Friend,
-    Load_End_User_Friend_Permissions
+    Load_End_User_Friend_Permissions,
+    Unblock_Friend,
+    Unfriend
 } from '@Redux_Thunk/Actions/User/Friends'
 
 const Profile_View = () => {
@@ -87,7 +89,7 @@ const Profile_View = () => {
     const [disable_reject_button, set_disable_reject_button] = useState<boolean>(true)
     const [disable_block_button, set_disable_block_button] = useState<boolean>(true)
     const [disable_report_button, set_disable_report_button] = useState<boolean>(true)
-    const [permissions_are_complete, set_permissions_are_complete] = useState<boolean>(false)
+    const [friend_permissions_are_complete, set_friend_friend_permissions_are_complete] = useState<boolean>(false)
 
     const [end_user_message_input_value, set_end_user_message_input_value] = useState<string>(``)
 
@@ -264,11 +266,9 @@ const Profile_View = () => {
     }
 
     const report_profile = () => {
-        console.log(`reporting profile...`)
         set_lock_submit_button_value(true)
         set_submit_button_color(`info`)
         set_submit_button_text(`${lbl.ValidatingPleaseWait}`)
-        console.log(html_selected_report_type)
         switch (html_selected_report_type) {
             case "ABUSIVE":
                 set_alert_text(``)
@@ -283,6 +283,7 @@ const Profile_View = () => {
                     set_disable_friend_button(true)
                     set_disable_block_button(true)
                     set_disable_report_button(true)
+                    Navigate.push('/')
                 })
                 break
 
@@ -299,6 +300,7 @@ const Profile_View = () => {
                     set_disable_friend_button(true)
                     set_disable_block_button(true)
                     set_disable_report_button(true)
+                    Navigate.push('/')
                 })
                 break
 
@@ -315,6 +317,7 @@ const Profile_View = () => {
                     set_disable_friend_button(true)
                     set_disable_block_button(true)
                     set_disable_report_button(true)
+                    Navigate.push('/')
                 })
                 break
 
@@ -331,6 +334,7 @@ const Profile_View = () => {
                     set_disable_friend_button(true)
                     set_disable_block_button(true)
                     set_disable_report_button(true)
+                    Navigate.push('/')
                 })
                 break
 
@@ -347,6 +351,7 @@ const Profile_View = () => {
                     set_disable_friend_button(true)
                     set_disable_block_button(true)
                     set_disable_report_button(true)
+                    Navigate.push('/')
                 })
                 break
 
@@ -363,6 +368,7 @@ const Profile_View = () => {
                     set_disable_friend_button(true)
                     set_disable_block_button(true)
                     set_disable_report_button(true)
+                    Navigate.push('/')
                 })
                 break
 
@@ -379,6 +385,7 @@ const Profile_View = () => {
                     set_disable_friend_button(true)
                     set_disable_block_button(true)
                     set_disable_report_button(true)
+                    Navigate.push('/')
                 })
                 break
 
@@ -395,6 +402,7 @@ const Profile_View = () => {
                     set_disable_friend_button(true)
                     set_disable_block_button(true)
                     set_disable_report_button(true)
+                    Navigate.push('/')
                 })
                 break
 
@@ -411,6 +419,7 @@ const Profile_View = () => {
                     set_disable_friend_button(true)
                     set_disable_block_button(true)
                     set_disable_report_button(true)
+                    Navigate.push('/')
                 })
                 break
 
@@ -427,6 +436,7 @@ const Profile_View = () => {
                     set_disable_friend_button(true)
                     set_disable_block_button(true)
                     set_disable_report_button(true)
+                    Navigate.push('/')
                 })
                 break
 
@@ -443,6 +453,7 @@ const Profile_View = () => {
                     set_disable_friend_button(true)
                     set_disable_block_button(true)
                     set_disable_report_button(true)
+                    Navigate.push('/')
                 })
                 break
         }
@@ -480,6 +491,25 @@ const Profile_View = () => {
         })
     }
 
+    const unfriend = () => {
+        set_disable_friend_button(true)
+        set_disable_block_button(true)
+        set_disable_report_button(true)
+        set_disable_profile_modal_chat_button(true)
+        set_disable_approve_button(true)
+        set_disable_reject_button(true)
+        create_information_alert(`${lbl.Unfriending}`)
+        Dispatch(Unfriend(profile_id)).then(() => {
+            set_disable_friend_button(false)
+            set_disable_block_button(false)
+            set_disable_report_button(false)
+            set_disable_profile_modal_chat_button(false)
+            set_disable_approve_button(false)
+            set_disable_reject_button(false)
+            create_success_alert(`${lbl.Unfriended}`)
+        })
+    }
+
     const block_friend_requests = () => {
         set_disable_friend_button(true)
         set_disable_block_button(true)
@@ -493,6 +523,23 @@ const Profile_View = () => {
             set_disable_block_button(true)
             set_disable_report_button(false)
             create_success_alert(`${lbl.BlockedProfile}`)
+        })
+    }
+
+    const unblock_friend = () => {
+        set_disable_friend_button(true)
+        set_disable_block_button(true)
+        set_disable_report_button(true)
+        set_disable_profile_modal_chat_button(true)
+        set_disable_approve_button(true)
+        set_disable_reject_button(true)
+        create_information_alert(`${lbl.Unblocking}`)
+        Dispatch(Unblock_Friend(profile_id)).then(() => {
+            set_disable_profile_modal_chat_button(false)
+            set_disable_friend_button(false)
+            set_disable_block_button(false)
+            set_disable_report_button(false)
+            create_success_alert(`${lbl.UnblockedThisAccount}`)
         })
     }
 
@@ -544,7 +591,7 @@ const Profile_View = () => {
             set_disable_report_button(false)
             set_disable_approve_button(false)
             set_disable_reject_button(false)
-            set_permissions_are_complete(true)
+            set_friend_friend_permissions_are_complete(true)
         })
         
         if (profile_id === props.end_user.account.id) {
@@ -644,7 +691,7 @@ const Profile_View = () => {
                                         <br />
                                         <Button
                                             className="mt-5"
-                                            onClick={() => { set_report_modal_display_value(true) }}
+                                            onClick={() => { unblock_friend() }}
                                             disabled={disable_report_button}
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-gear" viewBox="0 0 16 16">
@@ -658,7 +705,7 @@ const Profile_View = () => {
                                 </Row>
                             )}
 
-                            {!props.application.community.profile_viewer.id && !permissions_are_complete &&
+                            {!props.application.community.profile_viewer.id && !friend_permissions_are_complete &&
                                 <Row>
                                     <Col>
                                         {lbl.Loading}
@@ -672,7 +719,7 @@ const Profile_View = () => {
                             }
 
                             {props.application.community.profile_viewer.id &&
-                             permissions_are_complete &&
+                             friend_permissions_are_complete &&
                              props.end_user.people?.friends?.blocked.user_ids &&
                              props.end_user.people?.friends?.blocked?.user_ids?.indexOf(profile_id) === -1 &&
                              props.end_user.people?.friends?.blocked.by_other_user_ids &&
@@ -796,8 +843,10 @@ const Profile_View = () => {
                                                                     </Button>
                                                             )}
 
-                                                            {props.end_user.people?.friends?.approved?.length !== undefined &&
-                                                             props.end_user.people?.friends?.approved?.length > 0 && (
+                                                            {friend_permissions_are_complete &&
+                                                             props.end_user.people?.friends?.approved &&
+                                                            props.end_user.people?.friends?.approved?.indexOf(profile_id) > -1 && (
+                                                                <>
                                                                     <Button
                                                                         variant="success"
                                                                         onClick={() => { send_friend_request() }}
@@ -810,6 +859,19 @@ const Profile_View = () => {
                                                                         <br />
                                                                         {lbl.Friends}
                                                                     </Button>
+                                                                    <Button
+                                                                        variant="success"
+                                                                        onClick={() => { unfriend() }}
+                                                                        disabled={false}
+                                                                    >
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-dash" viewBox="0 0 16 16">
+                                                                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+                                                                            <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
+                                                                        </svg>
+                                                                        <br />
+                                                                        {lbl.UnFriend}
+                                                                    </Button>
+                                                                </>
                                                             )}
 
                                                             <Button onClick={() => { block_friend_requests() }} disabled={disable_block_button}>
