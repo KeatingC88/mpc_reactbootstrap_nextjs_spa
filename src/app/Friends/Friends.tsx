@@ -60,9 +60,7 @@ const End_User_Friends = () => {
 
     const build_friends_list = () => {
 
-        console.log(props.end_user.people?.friends)
-
-        if (!props.end_user.people?.friends) return <> </>
+        if (!props.end_user.people?.friends?.approved || props.end_user.people?.friends?.approved && props.end_user.people?.friends?.approved?.length < 0) return <></>
 
         return (
             <ListGroup variant="flush text-start">
@@ -77,13 +75,11 @@ const End_User_Friends = () => {
 
     const build_blocked_list = () => {
 
-        console.log(props.end_user.people?.friends)
-
-        if (!props.end_user.people?.friends) return <> </>
+        if (!props.end_user.people?.friends?.blocked?.user_ids || props.end_user.people?.friends?.blocked?.user_ids && props.end_user.people?.friends?.blocked?.user_ids?.length < 0) return <></>
 
         return (
             <ListGroup variant="flush text-start">
-                {props.end_user.people.friends.approved?.map((x, index) => {
+                {props.end_user.people?.friends?.blocked?.user_ids?.map((x, index) => {
                     return (
                         <ListGroup.Item key={index}>{`${x}`}</ListGroup.Item>
                     )
@@ -94,13 +90,11 @@ const End_User_Friends = () => {
 
     const build_reported_list = () => {
 
-        console.log(props.end_user.people?.friends.reported)
-
-        if (!props.end_user.people?.friends) return <> </>
+        if (!!props.end_user.reported?.user_ids || props.end_user.reported?.user_ids && props.end_user.reported?.user_ids?.length < 0) return <> </>
 
         return (
             <ListGroup variant="flush text-start">
-                {props.end_user.people.friends.approved?.map((x, index) => {
+                {props.end_user.reported?.user_ids?.map((x, index) => {
                     return (
                         <ListGroup.Item key={index}>{`${x}`}</ListGroup.Item>
                     )
