@@ -63,7 +63,7 @@ export const POST = async (req: NextRequest) => {
         })
 
         let twitch_access_token = JSON.parse(Decrypt(response_twitch_access_token.data)).app_token
-
+        
         const community_users_twitch_data: {
             [user_id: string]: {
                 id: string,

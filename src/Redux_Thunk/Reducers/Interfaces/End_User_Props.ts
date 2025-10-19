@@ -22,11 +22,85 @@ export interface End_User_Props {
 
     people: {
         friends: {
-            approved: BigInt[] | null
+            approved: {
+                user_ids: BigInt[] | null,
+                users_data: {
+                    user_id: BigInt,
+                    account: {
+                        avatar_title: string | null
+                        avatar_url_path: string | null
+                        created_on: string | null
+                        custom_lbl: string | null
+                        email_address: string | null
+                        login_on: string | null
+                        login_type: string | null
+                        name: string | null
+                        public_id: string | null
+                        online_status: number | string | null
+                        account_type: number
+                        roles: any
+                        groups: any
+                    },
+                    identity: {
+                        first_name: string,
+                        last_name: string,
+                        middle_name: string,
+                        maiden_name: string,
+                        gender: number,
+                        birth_month: number,
+                        birth_day: number,
+                        birth_year: number,
+                        ethnicity: string,
+                    },
+                    twitch: {
+                        twitch_id: BigInt | null,
+                        display_name: string | null,
+                        login: string | null,
+                        email_address: string | null,
+                        profile_image_url: string | null,
+                    },
+                }[] | null
+            },
             sent_requests: BigInt[] | null,
             blocked: {
                 by_other_user_ids: BigInt[] | null,
-                user_ids: BigInt[] | null
+                user_ids: BigInt[] | null,
+                users_data: {
+                    user_id: BigInt,
+                    account: {
+                        avatar_title: string | null
+                        avatar_url_path: string | null
+                        created_on: string | null
+                        custom_lbl: string | null
+                        email_address: string | null
+                        login_on: string | null
+                        login_type: string | null
+                        name: string | null
+                        public_id: string | null
+                        online_status: number | string | null
+                        account_type: number
+                        roles: any
+                        groups: any
+                    },
+                    identity: {
+                        first_name: string,
+                        last_name: string,
+                        middle_name: string,
+                        maiden_name: string,
+                        gender: number,
+                        birth_month: number,
+                        birth_day: number,
+                        birth_year: number,
+                        ethnicity: string,
+                    },
+                    twitch: {
+                        twitch_id: BigInt | null,
+                        display_name: string | null,
+                        login: string | null,
+                        email_address: string | null,
+                        profile_image_url: string | null,
+                    },
+                } [] | null
             },
             received_requests: BigInt[] | null,
             time_stamped: BigInt

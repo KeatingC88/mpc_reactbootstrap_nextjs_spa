@@ -56,7 +56,7 @@ import {
     Reject_Friend,
     Block_Friend,
     Approve_Friend,
-    Load_End_User_Friend_Permissions,
+    Load_End_User_Friends,
     Unblock_Friend,
     Unfriend
 } from '@Redux_Thunk/Actions/User/Friends'
@@ -584,7 +584,7 @@ const Profile_View = () => {
                 set_created_on_value(new Date(props.application.community.profile_viewer.created_on * 1000).toString())
         })
 
-        Dispatch(Load_End_User_Friend_Permissions()).then(() => {
+        Dispatch(Load_End_User_Friends()).then(() => {
             set_disable_profile_modal_chat_button(false)
             set_disable_friend_button(false)
             set_disable_block_button(false)
@@ -828,7 +828,7 @@ const Profile_View = () => {
 
                                                             {props.end_user.people?.friends?.sent_requests?.length === 0 &&
                                                                 props.end_user.people?.friends?.received_requests?.length === 0 &&
-                                                                props.end_user.people?.friends?.approved?.length === 0  && (
+                                                                props.end_user.people?.friends?.approved?.user_ids?.length === 0  && (
                                                                     <Button
                                                                         variant="success"
                                                                         onClick={() => { send_friend_request() }}
@@ -844,8 +844,8 @@ const Profile_View = () => {
                                                             )}
 
                                                             {friend_permissions_are_complete &&
-                                                             props.end_user.people?.friends?.approved &&
-                                                            props.end_user.people?.friends?.approved?.indexOf(profile_id) > -1 && (
+                                                             props.end_user.people?.friends?.approved?.user_ids &&
+                                                             props.end_user.people?.friends?.approved?.user_ids?.indexOf(profile_id) > -1 && (
                                                                 <>
                                                                     <Button
                                                                         variant="success"

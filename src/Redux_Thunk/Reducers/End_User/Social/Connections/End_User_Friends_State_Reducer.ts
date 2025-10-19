@@ -3,12 +3,51 @@ import {
     UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
     UPDATE_END_USER_FRIENDS_SENT_PERMISSION_STATE,
     UPDATE_END_USER_FRIENDS_RECEIVED_PERMISSION_STATE,
-    UPDATE_END_USER_FRIENDS_APPROVED_PERMISSION_STATE,
-    UPDATE_END_USER_FRIENDS_REPORTED_PERMISSION_STATE
+    UPDATE_END_USER_FRIENDS_APPROVED_PERMISSION_STATE
 } from '@Constants'
 
 interface End_User_Friends_State {
-    approved: BigInt[],
+    approved: {
+        user_ids: [],
+        users_data: {
+            [user_id: string]: {
+                user_id: BigInt,
+                account: {
+                    avatar_title: string | null
+                    avatar_url_path: string | null
+                    created_on: string | null
+                    custom_lbl: string | null
+                    email_address: string | null
+                    login_on: string | null
+                    login_type: string | null
+                    name: string | null
+                    public_id: string | null
+                    online_status: number | string | null
+                    account_type: number
+                    roles: any
+                    groups: any
+                },
+                identity: {
+                    first_name: string,
+                    last_name: string,
+                    middle_name: string,
+                    maiden_name: string,
+                    gender: number,
+                    birth_month: number,
+                    birth_day: number,
+                    birth_year: number,
+                    ethnicity: string,
+                },
+                twitch: {
+                    twitch_id: BigInt | null,
+                    display_name: string | null,
+                    login: string | null,
+                    email_address: string | null,
+                    profile_image_url: string | null,
+                },
+            }
+        } | {}
+    } | null,
     sent_requests: {
         participant_id: BigInt | null,
         request: boolean | null,
@@ -26,6 +65,44 @@ interface End_User_Friends_State {
     blocked: {
         by_other_user_ids: BigInt[],
         user_ids: BigInt[],
+        users_data: {
+            [user_id: string]: {
+                user_id: BigInt,
+                account: {
+                    avatar_title: string | null
+                    avatar_url_path: string | null
+                    created_on: string | null
+                    custom_lbl: string | null
+                    email_address: string | null
+                    login_on: string | null
+                    login_type: string | null
+                    name: string | null
+                    public_id: string | null
+                    online_status: number | string | null
+                    account_type: number
+                    roles: any
+                    groups: any
+                },
+                identity: {
+                    first_name: string,
+                    last_name: string,
+                    middle_name: string,
+                    maiden_name: string,
+                    gender: number,
+                    birth_month: number,
+                    birth_day: number,
+                    birth_year: number,
+                    ethnicity: string,
+                },
+                twitch: {
+                    twitch_id: BigInt | null,
+                    display_name: string | null,
+                    login: string | null,
+                    email_address: string | null,
+                    profile_image_url: string | null,
+                },
+            }
+        },
     },
     time_stamped: BigInt | null
 }
@@ -35,14 +112,18 @@ interface End_User_Friends_Action {
 }
 
 const initial_state: End_User_Friends_State = {
-    approved: [],
+    approved: {
+        user_ids: [],
+        users_data: {}
+    },
     sent_requests: [],
     received_requests: [],
     time_stamped: null,
     blocked: {
         by_other_user_ids: [],
         user_ids: [],
-    },
+        users_data: {}
+    }
 }
 
 const End_User_Friends_State_Reducer = (

@@ -113,6 +113,7 @@ const Community = () => {
     }
 
     const build_community_user_tool_tip = (id: any) => {
+
         let user_data = props.application.community.users.users_data[id]
         let twitch_data = props.application.community.users.users_twitch_data[id]
 

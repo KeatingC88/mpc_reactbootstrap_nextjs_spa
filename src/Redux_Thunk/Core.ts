@@ -100,11 +100,15 @@ export const Redux_Thunk_Core = createSelector(
             },
             people: {
                 friends: {
-                    approved: state.End_User_Friends_State_Reducer.approved,
+                    approved: {
+                        user_ids: state.End_User_Friends_State_Reducer.approved.user_ids,
+                        users_data: state.End_User_Friends_State_Reducer.approved.users_data,
+                    },
                     sent_requests: state.End_User_Friends_State_Reducer.sent_requests,
                     blocked: {
                         by_other_user_ids: state.End_User_Friends_State_Reducer.blocked.by_other_user_ids,
                         user_ids: state.End_User_Friends_State_Reducer.blocked.user_ids,
+                        users_data: state.End_User_Friends_State_Reducer.blocked.users_data,
                     },
                     received_requests: state.End_User_Friends_State_Reducer.received_requests,
                     time_stamped: state.End_User_Friends_State_Reducer.time_stamped
