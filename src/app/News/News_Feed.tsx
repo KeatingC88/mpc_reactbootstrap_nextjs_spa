@@ -808,8 +808,6 @@ const News_Feed = () => {
                                         onChange={(e) => { set_add_body_value(e.currentTarget.value.split(`\n`)) }}
                                     />
                                 </FloatingLabel>
-
-                                <hr />
                             </Col>
                         </Row>
                         <Row>

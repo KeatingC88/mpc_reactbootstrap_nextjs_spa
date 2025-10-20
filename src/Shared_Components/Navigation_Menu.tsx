@@ -512,142 +512,147 @@ const Navigation_Menu = () => {
                                                 }
                                             </Nav.Link>
                                         </Col>
-                                        <Col className="text-center">
-                                            <Nav.Link onClick={() => toggle_application_alignment()}>
-                                                {(props.application.settings.alignment === "justify-content-start" || props.application.settings.alignment === "justify-content-center") &&
-                                                    <>
-                                                        {props.application.settings.theme === 0 ? (
-                                                            <>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrow-right-circle-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
-                                                                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
-                                                            </svg>
-                                                            <br />
-                                                                {lbl.Align}
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrow-right-circle d-inline-block align-top mt-2" viewBox="0 0 16 16">
-                                                                    <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
-                                                                </svg>
-                                                                <br />
-                                                                {lbl.Align}
-                                                            </>
-                                                        )}
-                                                    </>
-                                                }
-                                                {(props.application.settings.alignment === "justify-content-end") &&
-                                                    <>
-                                                        {props.application.settings.theme === 0 ? (
-                                                            <>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrow-left-circle-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
-                                                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
-                                                            </svg>
-                                                            <br />
-                                                                {lbl.Align}
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrow-left-circle d-inline-block align-top mt-2" viewBox="0 0 16 16">
-                                                                    <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
-                                                                </svg>
-                                                                <br />
-                                                                {lbl.Align}
-                                                            </>
-                                                        )}
-                                                    </>
-                                                }
-                                            </Nav.Link>
-                                        </Col>
-                                        <Col className="text-center">
-                                            <Nav.Link onClick={() => toggle_application_grid_column_sizes()}>
-                                                {(props.application.settings.grid_type === 1) &&
-                                                    <>
-                                                        {props.application.settings.theme === 0 ? (
-                                                            <>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-1-circle-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
-                                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z" />
-                                                            </svg>
-                                                            <br />
-                                                                {lbl.Column}
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-1-circle d-inline-block align-top mt-2" viewBox="0 0 16 16">
-                                                                    <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                                                                </svg>
-                                                                <br />
-                                                                {lbl.Column}
-                                                            </>
-                                                        )}
-                                                    </>
-                                                }
-                                                {(props.application.settings.grid_type === 2) &&
-                                                    <>
-                                                        {props.application.settings.theme === 0 ? (
-                                                            <>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-2-circle-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
-                                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.646 6.24c0-.691.493-1.306 1.336-1.306.756 0 1.313.492 1.313 1.236 0 .697-.469 1.23-.902 1.705l-2.971 3.293V12h5.344v-1.107H7.268v-.077l1.974-2.22.096-.107c.688-.763 1.287-1.428 1.287-2.43 0-1.266-1.031-2.215-2.613-2.215-1.758 0-2.637 1.19-2.637 2.402v.065h1.271v-.07Z" />
-                                                            </svg>
-                                                            <br />
-                                                                {lbl.Column}
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-2-circle d-inline-block align-top mt-2" viewBox="0 0 16 16">
-                                                                    <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
-                                                                </svg>
-                                                                <br />
-                                                                {lbl.Column}
-                                                            </>
-                                                        )}
-                                                    </>
-                                                }
-                                                {(props.application.settings.grid_type === 3) &&
-                                                    <>
-                                                        {props.application.settings.theme === 0 ? (
-                                                            <>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-3-circle-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
-                                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-8.082.414c.92 0 1.535.54 1.541 1.318.012.791-.615 1.36-1.588 1.354-.861-.006-1.482-.469-1.54-1.066H5.104c.047 1.177 1.05 2.144 2.754 2.144 1.653 0 2.954-.937 2.93-2.396-.023-1.278-1.031-1.846-1.734-1.916v-.07c.597-.1 1.505-.739 1.482-1.876-.03-1.177-1.043-2.074-2.637-2.062-1.675.006-2.59.984-2.625 2.12h1.248c.036-.556.557-1.054 1.348-1.054.785 0 1.348.486 1.348 1.195.006.715-.563 1.237-1.342 1.237h-.838v1.072h.879Z" />
-                                                            </svg>
-                                                            <br />
-                                                                {lbl.Column}
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-3-circle d-inline-block align-top mt-2" viewBox="0 0 16 16">
-                                                                    <path d="M7.918 8.414h-.879V7.342h.838c.78 0 1.348-.522 1.342-1.237 0-.709-.563-1.195-1.348-1.195-.79 0-1.312.498-1.348 1.055H5.275c.036-1.137.95-2.115 2.625-2.121 1.594-.012 2.608.885 2.637 2.062.023 1.137-.885 1.776-1.482 1.875v.07c.703.07 1.71.64 1.734 1.917.024 1.459-1.277 2.396-2.93 2.396-1.705 0-2.707-.967-2.754-2.144H6.33c.059.597.68 1.06 1.541 1.066.973.006 1.6-.563 1.588-1.354-.006-.779-.621-1.318-1.541-1.318" />
-                                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8" />
-                                                                </svg>
-                                                                <br />
-                                                                {lbl.Column}
-                                                            </>
-                                                        )}
-                                                    </>
-                                                }
-                                                {(props.application.settings.grid_type === 4) &&
-                                                    <>
-                                                        {props.application.settings.theme === 0 ? (
-                                                            <>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-4-circle-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
-                                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M7.519 5.057c-.886 1.418-1.772 2.838-2.542 4.265v1.12H8.85V12h1.26v-1.559h1.007V9.334H10.11V4.002H8.176zM6.225 9.281v.053H8.85V5.063h-.065c-.867 1.33-1.787 2.806-2.56 4.218" />
-                                                            </svg>
-                                                            <br />
-                                                                {lbl.Column}
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-4-circle d-inline-block align-top mt-2" viewBox="0 0 16 16">
-                                                                    <path d="M7.519 5.057q.33-.527.657-1.055h1.933v5.332h1.008v1.107H10.11V12H8.85v-1.559H4.978V9.322c.77-1.427 1.656-2.847 2.542-4.265ZM6.225 9.281v.053H8.85V5.063h-.065c-.867 1.33-1.787 2.806-2.56 4.218" />
-                                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8" />
-                                                                </svg>
-                                                                <br />
-                                                                {lbl.Column}
-                                                            </>
-                                                        )}
-                                                    </>
-                                                }
-                                            </Nav.Link>
-                                        </Col>
+                                    {!props.application.mobile_mode &&
+                                        <>
+                                            <Col className="text-center">
+                                                <Nav.Link onClick={() => toggle_application_alignment()}>
+                                                    {(props.application.settings.alignment === "justify-content-start" || props.application.settings.alignment === "justify-content-center") &&
+                                                        <>
+                                                            {props.application.settings.theme === 0 ? (
+                                                                <>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrow-right-circle-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                        <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
+                                                                    </svg>
+                                                                    <br />
+                                                                    {lbl.Align}
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrow-right-circle d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                        <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
+                                                                    </svg>
+                                                                    <br />
+                                                                    {lbl.Align}
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    }
+                                                    {(props.application.settings.alignment === "justify-content-end") &&
+                                                        <>
+                                                            {props.application.settings.theme === 0 ? (
+                                                                <>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrow-left-circle-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                        <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
+                                                                    </svg>
+                                                                    <br />
+                                                                    {lbl.Align}
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrow-left-circle d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                        <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
+                                                                    </svg>
+                                                                    <br />
+                                                                    {lbl.Align}
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    }
+                                                </Nav.Link>
+                                            </Col>
+                                            <Col className="text-center">
+                                                <Nav.Link onClick={() => toggle_application_grid_column_sizes()}>
+                                                    {(props.application.settings.grid_type === 1) &&
+                                                        <>
+                                                            {props.application.settings.theme === 0 ? (
+                                                                <>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-1-circle-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 5.385v1.271l1.834-1.318h.065V12h1.312z" />
+                                                                    </svg>
+                                                                    <br />
+                                                                    {lbl.Column}
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-1-circle d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                        <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
+                                                                    </svg>
+                                                                    <br />
+                                                                    {lbl.Column}
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    }
+                                                    {(props.application.settings.grid_type === 2) &&
+                                                        <>
+                                                            {props.application.settings.theme === 0 ? (
+                                                                <>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-2-circle-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.646 6.24c0-.691.493-1.306 1.336-1.306.756 0 1.313.492 1.313 1.236 0 .697-.469 1.23-.902 1.705l-2.971 3.293V12h5.344v-1.107H7.268v-.077l1.974-2.22.096-.107c.688-.763 1.287-1.428 1.287-2.43 0-1.266-1.031-2.215-2.613-2.215-1.758 0-2.637 1.19-2.637 2.402v.065h1.271v-.07Z" />
+                                                                    </svg>
+                                                                    <br />
+                                                                    {lbl.Column}
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-2-circle d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                        <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
+                                                                    </svg>
+                                                                    <br />
+                                                                    {lbl.Column}
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    }
+                                                    {(props.application.settings.grid_type === 3) &&
+                                                        <>
+                                                            {props.application.settings.theme === 0 ? (
+                                                                <>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-3-circle-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-8.082.414c.92 0 1.535.54 1.541 1.318.012.791-.615 1.36-1.588 1.354-.861-.006-1.482-.469-1.54-1.066H5.104c.047 1.177 1.05 2.144 2.754 2.144 1.653 0 2.954-.937 2.93-2.396-.023-1.278-1.031-1.846-1.734-1.916v-.07c.597-.1 1.505-.739 1.482-1.876-.03-1.177-1.043-2.074-2.637-2.062-1.675.006-2.59.984-2.625 2.12h1.248c.036-.556.557-1.054 1.348-1.054.785 0 1.348.486 1.348 1.195.006.715-.563 1.237-1.342 1.237h-.838v1.072h.879Z" />
+                                                                    </svg>
+                                                                    <br />
+                                                                    {lbl.Column}
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-3-circle d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                        <path d="M7.918 8.414h-.879V7.342h.838c.78 0 1.348-.522 1.342-1.237 0-.709-.563-1.195-1.348-1.195-.79 0-1.312.498-1.348 1.055H5.275c.036-1.137.95-2.115 2.625-2.121 1.594-.012 2.608.885 2.637 2.062.023 1.137-.885 1.776-1.482 1.875v.07c.703.07 1.71.64 1.734 1.917.024 1.459-1.277 2.396-2.93 2.396-1.705 0-2.707-.967-2.754-2.144H6.33c.059.597.68 1.06 1.541 1.066.973.006 1.6-.563 1.588-1.354-.006-.779-.621-1.318-1.541-1.318" />
+                                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8" />
+                                                                    </svg>
+                                                                    <br />
+                                                                    {lbl.Column}
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    }
+                                                    {(props.application.settings.grid_type === 4) &&
+                                                        <>
+                                                            {props.application.settings.theme === 0 ? (
+                                                                <>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-4-circle-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M7.519 5.057c-.886 1.418-1.772 2.838-2.542 4.265v1.12H8.85V12h1.26v-1.559h1.007V9.334H10.11V4.002H8.176zM6.225 9.281v.053H8.85V5.063h-.065c-.867 1.33-1.787 2.806-2.56 4.218" />
+                                                                    </svg>
+                                                                    <br />
+                                                                    {lbl.Column}
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-4-circle d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                        <path d="M7.519 5.057q.33-.527.657-1.055h1.933v5.332h1.008v1.107H10.11V12H8.85v-1.559H4.978V9.322c.77-1.427 1.656-2.847 2.542-4.265ZM6.225 9.281v.053H8.85V5.063h-.065c-.867 1.33-1.787 2.806-2.56 4.218" />
+                                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8" />
+                                                                    </svg>
+                                                                    <br />
+                                                                    {lbl.Column}
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    }
+                                                </Nav.Link>
+                                            </Col>
+                                        </>
+                                    }
+
 
                                         {props.end_user.account.account_type === 1 &&
                                             <>
@@ -696,14 +701,14 @@ const Navigation_Menu = () => {
                                                     </Nav.Link>
                                                 </Col>
                                                 <Col className="text-center">
-                                                    <Nav.Link onClick={() => { Navigate.push(`/community`) }}>
+                                                    <Nav.Link onClick={() => { Navigate.push(`/friends`) }}>
                                                         {props.application.settings.theme === 0 ? (
                                                             <>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-people-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">
                                                                     <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
                                                                 </svg>
                                                                 <br />
-                                                                {lbl.Community}
+                                                                {lbl.Friends}
                                                             </>
                                                         ) : (
                                                             <>
@@ -711,15 +716,26 @@ const Navigation_Menu = () => {
                                                                     <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
                                                                 </svg>
                                                                 <br />
-                                                                {lbl.Community}
+                                                                {lbl.Friends}
                                                             </>
                                                         )}
                                                     </Nav.Link>
                                                 </Col>
                                                 <Col className="text-center">
+                                                    <Nav.Link onClick={() => { Navigate.push(`/community`) }}>
+                                                        <>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-globe d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                                <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z" />
+                                                            </svg>
+                                                            <br />
+                                                            {lbl.Community}
+                                                        </>
+                                                    </Nav.Link>
+                                                </Col>
+                                                <Col className="text-center">
                                                     <Nav.Link onClick={() => { Navigate.push(`/news`) }}>
                                                         <>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-newspaper  d-inline-block align-top mt-2" viewBox="0 0 16 16">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-newspaper d-inline-block align-top mt-2" viewBox="0 0 16 16">
                                                                 <path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5z" />
                                                                 <path d="M2 3h10v2H2zm0 3h4v3H2zm0 4h4v1H2zm0 2h4v1H2zm5-6h2v1H7zm3 0h2v1h-2zM7 8h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2z" />
                                                             </svg>

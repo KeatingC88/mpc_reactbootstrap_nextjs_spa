@@ -22,6 +22,9 @@ export const POST = async (req: NextRequest) => {
         const cookie = await cookies()
         let dto = await req.json()
 
+        console.log(`page index is requesting`)
+        console.log(dto.page_index)
+
         if (USERS_SERVER_COOKIE_NAME)
             token = cookie.get(USERS_SERVER_COOKIE_NAME)?.value
 

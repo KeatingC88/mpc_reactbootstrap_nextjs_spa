@@ -41,36 +41,14 @@ export const Load_Profile_Viewer_Data = (value: BigInt) => async (dispatch: AppD
 
 }
 
-/*export const Load_Friend_Data = (user_id: BigInt) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
-
-    await axios.post(`/api/community/member`, {
-        user_id: `${user_id.toString()}`
-    }, { withCredentials: true }).catch(async (error) => {
-        return await new Promise(async (reject) => {
-            error.id = `Load-Friend-Data-Failed`
-            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
-            setTimeout(() => {
-                dispatch({ type: DEFAULT_HOST_ERROR_STATE })
-                dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-            }, 1000)
-            reject(error)
-        })
-    }).then( async (response: any) => {
-        console.log(response)
-        return await new Promise((resolve) => {
-            resolve(response.data)
-        })
-    })
-
-}*/
-
-export const Load_All_Community_Users = () => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+export const Load_Community_Users = (page_index?: number) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
 
     let state = getState()
     let current_language_state = state.Application_Language_State_Reducer
     let current_end_user_state = state.End_User_Account_State_Reducer
-    console.log(`loading community members`)
+
     await axios.post(`/api/community/members`, {
+        page_index: page_index,
         login_type: current_end_user_state.login_type,
         language: `${current_language_state.current_language.split(`-`)[0]}`,
         region: `${current_language_state.current_language.split(`-`)[1]}`,
@@ -92,10 +70,6 @@ export const Load_All_Community_Users = () => async (dispatch: AppDispatch, getS
         rtt: `${Get_Device_Information().rtt}`,
         data_saver: `${Get_Device_Information().saveData}`,
         device_ram_gb: `${Get_Device_Information().deviceMemory}`
-    }, {
-        headers: {
-            'Content-Type': 'application/json'
-        }
     }).catch((error: any) => {
         return new Promise(async (reject) => {
             error.id = `Application-Community-Users-Load-Failed`
