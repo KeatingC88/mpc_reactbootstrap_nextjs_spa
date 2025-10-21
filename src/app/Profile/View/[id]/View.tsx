@@ -741,7 +741,6 @@ const Profile_View = () => {
                                                     </svg>
                                                 </center>
                                             }
-
                                         </Col>
                                         <Col lg={10} md={8} sm={12} xs={12}>
                                             <Row className="text-start p-3">
@@ -771,7 +770,7 @@ const Profile_View = () => {
                                                     <tr>
                                                         <td>
 
-                                                            <Button variant="success"
+                                                            <Button
                                                                 onClick={() => { show_the_end_user_the_profile_chat_modal() }}
                                                                 disabled={disable_profile_modal_chat_button}
                                                             >
@@ -796,7 +795,7 @@ const Profile_View = () => {
 
                                                             {props.end_user.people?.friends?.received_requests?.includes(profile_id) && (
                                                                     <>
-                                                                        <Button variant="success" disabled={disable_approve_button} onClick={()=> approve_friend_requests()}>
+                                                                        <Button disabled={disable_approve_button} onClick={()=> approve_friend_requests()}>
                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-check" viewBox="0 0 16 16">
                                                                                 <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                                                                                 <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
@@ -804,7 +803,7 @@ const Profile_View = () => {
                                                                             <br />
                                                                             {lbl.ApproveFriendInvite}
                                                                         </Button>
-                                                                        <Button variant="success" disabled={disable_reject_button} onClick={() => { reject_friend_request() }}>
+                                                                        <Button disabled={disable_reject_button} onClick={() => { reject_friend_request() }}>
                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-x" viewBox="0 0 16 16">
                                                                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
                                                                                 <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708" />
@@ -816,7 +815,7 @@ const Profile_View = () => {
                                                             )}
 
                                                             {props.end_user.people?.friends?.sent_requests?.includes(profile_id) && (
-                                                                <Button variant="success" disabled={true} >
+                                                                <Button disabled={true} >
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-person-fill-check" viewBox="0 0 16 16">
                                                                         <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                                                                         <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
@@ -830,7 +829,6 @@ const Profile_View = () => {
                                                                 props.end_user.people?.friends?.received_requests?.length === 0 &&
                                                                 props.end_user.people?.friends?.approved?.user_ids?.length === 0  && (
                                                                     <Button
-                                                                        variant="success"
                                                                         onClick={() => { send_friend_request() }}
                                                                         disabled={disable_friend_button}
                                                                     >
@@ -848,7 +846,6 @@ const Profile_View = () => {
                                                              props.end_user.people?.friends?.approved?.user_ids?.indexOf(profile_id) > -1 && (
                                                                 <>
                                                                     <Button
-                                                                        variant="success"
                                                                         onClick={() => { send_friend_request() }}
                                                                         disabled={true}
                                                                     >
@@ -860,7 +857,6 @@ const Profile_View = () => {
                                                                         {lbl.Friends}
                                                                     </Button>
                                                                     <Button
-                                                                        variant="success"
                                                                         onClick={() => { unfriend() }}
                                                                         disabled={false}
                                                                     >

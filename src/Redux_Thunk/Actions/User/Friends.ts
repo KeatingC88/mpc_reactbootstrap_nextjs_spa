@@ -393,7 +393,7 @@ export const Approve_Friend = (participant_id: BigInt) => async (dispatch: AppDi
                 current_friends.received_requests.splice(if_value_in_received_requests_remove_it, 1)
             }
             dispatch({ type: UPDATE_END_USER_FRIENDS_RECEIVED_PERMISSION_STATE, payload: { received_requests: current_friends.received_requests } })
-            current_friends.approved.push(participant_id)
+            current_friends.approved.user_ids.push(participant_id)
             dispatch({ type: UPDATE_END_USER_FRIENDS_APPROVED_PERMISSION_STATE, payload: { approved: current_friends.approved } })
             resolve(response.data)
         })
