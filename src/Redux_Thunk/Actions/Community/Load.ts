@@ -48,7 +48,7 @@ export const Load_Community_Users = (page_index?: number) => async (dispatch: Ap
     let current_end_user_state = state.End_User_Account_State_Reducer
 
     await axios.post(`/api/community/members`, {
-        page_index: page_index,
+        page_index: page_index ?? 1,
         login_type: current_end_user_state.login_type,
         language: `${current_language_state.current_language.split(`-`)[0]}`,
         region: `${current_language_state.current_language.split(`-`)[1]}`,
@@ -80,7 +80,7 @@ export const Load_Community_Users = (page_index?: number) => async (dispatch: Ap
             }, 1000)
             reject(error)
         })
-    }).then( async (response: any) => {
+    }).then(async (response: any) => {
         return await new Promise(async (resolve) => {
             await dispatch({ type: UPDATE_APPLICATION_COMMUNITY_STATE, payload: { users: response.data } })
             resolve(response.data)

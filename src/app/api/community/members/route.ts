@@ -22,9 +22,6 @@ export const POST = async (req: NextRequest) => {
         const cookie = await cookies()
         let dto = await req.json()
 
-        console.log(`page index is requesting`)
-        console.log(dto.page_index)
-
         if (USERS_SERVER_COOKIE_NAME)
             token = cookie.get(USERS_SERVER_COOKIE_NAME)?.value
 
@@ -167,7 +164,7 @@ export const POST = async (req: NextRequest) => {
             }
         })
 
-        const community_users_data: {
+        let community_users_data: {
             [user_id: string]: {
                 id: string,
                 online_status: number,
@@ -186,31 +183,35 @@ export const POST = async (req: NextRequest) => {
             }
         } = {}
 
+        let all_user_ids_from_db: string[] = [];
+
         await axios.post(`${USERS_CACHE_SERVER_ADDRESS}/get/users`, {
-            token: token
+            token: token,
+            page_index: Encrypt(`${dto.page_index}`)
         }).then( async (response: any) => {
 
             if (!response.data)
                 return {}
 
             response.data = JSON.parse(Decrypt(response.data))
+            all_user_ids_from_db = response.data.all_keys
 
-            for (const community_user_id in response.data) {
+            for (const community_user_id in response.data.page_data) {
 
-                let mpc_user_id = response.data[community_user_id][0]
-                let mpc_user_online_status = response.data[community_user_id][1]
-                let mpc_user_custom_status_label = response.data[community_user_id][2]
-                let mpc_user_name = response.data[community_user_id][3]
-                let mpc_user_created_on = response.data[community_user_id][4]
-                let mpc_user_avatar_url_path = response.data[community_user_id][5]
-                let mpc_user_avatar_title = response.data[community_user_id][6]
-                let mpc_user_language_code = response.data[community_user_id][7]
-                let mpc_user_region_code = response.data[community_user_id][8]
-                let mpc_user_login_on = response.data[community_user_id][9]
-                let mpc_user_logout_on = response.data[community_user_id][10]
-                let mpc_user_login_type = response.data[community_user_id][11]
-                let mpc_user_account_type = response.data[community_user_id][12]
-                let mpc_user_email_address = response.data[community_user_id][13]
+                let mpc_user_id = response.data.page_data[community_user_id][0]
+                let mpc_user_online_status = response.data.page_data[community_user_id][1]
+                let mpc_user_custom_status_label = response.data.page_data[community_user_id][2]
+                let mpc_user_name = response.data.page_data[community_user_id][3]
+                let mpc_user_created_on = response.data.page_data[community_user_id][4]
+                let mpc_user_avatar_url_path = response.data.page_data[community_user_id][5]
+                let mpc_user_avatar_title = response.data.page_data[community_user_id][6]
+                let mpc_user_language_code = response.data.page_data[community_user_id][7]
+                let mpc_user_region_code = response.data.page_data[community_user_id][8]
+                let mpc_user_login_on = response.data.page_data[community_user_id][9]
+                let mpc_user_logout_on = response.data.page_data[community_user_id][10]
+                let mpc_user_login_type = response.data.page_data[community_user_id][11]
+                let mpc_user_account_type = response.data.page_data[community_user_id][12]
+                let mpc_user_email_address = response.data.page_data[community_user_id][13]
 
                 community_users_data[community_user_id] = {
                     id: mpc_user_id,
@@ -228,15 +229,14 @@ export const POST = async (req: NextRequest) => {
                     account_type: mpc_user_account_type,
                     email_address: mpc_user_email_address.toUpperCase()
                 }
-
             }
-
         })
-
+        
         let community_users_data_combined = {
             users_data: community_users_data,
+            users_ids: all_user_ids_from_db,
             users_profile_data: community_users_profiles_data,
-            users_twitch_data: community_users_twitch_data
+            users_twitch_data: community_users_twitch_data,
         }
 
         return NextResponse.json(community_users_data_combined, { status: 200 })

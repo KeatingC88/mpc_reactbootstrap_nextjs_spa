@@ -201,7 +201,7 @@ const Community = () => {
     const build_pagination_tiles = () => {
 
         const pagination_html = []
-        const count = Object.keys(props.application.community.users?.users_data).length
+        const count = props.application.community.users.users_ids.length
 
         if (count) {
             for (let number = 1; number <= Math.ceil(count / 10); number++) {

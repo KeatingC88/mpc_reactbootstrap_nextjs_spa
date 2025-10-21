@@ -72,8 +72,6 @@ export const PUT = async (req: NextRequest) => {
             token = response.headers["set-cookie"][0].split(`${USERS_SERVER_COOKIE_NAME}=`)[1].split(`;`)[0]
             response_data = JSON.parse(Decrypt(response.data)).user_data
 
-            console.log(response_data)
-
             let birth_month = parseInt(response_data.birth_month)
             let birth_day = parseInt(response_data.birth_day)
             let birth_year = parseInt(response_data.birth_year)
