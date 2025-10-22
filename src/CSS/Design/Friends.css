@@ -1,0 +1,4 @@
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > svg,
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > p {
+    color: rgba(182, 255, 182, .9) !important;
+}

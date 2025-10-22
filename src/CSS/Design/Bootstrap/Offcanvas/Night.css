@@ -1,0 +1,16 @@
+body[data-theme="Night-Theme"] > div > div.offcanvas-header {
+    background-color: black;
+}
+
+body[data-theme="Night-Theme"] > div > div.offcanvas-body {
+    background-color: black;
+    color: rgba(182, 255, 182, .9);
+}
+
+body[data-theme="Night-Theme"] > div > div.offcanvas-header {
+    background-color: black;
+}
+
+body[data-theme="Night-Theme"] > div > div.offcanvas-body {
+    background-color: black;
+}

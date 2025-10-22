@@ -15,7 +15,7 @@ import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import type { AppDispatch } from '@Redux_Thunk/Provider'
 import { Get_Device_Information } from '@Redux_Thunk/Actions/Misc'
 
-export const Load_End_User_Friends = () => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+export const Load_End_User_Friends = (page_index?: number) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
     let current_language_state = state.Application_Language_State_Reducer

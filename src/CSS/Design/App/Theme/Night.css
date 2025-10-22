@@ -6,13 +6,6 @@ body[data-theme="Night-Theme"] > header > nav {
     background-color: rgba(33, 37,41,1) !important;
 }
 
-body[data-theme="Night-Theme"] > div > div > div > div > div > div > div > select,
-body[data-theme="Night-Theme"] > div > div > select {
-    color: rgba(182,255,182,.9);
-    background-color: black !important;
-    border-color: rgba(182,255,182,.9);
-}
-
 body[data-theme="Night-Theme"] {
     background-color: black;
     color: rgba(182, 255, 182, .9);
@@ -26,26 +19,9 @@ body[data-theme="Night-Theme"] > header > nav > div > div > div > div > div > di
     background-color: rgba(182, 255, 182, .9);
 }
 
-body[data-theme="Night-Theme"] > div > div.offcanvas-body {
-    background-color: black;
-}
-
 body[data-theme="Night-Theme"] > header > nav > div > div > button {
     background-color: rgba(182, 255, 182, .9);
     position: relative;
-}
-
-body[data-theme="Night-Theme"] > div > div.offcanvas-header {
-    background-color: black;
-}
-
-body[data-theme="Night-Theme"] > div > div.offcanvas-body {
-    background-color: black;
-    color: rgba(182, 255, 182, .9);
-}
-
-body[data-theme="Night-Theme"] > div > div.offcanvas-header {
-    background-color: black;
 }
 
 body[data-theme="Night-Theme"] > header > nav > div > div > img:hover {
@@ -54,64 +30,10 @@ body[data-theme="Night-Theme"] > header > nav > div > div > img:hover {
     border-radius: 2rem;
 }
 
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div.card,
-body[data-theme="Night-Theme"] > main > div > div > div > div.card,
-body[data-theme="Night-Theme"] > div > div > div > div > div > div.card {
-    background: linear-gradient(45deg, rgb(0, 0, 4) 10%, rgba(39, 37, 36, 0.5) 62%, rgb(0 0 4));
-    box-shadow: 0px 0px 0px 2px inset rgba(182,255,182, .9);
-    color: rgba(182, 255, 182, .9) !important;
-}
-
-body[data-theme="Night-Theme"] > div > div > div.modal-title,
-body[data-theme="Night-Theme"] > div > div > div.modal-content,
-body[data-theme="Night-Theme"] > div > div > div.modal-header > .btn-close,
-body[data-theme="Night-Theme"] > div > div > div > div > div.modal-title,
-body[data-theme="Night-Theme"] > div > div > div.modal-footer {
-    background-color: black;
-    border-color: rgba(182, 255, 182, .9) !important;
-    color: rgba(182, 255, 182, .9) !important;
-}
-
-body[data-theme="Night-Theme"] > #Profile_View > div > div > div > div > div > div > div > div > div.list-group-item {
+body[data-theme="Night-Theme"] > #Profile_View > div > div > div > div > div > div > div > div > div.list-group-item,
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > div > div,
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > ul > li > span {
     background-color: transparent !important;
     color: #b6ffb6 !important;
     border: none !important;
 }
-
-/*Pagination Buttons Start*/
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > li.page-item > .page-link,
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > li.page-item > .page-link
-{
-    background-color: transparent !important;
-    color: white;
-}
-
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > .page-item:active > .page-link,
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > .page-item:active > .page-link
-{
-    background-color: rgba(182, 255, 182, .9) !important;
-    border-color: rgba(182, 255, 182, .9) !important;
-    
-}
-
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > .active > .page-link,
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > .active > .page-link
-{
-    background-color: rgba(182, 255, 182, .9) !important;
-    color: rgba(182, 255, 182, .9) !important;
-}
-
-
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > .page-item:hover > .page-link,
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > .page-item:hover > .page-link,
-{
-    background-color: rgba(182, 255, 182, .9) !important;
-    color: black !important;
-}
-
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > li > span,
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > li > span
-{
-    border-color: rgba(182, 255, 182, .9) !important;
-}
-/*Pagination Buttons End*/

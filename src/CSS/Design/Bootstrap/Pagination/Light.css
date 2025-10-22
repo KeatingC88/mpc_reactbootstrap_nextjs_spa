@@ -1,0 +1,29 @@
+body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > li.page-item > .page-link,
+body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div > ul > li.page-item > .page-link {
+    background-color: transparent !important;
+    color: grey;
+}
+
+body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > .page-item:active > .page-link,
+body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div > ul > .page-item:active > .page-link {
+    background-color: rgba(182, 255, 182, .9) !important;
+    border-color: black !important;
+}
+
+body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > .active > .page-link,
+body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div > ul > .active > .page-link {
+    background-color: rgba(182, 255, 182, .9) !important;
+    color: black !important;
+}
+
+
+body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > .page-item:hover > .page-link,
+body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div > ul > .page-item:hover > .page-link {
+    background-color: rgba(182, 255, 182, .9) !important;
+    color: black !important;
+}
+
+body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > li > span,
+body[data-theme="Light-Theme"] > main > div > div > div > div > div > div > div > div > ul > li > span {
+    border-color: black !important;
+}

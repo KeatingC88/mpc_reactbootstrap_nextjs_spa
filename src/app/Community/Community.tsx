@@ -18,6 +18,10 @@ import {
 import { Load_Community_Users } from '@Redux_Thunk/Actions/Community/Load'
 import { Get_Nation_Flag_Value } from '@Redux_Thunk/Actions/Misc'
 
+import {
+    Get_Status_Label
+} from '@Redux_Thunk/Actions/User/Selected'
+
 const Community = () => {
 
     const props: any = useSelector(Redux_Thunk_Core)
@@ -94,25 +98,6 @@ const Community = () => {
         set_display_region_index((prev) => (prev + 1) % 3)
     }
 
-    const get_status_label = (code: any) => {
-        switch (parseInt(code)) {
-            case 0:
-                return "Offline"
-            case 1:
-                return "Offline"
-            case 2:
-                return "Online"
-            case 3: 
-                return "Away"
-            case 4:
-                return "Dnd"
-            case 5:
-                return props.end_user.account.custom_lbl
-            default:
-                return "error"
-        }
-    }
-
     const build_community_user_tool_tip = (id: any) => {
 
         let user_data = props.application.community.users.users_data[id]
@@ -128,7 +113,7 @@ const Community = () => {
                         <strong>Name</strong>: {user_data.name} <br />
                         <strong>Language</strong>: {user_data.language_code} <br />
                         <strong>Region</strong>: {user_data.region_code} <br />
-                        <strong>Status</strong>: {get_status_label(user_data.online_status)} <br />
+                        <strong>Status</strong>: {Get_Status_Label(user_data.online_status)} <br />
                         <strong>Created on</strong>: {formattedDate} <br />
 
                         {twitch_data?.twitch_user_name &&
@@ -188,7 +173,7 @@ const Community = () => {
                             </Col>
                             <Col>
                                 <span className="mt-1" onClick={() => go_to_end_user_selected_profile(user.id)}>{user.name}</span> <br />
-                                {get_status_label(user.online_status)}
+                                {Dispatch(Get_Status_Label(user.online_status))}
                                 {build_user_buttons(user.id)}
                             </Col>
                         </Row>

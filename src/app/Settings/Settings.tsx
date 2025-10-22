@@ -36,8 +36,7 @@ import {
     Change_Application_Button_Background_Color,
     Change_Application_Button_Font_Color,
     Change_Application_Button_Font,
-    Default_Application_Theme_Custom_Settings,
-
+    Default_Application_Theme_Custom_Settings
 } from '@Redux_Thunk/Actions/User/Selected'
 
 import { useSelector } from 'react-redux'

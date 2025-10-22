@@ -1,0 +1,6 @@
+body[data-theme="Night-Theme"] > div > div > div > div > div > div > div > select,
+body[data-theme="Night-Theme"] > div > div > select {
+    color: rgba(182,255,182,.9);
+    background-color: black !important;
+    border-color: rgba(182,255,182,.9);
+}

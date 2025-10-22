@@ -26,9 +26,9 @@ import {
     Report_Disruptive_Behavior,
     Report_Self_Harm_Content,
     Report_Illegal_Content,
-    Report_Harrass_Chat,
-    Report_Misleading_Chat,
-    Report_Threat_Chat,
+    Report_Harrass_Content,
+    Report_Misleading_Content,
+    Report_Threat_Content,
     Report_Nudity_Content,
     Report_Fake_Account,
     Report_Hate_Content,
@@ -240,18 +240,18 @@ const WebSocket_Chat = () => {
     }
 
     const report_harass_chat = async (participant_id: BigInt) => {
-        await Dispatch(Report_Harrass_Chat({participant_id: participant_id, reason: undefined}))
+        await Dispatch(Report_Harrass_Content({participant_id: participant_id, reason: undefined}))
         set_end_user_action_modal(false)
         create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
     const report_misleading_chat = async (participant_id: BigInt) => {
-        await Dispatch(Report_Misleading_Chat({participant_id: participant_id, reason: undefined}))
+        await Dispatch(Report_Misleading_Content({participant_id: participant_id, reason: undefined}))
         create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }
 
     const report_threat_chat = async (participant_id: BigInt) => {
-        await Dispatch(Report_Threat_Chat({participant_id: participant_id, reason: undefined}))
+        await Dispatch(Report_Threat_Content({participant_id: participant_id, reason: undefined}))
         set_end_user_action_modal(false)
         create_success_alert(`${lbl.SuccessfullyReported} ${participant_id}.`)
     }

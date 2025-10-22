@@ -1261,16 +1261,14 @@ export const Change_Application_Flag = (value: string) => async (dispatch: AppDi
         resolve(value)
     })
 }
-export interface Change_Password_DTO {
+
+export const Change_Password = (dto: {
     id: BigInt | null
     language: string
     region: string
-    token: string | null
     password: string
     new_password: string
-}
-
-export const Change_Password = (dto: Change_Password_DTO) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+}) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
     
     let end_user_account = getState().End_User_Account_State_Reducer
 
@@ -1723,4 +1721,27 @@ export const Update_End_User_Selected_Custom_Label = (value: string | null) => a
         dispatch({ type: UPDATE_END_USER_ACCOUNT_CUSTOM_LABEL, payload: { custom_lbl: value } })
         resolve(value)
     })
+}
+
+export const Get_Status_Label = (code: number) => (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+
+    let state = getState()
+    let end_user_account = state.End_User_Account_State_Reducer
+
+    switch (code) {
+        case 0:
+            return "Offline"
+        case 1:
+            return "Offline"
+        case 2:
+            return "Online"
+        case 3:
+            return "Away"
+        case 4:
+            return "Dnd"
+        case 5:
+            return end_user_account.custom_lbl
+        default:
+            return "error"
+    }
 }

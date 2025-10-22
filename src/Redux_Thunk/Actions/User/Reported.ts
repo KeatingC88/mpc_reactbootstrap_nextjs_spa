@@ -273,7 +273,7 @@ export const Report_Illegal_Content = (dto:{ participant_id: BigInt, reason: str
     })
 }
 
-export const Report_Harrass_Chat = (dto:{ participant_id: BigInt, reason: string | undefined }) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+export const Report_Harrass_Content = (dto:{ participant_id: BigInt, reason: string | undefined }) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
 
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
@@ -326,7 +326,7 @@ export const Report_Harrass_Chat = (dto:{ participant_id: BigInt, reason: string
     })
 }
 
-export const Report_Misleading_Chat = (dto:{ participant_id: BigInt, reason: string | undefined }) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+export const Report_Misleading_Content = (dto:{ participant_id: BigInt, reason: string | undefined }) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
 
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
@@ -378,7 +378,7 @@ export const Report_Misleading_Chat = (dto:{ participant_id: BigInt, reason: str
     })
 }
 
-export const Report_Threat_Chat = (dto:{ participant_id: BigInt, reason: string | undefined }) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+export const Report_Threat_Content = (dto:{ participant_id: BigInt, reason: string | undefined }) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
 
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer

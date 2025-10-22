@@ -20,7 +20,15 @@ import '@CSS/Design/App/WebSocket/Default_Chat_Icon.css'
 import '@CSS/Design/Bootstrap/Accordion.css'
 import '@CSS/Design/App/Theme/Background.css'
 import '@CSS/Design/Bootstrap/Card_Header.css'
-
+//Night/Light Themes
+import '@CSS/Design/Bootstrap/Pagination/Light.css'
+import '@CSS/Design/Bootstrap/Pagination/Night.css'
+import '@CSS/Design/Bootstrap/Modal/Light.css'
+import '@CSS/Design/Bootstrap/Modal/Night.css'
+import '@CSS/Design/Bootstrap/Card/Light.css'
+import '@CSS/Design/Bootstrap/Card/Night.css'
+import '@CSS/Design/Bootstrap/Select/Night.css'
+import '@CSS/Design/Bootstrap/Offcanvas/Night.css'
 
 import App from './App'
 

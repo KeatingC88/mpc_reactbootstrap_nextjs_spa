@@ -1,0 +1,9 @@
+body[data-theme="Night-Theme"] > div > div > div.modal-title,
+body[data-theme="Night-Theme"] > div > div > div.modal-content,
+body[data-theme="Night-Theme"] > div > div > div.modal-header > .btn-close,
+body[data-theme="Night-Theme"] > div > div > div > div > div.modal-title,
+body[data-theme="Night-Theme"] > div > div > div.modal-footer {
+    background-color: black;
+    border-color: rgba(182, 255, 182, .9) !important;
+    color: rgba(182, 255, 182, .9) !important;
+}

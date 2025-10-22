@@ -11,5 +11,6 @@
     <Folder Include="src\app\Login\Admin\" />
     <Folder Include="src\app\Login\User\Facebook\" />
     <Folder Include="src\app\Login\User\Google\" />
+    <Folder Include="src\CSS\Design\Bootstrap\Offcanvas\" />
   </ItemGroup>
 </Project>

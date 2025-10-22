@@ -19,6 +19,7 @@ import Settings from './Settings/Settings'
 import FAQ from './Faq/FAQ'
 import Help from './Help/Help'
 import News_Feed from './News/News_Feed'
+import Friends from './Friends/Friends'
 
 const Main = () => {
 
@@ -102,13 +103,14 @@ const Main = () => {
                     <Container fluid>
                         <Row>
                             <Col>
+                                <Friends />
                                 <Community />
                                 <Identity />
+                                <Profile_Mirror />
+                                <News_Feed />
                                 <Settings />
                                 <FAQ />
                                 <Help />
-                                <Profile_Mirror />
-                                <News_Feed />
                             </Col>
                         </Row>
                     </Container>
@@ -118,13 +120,14 @@ const Main = () => {
                     <Container fluid>
                         <Row>
                             <Col>
+                                <Friends />
                                 <Community />
-                                <Settings />
+                                <News_Feed />
                                 <Profile_Mirror />
                             </Col>
                             <Col>
                                 <Identity />
-                                <News_Feed />
+                                <Settings />
                                 <FAQ />
                                 <Help />
                             </Col>
@@ -136,13 +139,14 @@ const Main = () => {
                     <Container fluid>
                         <Row>
                             <Col>
+                                <Friends />
                                 <Community />
                                 <News_Feed />
-                                <Help />
                             </Col>
                             <Col>
                                 <Settings />
                                 <FAQ />
+                                <Help />
                             </Col>
                             <Col>
                                 <Identity />
@@ -156,10 +160,11 @@ const Main = () => {
                     <Container fluid>
                         <Row>
                             <Col>
+                                <Friends />
                                 <Community />
-                                <News_Feed />
                             </Col>
                             <Col>
+                                <News_Feed />
                                 <Settings />
                             </Col>
                             <Col>

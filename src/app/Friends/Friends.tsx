@@ -17,7 +17,8 @@ import {
     Form,
     InputGroup,
     FloatingLabel,
-    Image
+    Image,
+    Pagination
 } from 'react-bootstrap'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
@@ -35,14 +36,18 @@ import {
 } from '@Redux_Thunk/Actions/User/Friends'
 
 import {
+    Get_Status_Label
+} from '@Redux_Thunk/Actions/User/Selected'
+
+import {
     Report_Abusive_Content,
     Report_Spam_Content,
     Report_Disruptive_Behavior,
     Report_Self_Harm_Content,
     Report_Illegal_Content,
-    Report_Harrass_Chat,
-    Report_Misleading_Chat,
-    Report_Threat_Chat,
+    Report_Harrass_Content,
+    Report_Misleading_Content,
+    Report_Threat_Content,
     Report_Nudity_Content,
     Report_Fake_Account,
     Report_Hate_Content
@@ -51,7 +56,7 @@ import {
 const End_User_Friends = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-
+    console.log(props)
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -154,7 +159,7 @@ const End_User_Friends = () => {
 
             case "HARASSMENT":
                 set_alert_text(``)
-                Dispatch(Report_Harrass_Chat({
+                Dispatch(Report_Harrass_Content({
                     participant_id: friend_user_id,
                     reason: reported_reason_from_end_user_input
                 })).then(() => {
@@ -165,7 +170,7 @@ const End_User_Friends = () => {
 
             case "MISLEADING":
                 set_alert_text(``)
-                Dispatch(Report_Misleading_Chat({
+                Dispatch(Report_Misleading_Content({
                     participant_id: friend_user_id,
                     reason: reported_reason_from_end_user_input
                 })).then(() => {
@@ -176,7 +181,7 @@ const End_User_Friends = () => {
 
             case "THREAT":
                 set_alert_text(``)
-                Dispatch(Report_Threat_Chat({
+                Dispatch(Report_Threat_Content({
                     participant_id: friend_user_id,
                     reason: reported_reason_from_end_user_input
                 })).then(() => {
@@ -255,9 +260,9 @@ const End_User_Friends = () => {
         }
 
         return (
-            <ListGroup variant="flush text-start">
+            <ListGroup variant="flush">
                 {Object.values(props.end_user.people?.friends?.approved?.users_data).map((user: any, index: number) => (
-                    <ListGroup.Item key={user.user_id ?? index}>
+                    <ListGroup.Item key={user.user_id ?? index} style={{ backgroundColor: "transparent" }}>
                         <Row>
                             <Col className="text-center">
                                 {user.account?.avatar_url_path && user.account?.avatar_url_path !== "" &&
@@ -265,19 +270,23 @@ const End_User_Friends = () => {
                                 }
 
                                 {user.account?.avatar_url_path === "" &&
-                                    <center>
+                                    <>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="124" height="124" fill="currentColor" className="bi-person-circle d-inline-block align-top mt-2 rounded-circle" viewBox="0 0 16 16">
                                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                                             <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
                                         </svg>
-                                    </center>
-                                } 
+                                    </>
+                                }
+
                                 <br />
-                                {user.account?.name ?? "Unknown User"}
                                 <br />
-                                {lbl.Status}: {user.account?.online_status != 5 ? user.account?.online_status : user.account?.custom_lbl}
+                                <p>{user.account?.name ?? "Unknown User"}</p>
+                                <br />
+                                <p>{lbl.Status}: {Dispatch(Get_Status_Label(user.account?.online_status))}</p>
+                                <br />
+                                <br />
                             </Col>
-                            <Col className="d-flex justify-content-end">
+                            <Col className="text-end">
                                 <Row>
                                     <Col>
                                         <Button
@@ -304,7 +313,7 @@ const End_User_Friends = () => {
                                                 </>
                                             )}
                                         </Button>
-                                        <Button variant="success"
+                                        <Button
                                             onClick={() => {
                                                 Navigate.push(`/Profile/View/${user.user_id.toString()}`)
                                             }}
@@ -453,6 +462,32 @@ const End_User_Friends = () => {
         )
     } 
 
+    const [active_pagination_number, set_pagination_active_number] = useState(1)
+
+    const build_pagination_tiles = () => {
+
+        const pagination_html = []
+        const count = props.end_user.people?.friends?.approved?.user_ids?.length
+
+        if (count) {
+            for (let number = 1; number <= Math.ceil(count / 10); number++) {
+                pagination_html.push(
+                    <Pagination.Item
+                        onClick={() => {
+                            set_pagination_active_number(number)
+                            Dispatch(Load_End_User_Friends((number - 1) * 10))
+                        }}
+                        key={number}
+                        active={number === active_pagination_number}
+                    >
+                        {number}
+                    </Pagination.Item>
+                )
+            }
+            return <Pagination size="lg" className="float-end">{pagination_html}</Pagination>
+        }
+    }
+
     useEffect(() => {
         Dispatch(Load_End_User_Friends())
 
@@ -493,6 +528,7 @@ const End_User_Friends = () => {
                                     <ListGroup variant="flush text-start">
                                         {build_friends_list()}
                                     </ListGroup>
+                                    {build_pagination_tiles()}
                                 </Col>
                             </Row>
                             {props.end_user.people?.friends?.blocked?.user_ids?.length !== 0 &&

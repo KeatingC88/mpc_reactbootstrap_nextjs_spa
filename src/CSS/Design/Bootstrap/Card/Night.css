@@ -1,0 +1,7 @@
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div.card,
+body[data-theme="Night-Theme"] > main > div > div > div > div.card,
+body[data-theme="Night-Theme"] > div > div > div > div > div > div.card {
+    background: linear-gradient(45deg, rgb(0, 0, 4) 10%, rgba(39, 37, 36, 0.5) 62%, rgb(0 0 4));
+    box-shadow: 0px 0px 0px 2px inset rgba(182,255,182, .9);
+    color: rgba(182, 255, 182, .9) !important;
+}
