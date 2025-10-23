@@ -259,12 +259,15 @@ const End_User_Friends = () => {
             )
         }
 
+        console.log(props.end_user.people?.friends?.approved?.users_data)
+
         return (
             <ListGroup variant="flush">
                 {Object.values(props.end_user.people?.friends?.approved?.users_data).map((user: any, index: number) => (
                     <ListGroup.Item key={user.user_id ?? index} style={{ backgroundColor: "transparent" }}>
                         <Row>
                             <Col className="text-center">
+
                                 {user.account?.avatar_url_path && user.account?.avatar_url_path !== "" &&
                                     <Image src={`${user.avatar_url_path}`} roundedCircle height="124" width="124" className="mb-3" />
                                 }
@@ -278,13 +281,11 @@ const End_User_Friends = () => {
                                     </>
                                 }
 
-                                <br />
-                                <br />
-                                <p>{user.account?.name ?? "Unknown User"}</p>
-                                <br />
-                                <p>{lbl.Status}: {Dispatch(Get_Status_Label(user.account?.online_status))}</p>
-                                <br />
-                                <br />
+                                <p className="mb-2">{user.account?.name ?? "Unknown User"}</p>
+                                <p className="mb-2">{Dispatch(Get_Status_Label(user.account?.online_status))}</p>
+
+                                
+
                             </Col>
                             <Col className="text-end">
                                 <Row>

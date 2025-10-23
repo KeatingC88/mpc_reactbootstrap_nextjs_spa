@@ -1,5 +1,6 @@
+import { Get_Nation_Flag_Value } from '@JS/Get_Nation_Flag_Value'
+
 import {
-    Get_Nation_Flag_Value,
     Map_GUI_Values_For_Database_Storage,
     Map_Database_Values_For_ReactBootstrap
 } from '@Redux_Thunk/Actions/Misc'
@@ -17,8 +18,6 @@ import {
     UPDATE_END_USER_PROFILE_ACCOUNT_STATE,
     UPDATE_APPLICATION_SETTINGS_MAX_BOOTSTRAP_GRID_COLUMNS,
     CLIENT_ADDRESS,
-    JWT_ISSUER_KEY,
-    JWT_CLIENT_KEY,
     UPDATE_APPLICATION_SETTINGS_FLAG,
     UPDATE_APPLICATION_SETTINGS_ALIGNMENT,
     UPDATE_APPLICATION_SETTINGS_NAV_LOCK,
@@ -32,7 +31,7 @@ import {
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import type { AppDispatch } from '@Redux_Thunk/Provider'
 
-import { Get_Device_Information } from '@Redux_Thunk/Actions/Misc'
+import { DTO } from '@JS/Required_DTO_Properties'
 
 export const Login_Email_Password_Account = (dto: {
     email_address: string
@@ -48,35 +47,17 @@ export const Login_Email_Password_Account = (dto: {
         text_alignment: current_setting.text_alignment,
     })
 
-    await axios.put(`/api/authentication/login/email_password_account`, {
-        email_address: `${dto.email_address}`,
-        password: `${dto.password}`,
-        theme: `${current_setting.theme}`,
-        alignment: `${converted_alignment_numerically.alignment}`,
-        text_alignment: `${converted_alignment_numerically.text_alignment}`,
-        grid_type: `${current_setting.grid_type}`,
-        locked: `${current_setting.nav_lock}`,
-        language: `${current_language_state.current_language.split(`-`)[0]}`,
-        region: `${current_language_state.current_language.split(`-`)[1]}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch(async (error: any) => {
+    await axios.put(`/api/authentication/login/email_password_account`, DTO({
+        email_address: dto.email_address,
+        password: dto.password,
+        theme: current_setting.theme,
+        alignment: converted_alignment_numerically.alignment,
+        text_alignment: converted_alignment_numerically.text_alignment,
+        grid_type: current_setting.grid_type,
+        locked: current_setting.nav_lock,
+        language: current_language_state.current_language.split(`-`)[0],
+        region: current_language_state.current_language.split(`-`)[1]
+    })).catch(async (error: any) => {
         return await new Promise((reject) => {
             error.id = `Email-Login-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })

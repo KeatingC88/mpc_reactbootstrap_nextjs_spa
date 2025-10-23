@@ -1,31 +1,37 @@
 import {
-    Get_Nation_Flag_Value,
     Map_GUI_Values_For_Database_Storage,
     Map_Database_Values_For_ReactBootstrap
 } from '@Redux_Thunk/Actions/Misc'
+
+import { Get_Nation_Flag_Value } from '@JS/Get_Nation_Flag_Value'
 
 import axios from 'axios'
 
 import {
     UPDATE_NETWORK_ERROR_STATE,
-    UPDATE_END_USER_ACCOUNT_STATE, UPDATE_APPLICATION_SETTINGS_LOCAL_TIME,
-    UPDATE_APPLICATION_SETTINGS_GLOBAL_TIME, UPDATE_APPLICATION_SETTINGS_DATE,
-    UPDATE_APPLICATION_SETTINGS_LOCATION, UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE,
-    UPDATE_END_USER_PROFILE_ACCOUNT_STATE, UPDATE_APPLICATION_SETTINGS_MAX_BOOTSTRAP_GRID_COLUMNS,
-    CLIENT_ADDRESS, JWT_ISSUER_KEY, JWT_CLIENT_KEY,
-    UPDATE_APPLICATION_SETTINGS_FLAG, UPDATE_APPLICATION_SETTINGS_ALIGNMENT,
-    UPDATE_APPLICATION_SETTINGS_NAV_LOCK, UPDATE_APPLICATION_SETTINGS_THEME,
-    UPDATE_APPLICATION_SETTINGS_TEXT_ALIGNMENT, DEFAULT_NETWORK_ERROR_STATE,
+    UPDATE_END_USER_ACCOUNT_STATE,
+    UPDATE_APPLICATION_SETTINGS_LOCAL_TIME,
+    UPDATE_APPLICATION_SETTINGS_GLOBAL_TIME,
+    UPDATE_APPLICATION_SETTINGS_DATE,
+    UPDATE_APPLICATION_SETTINGS_LOCATION,
+    UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE,
+    UPDATE_END_USER_PROFILE_ACCOUNT_STATE,
+    UPDATE_APPLICATION_SETTINGS_MAX_BOOTSTRAP_GRID_COLUMNS,
+    CLIENT_ADDRESS,
+    UPDATE_APPLICATION_SETTINGS_FLAG,
+    UPDATE_APPLICATION_SETTINGS_ALIGNMENT,
+    UPDATE_APPLICATION_SETTINGS_NAV_LOCK,
+    UPDATE_APPLICATION_SETTINGS_THEME,
+    UPDATE_APPLICATION_SETTINGS_TEXT_ALIGNMENT,
+    DEFAULT_NETWORK_ERROR_STATE,
     DEFAULT_HOST_ERROR_STATE,
     UPDATE_CSS_CUSTOM_DESIGN_STATE,
 } from '@Constants'
 
-import { Encrypt } from '@AES/Encryptor'
-
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import type { AppDispatch } from '@Redux_Thunk/Provider'
 
-import { Get_Device_Information } from '@Redux_Thunk/Actions/Misc'
+import { DTO } from '../../../JS/Required_DTO_Properties'
 
 export const Login_Discord_Account = () => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
 
@@ -38,33 +44,15 @@ export const Login_Discord_Account = () => async (dispatch: AppDispatch, getStat
         text_alignment: current_setting.text_alignment,
     })
 
-    await axios.put(`/api/authentciation/login/discord_account`, {
-        theme: `${current_setting.theme}`,
-        alignment: `${converted_alignment_numerically.alignment}`,
-        text_alignment: `${converted_alignment_numerically.text_alignment}`,
-        grid_type: `${current_setting.grid_type}`,
-        locked: `${current_setting.nav_lock}`,
-        language: `${current_language_state.current_language.split(`-`)[0]}`,
-        region: `${current_language_state.current_language.split(`-`)[1]}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch(async (error) => {
+    await axios.put(`/api/authentciation/login/discord_account`, DTO({
+        theme: current_setting.theme,
+        alignment: converted_alignment_numerically.alignment,
+        text_alignment: converted_alignment_numerically.text_alignment,
+        grid_type: current_setting.grid_type,
+        locked: current_setting.nav_lock,
+        language: current_language_state.current_language.split("-")[0],
+        region: current_language_state.current_language.split("-")[1]
+    })).catch( async (error) => {
         return await new Promise((reject) => {
             error.id = `Email-Login-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -73,7 +61,7 @@ export const Login_Discord_Account = () => async (dispatch: AppDispatch, getStat
                 dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
             }, 1)
         })
-    }).then(async (response: any) => {
+    }).then( async (response: any) => {
 
         let response_data = response.mpc_data
 

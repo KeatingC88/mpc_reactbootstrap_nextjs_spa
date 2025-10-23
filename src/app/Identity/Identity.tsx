@@ -20,7 +20,7 @@ import {
     Change_End_User_Middle_Name, Default_End_User_Birthdate
 } from '@Redux_Thunk/Actions/User/Identity'
 
-import { Delay_Execution } from '@Redux_Thunk/Actions/Misc'
+import { Delay_Function_Execution } from '../../JS/Delay_Funtion_Execution'
 
 const Identity = () => {
 
@@ -155,7 +155,7 @@ const Identity = () => {
     const create_error_message_to_display_to_user = (message: string) => {
         set_alert_color(`danger`)
         set_alert_text(`${message}`)
-        Delay_Execution(new Date().getTime() + 3000, (async () => {
+        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
             set_alert_text(``)
             set_alert_color(``)
         }))
@@ -164,7 +164,7 @@ const Identity = () => {
     const create_success_message_to_display_to_user = (message: string) => {
         set_alert_color(`success`)
         set_alert_text(`${message}`)
-        Delay_Execution(new Date().getTime() + 3000, (async () => {
+        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
             set_alert_text(``)
             set_alert_color(``)
         }))
@@ -173,7 +173,7 @@ const Identity = () => {
     const create_information_message_to_display_to_user = (message: string) => {
         set_alert_color(`info`)
         set_alert_text(`${message}`)
-        Delay_Execution(new Date().getTime() + 3000, (async () => {
+        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
             set_alert_text(``)
             set_alert_color(``)
         }))
@@ -200,7 +200,7 @@ const Identity = () => {
                         create_success_message_to_display_to_user(``)
 
                         Dispatch(Change_End_User_Ethnicity(``))
-                        Delay_Execution(new Date().getTime() + 3000, (async () => {
+                        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                             create_success_message_to_display_to_user(`${lbl.Saved}.`)
 
@@ -218,7 +218,7 @@ const Identity = () => {
                         create_information_message_to_display_to_user(`${lbl.Saving}...`)
 
                         Dispatch(Change_End_User_Ethnicity(ethnicity))
-                        Delay_Execution(new Date().getTime() + 3000, (async () => {
+                        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                             create_success_message_to_display_to_user(`${lbl.Saved}.`)
 
@@ -232,7 +232,7 @@ const Identity = () => {
                 set_ethnicity(ethnicity)
 
                 Dispatch(Change_End_User_Ethnicity(ethnicity))
-                Delay_Execution(new Date().getTime() + 3000, (async () => {
+                Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                     create_success_message_to_display_to_user(`${lbl.Saved}.`)
 
@@ -256,7 +256,7 @@ const Identity = () => {
                         create_success_message_to_display_to_user(``)
 
                         Dispatch(Change_End_User_First_Name(``))
-                        Delay_Execution(new Date().getTime() + 3000, (async () => {
+                        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                             create_success_message_to_display_to_user(`${lbl.Saved}.`)
 
@@ -274,7 +274,7 @@ const Identity = () => {
                         create_information_message_to_display_to_user(`${lbl.Saving}...`)
 
                         Dispatch(Change_End_User_First_Name(first_name))
-                        Delay_Execution(new Date().getTime() + 3000, (async () => {
+                        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                             create_success_message_to_display_to_user(`${lbl.Saved}.`)
 
@@ -286,7 +286,7 @@ const Identity = () => {
                 break
             default:
                 Dispatch(Change_End_User_First_Name(first_name))
-                Delay_Execution(new Date().getTime() + 3000, (async () => {
+                Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                     create_success_message_to_display_to_user(`${lbl.Saved}.`)
 
@@ -309,7 +309,7 @@ const Identity = () => {
                         create_success_message_to_display_to_user(``)
 
                         Dispatch(Change_End_User_Last_Name(``))
-                        Delay_Execution(new Date().getTime() + 3000, (async () => {
+                        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                             create_success_message_to_display_to_user(`${lbl.Saved}.`)
 
@@ -326,7 +326,7 @@ const Identity = () => {
                         create_information_message_to_display_to_user(`${lbl.Saving}...`)
 
                         Dispatch(Change_End_User_Last_Name(last_name))
-                        Delay_Execution(new Date().getTime() + 3000, (async () => {
+                        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                             create_success_message_to_display_to_user(`${lbl.Saved}.`)
 
@@ -338,7 +338,7 @@ const Identity = () => {
                 break
             default:
                 Dispatch(Change_End_User_Last_Name(last_name))
-                Delay_Execution(new Date().getTime() + 3000, (async () => {
+                Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                     create_success_message_to_display_to_user(`${lbl.Saved}.`)
 
@@ -362,7 +362,7 @@ const Identity = () => {
 
                         Dispatch(Change_End_User_Maiden_Name(``))
 
-                        Delay_Execution(new Date().getTime() + 3000, (async () => {
+                        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                             create_success_message_to_display_to_user(`${lbl.Saved}.`)
 
@@ -379,7 +379,7 @@ const Identity = () => {
                         set_maiden_name(maiden_name)
                         create_information_message_to_display_to_user(`${lbl.Saving}`)
 
-                        Delay_Execution(new Date().getTime() + 3000, (async () => {
+                        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                             create_success_message_to_display_to_user(`${lbl.Saved}`)
 
@@ -390,7 +390,7 @@ const Identity = () => {
                 break
             default:
                 Dispatch(Change_End_User_Maiden_Name(maiden_name))
-                Delay_Execution(new Date().getTime() + 3000, (async () => {
+                Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                     create_success_message_to_display_to_user(`${lbl.Saved}`)
 
@@ -413,7 +413,7 @@ const Identity = () => {
                         set_middle_name(``)
 
                         Dispatch(Change_End_User_Middle_Name(``))
-                        Delay_Execution(new Date().getTime() + 3000, (async () => {
+                        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                             create_success_message_to_display_to_user(`${lbl.Saved}`)
 
@@ -432,7 +432,7 @@ const Identity = () => {
 
                         Dispatch(Change_End_User_Middle_Name(middle_name))
 
-                        Delay_Execution(new Date().getTime() + 3000, (async () => {
+                        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                             create_success_message_to_display_to_user(`${lbl.Saved}`)
 
@@ -446,7 +446,7 @@ const Identity = () => {
 
                 Dispatch(Change_End_User_Middle_Name(middle_name))
 
-                Delay_Execution(new Date().getTime() + 3000, (async () => {
+                Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
 
                     create_success_message_to_display_to_user(`${lbl.Saved}`)
 

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import Redux_Provider from '@Redux_Thunk/Provider'
 import Navigation_Menu from '@Shared_Components/Navigation_Menu'
-import { Moveable_Card_2D } from '@Redux_Thunk/Actions/Misc'
+import { Moveable_Card_2D } from '@JS/Moveable_Cards_2D'
 
 const App = ({ children }: { children: React.ReactNode }) => {
 

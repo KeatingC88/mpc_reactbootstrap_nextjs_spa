@@ -24,6 +24,9 @@ export const POST = async (req: NextRequest) => {
         const host = headers.get("host")
         const baseUrl = `${protocol}://${host}`
 
+        console.log(`encrypt these values...`)
+        console.log(body)
+
         if (USERS_SERVER_COOKIE_NAME)
             token = cookie.get(USERS_SERVER_COOKIE_NAME)?.value
 

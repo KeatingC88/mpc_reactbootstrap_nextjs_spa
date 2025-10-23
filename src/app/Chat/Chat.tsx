@@ -34,9 +34,7 @@ import {
     Report_Hate_Content,
 } from '@Redux_Thunk/Actions/User/Reported'
 
-import {
-    Delay_Execution
-} from '@Redux_Thunk/Actions/Misc'
+import { Delay_Function_Execution } from '@JS/Delay_Function_Execution'
 
 const WebSocket_Chat = () => {
 
@@ -82,7 +80,7 @@ const WebSocket_Chat = () => {
     const create_error_alert = (message: string | null) => {
         set_alert_color(`danger`)
         set_alert_text(`${message}`)
-        Delay_Execution(new Date().getTime() + 3000, (async () => {
+        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
             set_alert_text(``)
             set_alert_color(``)
         }))
@@ -91,7 +89,7 @@ const WebSocket_Chat = () => {
     const create_success_alert = (message: string) => {
         set_alert_color(`success`)
         set_alert_text(`${message}`)
-        Delay_Execution(new Date().getTime() + 3000, (async () => {
+        Delay_Function_Execution(new Date().getTime() + 3000, (async () => {
             set_alert_text(``)
             set_alert_color(``)
         }))
@@ -100,7 +98,7 @@ const WebSocket_Chat = () => {
     const create_information_alert = (message: string) => {
         set_alert_color(`info`)
         set_alert_text(`${message}`)
-        Delay_Execution(new Date().getTime() + 8000, (async () => {
+        Delay_Function_Execution(new Date().getTime() + 8000, (async () => {
             set_alert_text(``)
             set_alert_color(``)
         }))

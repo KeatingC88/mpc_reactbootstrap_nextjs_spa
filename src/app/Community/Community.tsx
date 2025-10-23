@@ -15,8 +15,8 @@ import {
     Tooltip, ButtonToolbar, ButtonGroup, Button, Pagination
 } from 'react-bootstrap'
 
-import { Load_Community_Users } from '@Redux_Thunk/Actions/Community/Load'
-import { Get_Nation_Flag_Value } from '@Redux_Thunk/Actions/Misc'
+import { Load_Community_Users } from '@Redux_Thunk/Actions/Community/Users'
+import { Get_Nation_Flag_Value } from '@JS/Get_Nation_Flag_Value'
 
 import {
     Get_Status_Label
@@ -219,6 +219,7 @@ const Community = () => {
         <Container fluid>
             <Row className={`${props.application.settings.alignment}`}>
                 <Col className={`${props.application.settings.grid_type === 1 ? "col-xs-12 col-sm-12 col-md-12 col-lg-12 p-0" : ""}`}>
+
                     <Card className={`moveable ${props.application.settings.alignment === 'justify-content-start' ? '' : ''} ${props.application.settings.alignment === 'justify-content-end' ? '' : ''} ${props.application.settings.alignment === 'justify-content-center' ? 'mx-auto' : ''}`}
                         style={{
                             float: props.application.settings.alignment === `justify-content-end` ? `right` : `none`,
@@ -253,42 +254,46 @@ const Community = () => {
                                 className=" mr-sm-2 w-50 text-center mx-auto"
                             />
                         </Card.Header>
+
                         <Card.Body
                             style={{
                                 backgroundColor: `${props.end_user.custom_design?.card_body_background_color}`,
                                 color: `${props.end_user.custom_design?.card_body_font_color}`,
                                 fontFamily: `${props.end_user.custom_design?.card_body_font}`
-                            }}
-                        >
-                            {!props.application.community.users &&
-                                <Row>
-                                    <Col>
-                                        {lbl.Loading}
-                                        <br />
-                                        <Spinner animation="border"
-                                            style={{ maxHeight: 400, maxWidth: 400 }}
-                                        />
-                                    </Col>
-                                </Row>
-                            }
-                            {props.application.community.users &&
-                                <Table striped bordered hover variant={`dark`}>
-                                    <thead>
-                                        <tr>
-                                            <th style={{ fontSize: '8pt' }}>
-                                                {lbl.Count}:&nbsp;{props.application.community.users ? Object.keys(props.application.community.users.users_data).length : `Missingno`}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {build_table_record_rows()}
-                                    </tbody>
-                                </Table>
-                            }
+                        }}>
+
+                        {!props.application.community.users &&
+                            <Row>
+                                <Col>
+                                    {lbl.Loading}
+                                    <br />
+                                    <Spinner animation="border"
+                                        style={{ maxHeight: 400, maxWidth: 400 }}
+                                    />
+                                </Col>
+                            </Row>
+                        }
+
+                        {props.application.community.users &&
+                            <Table striped bordered hover variant={`dark`}>
+                                <thead>
+                                    <tr>
+                                        <th style={{ fontSize: '8pt' }}>
+                                            {lbl.Count}:&nbsp;{props.application.community.users ? Object.keys(props.application.community.users.users_data).length : `Missingno`}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {build_table_record_rows()}
+                                </tbody>
+                            </Table>
+                        }
                         </Card.Body>
+
                         <Card.Footer>
                             {build_pagination_tiles()}
                         </Card.Footer>
+
                     </Card>
                 </Col>
             </Row>

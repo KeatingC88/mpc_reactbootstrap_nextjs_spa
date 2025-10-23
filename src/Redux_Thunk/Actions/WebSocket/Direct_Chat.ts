@@ -19,8 +19,9 @@ import {
 import { Encrypt } from '@AES/Encryptor'
 import { Decrypt } from '@AES/Decryptor'
 
-import { Get_Device_Information } from '@Redux_Thunk/Actions/Misc'
+import { Get_Device_Information } from '@JS/End_User_Device_Information'
 import { Build_Required_Report_Object } from '@Redux_Thunk/Actions/User/Reported'
+import { DTO } from '@JS/Required_DTO_Properties'
 
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import type { AppDispatch } from '@Redux_Thunk/Provider'
@@ -143,33 +144,14 @@ export const Read_Both_Conversation_Participants_WebSocket_Conversation_Permissi
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
     let current_language_state = state.Application_Language_State_Reducer
-    let body = {
-        id: `${end_user_account.id}`,
-        account_type: `${end_user_account.account_type}`,
-        login_type: `${end_user_account.login_type}`,
-        language: `${current_language_state.language}`,
-        region: `${current_language_state.region}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }
 
-    await axios.post(`/api/websocket/direct_chat/end_user/chat_requests`, body).catch(async(error) => {
+    await axios.post(`/api/websocket/direct_chat/end_user/chat_requests`, DTO({
+        id: end_user_account.id,
+        account_type: end_user_account.account_type,
+        login_type: end_user_account.login_type,
+        language: current_language_state.language,
+        region: current_language_state.region,
+    })).catch(async(error) => {
         return await new Promise(() => {
             error.id = `WebSocket-Chat-Request-Data-Request-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -181,7 +163,13 @@ export const Read_Both_Conversation_Participants_WebSocket_Conversation_Permissi
         dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_SENT_REQUESTS_STATE, payload: { conversation_sent_requests: response } })
     })
         
-    await axios.post(`/api/websocket/direct_chat/end_user/chat_blocks`, body).catch( async (error) => {
+    await axios.post(`/api/websocket/direct_chat/end_user/chat_blocks`, DTO({
+        id: end_user_account.id,
+        account_type: end_user_account.account_type,
+        login_type: end_user_account.login_type,
+        language: current_language_state.language,
+        region: current_language_state.region,
+    })).catch( async (error) => {
         return await new Promise(() => {
             error.id = `WebSocket-Block-Data-Request-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -193,7 +181,13 @@ export const Read_Both_Conversation_Participants_WebSocket_Conversation_Permissi
         dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_SENT_BLOCKS_STATE, payload: { conversation_sent_blocks: response } })
     })
 
-    await axios.post(`/api/websocket/direct_chat/end_user/chat_approvals`, body).catch(async(error) => {
+    await axios.post(`/api/websocket/direct_chat/end_user/chat_approvals`, DTO({
+        id: end_user_account.id,
+        account_type: end_user_account.account_type,
+        login_type: end_user_account.login_type,
+        language: current_language_state.language,
+        region: current_language_state.region,
+    })).catch(async(error) => {
         return await new Promise(() => {
             error.id = `WebSocket-Approval-Data-Request-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -205,7 +199,13 @@ export const Read_Both_Conversation_Participants_WebSocket_Conversation_Permissi
         dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_SENT_APPROVALS_STATE, payload: { conversation_sent_approvals: response } })
     })
 
-    await axios.post('/api/websocket/direct_chat/end_user/chat_requests', body).catch(async(error) => {
+    await axios.post('/api/websocket/direct_chat/end_user/chat_requests', DTO({
+        id: end_user_account.id,
+        account_type: end_user_account.account_type,
+        login_type: end_user_account.login_type,
+        language: current_language_state.language,
+        region: current_language_state.region,
+    })).catch(async(error) => {
         return await new Promise(() => {
             error.id = `WebSocket-Request-Participant-Data-Request-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -217,7 +217,13 @@ export const Read_Both_Conversation_Participants_WebSocket_Conversation_Permissi
         dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_REQUESTS_STATE, payload: { conversation_received_requests: response } })
     })
 
-    await axios.post('/api/websocket/direct_chat/end_user/chat_blocks', body).catch(async(error) => {
+    await axios.post('/api/websocket/direct_chat/end_user/chat_blocks', DTO({
+        id: end_user_account.id,
+        account_type: end_user_account.account_type,
+        login_type: end_user_account.login_type,
+        language: current_language_state.language,
+        region: current_language_state.region,
+    })).catch(async(error) => {
         return await new Promise(() => {
             error.id = `WebSocket-Blocks-Participant-Data-Request-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -229,7 +235,13 @@ export const Read_Both_Conversation_Participants_WebSocket_Conversation_Permissi
         dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_BLOCKS_STATE, payload: { conversation_received_blocks: response } })
     })
 
-    await axios.post('/api/websocket/direct_chat/end_user/chat_approvals', body).catch(async(error) => {
+    await axios.post('/api/websocket/direct_chat/end_user/chat_approvals', DTO({
+        id: end_user_account.id,
+        account_type: end_user_account.account_type,
+        login_type: end_user_account.login_type,
+        language: current_language_state.language,
+        region: current_language_state.region,
+    })).catch(async(error) => {
         return await new Promise(() => {
             error.id = `WebSocket-Approval-Data-Request-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -237,7 +249,7 @@ export const Read_Both_Conversation_Participants_WebSocket_Conversation_Permissi
                 dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
             }, 1)
         })
-    }).then(async (response: any) => {
+    }).then( async (response: any) => {
         dispatch({ type: UPDATE_APPLICATION_WEBSOCKET_CONVERSATION_RECEIVED_APPROVALS_STATE, payload: { conversation_received_approvals: response } })
     })
 }
@@ -327,32 +339,14 @@ export const Authenticate_End_Users_Permissions = (dto: {
     let end_user_account = state.End_User_Account_State_Reducer
     let current_language_state = state.Application_Language_State_Reducer
 
-    await axios.post(`/api/websocket/direct_chat/authorize_users`, {
-        id: `${end_user_account.id}`,
-        user: `${dto.id}`,
-        account_type: `${end_user_account.account_type}`,
-        login_type: `${end_user_account.login_type}`,
-        language: `${current_language_state.language}`,
-        region: `${current_language_state.region}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch((error) => {
+    await axios.post(`/api/websocket/direct_chat/authorize_users`, DTO({
+        id: end_user_account.id,
+        user: dto.id,
+        account_type: end_user_account.account_type,
+        login_type: end_user_account.login_type,
+        language: current_language_state.language,
+        region: current_language_state.region
+    })).catch((error) => {
 
         return new Promise((reject) => {
             error.id = `WebSocket-Authorized-Request-Failed`
@@ -505,32 +499,14 @@ export const Approve_Chat_For_End_User = (value: BigInt) => async (dispatch: App
     let end_user_account = getState().End_User_Account_State_Reducer
     let current_language_state = state.Application_Language_State_Reducer
 
-    await axios.post('/api/websocket/direct_chat/end_user/approve_invite', {
+    await axios.post('/api/websocket/direct_chat/end_user/approve_invite', DTO({
         user: `${value}`,
         id: `${end_user_account.id}`,
         account_type: `${end_user_account.account_type}`,
         login_type: `${end_user_account.login_type}`,
         language: `${current_language_state.language}`,
-        region: `${current_language_state.region}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch((error) => {
+        region: `${current_language_state.region}`
+    })).catch((error) => {
 
         return new Promise((reject) => {
             error.id = `WebSocket-Approve-Chat-Failed`
@@ -567,32 +543,14 @@ export const Reject_Chat_For_End_User = (value: BigInt) => async (dispatch: AppD
     let end_user_account = state.End_User_Account_State_Reducer
     let current_language_state = state.Application_Language_State_Reducer
 
-    await axios.post('/api/websocket/direct_chat/end_user/reject_invite', {
+    await axios.post('/api/websocket/direct_chat/end_user/reject_invite', DTO({
         user: `${value}`,
         id: `${end_user_account.id}`,
         account_type: `${end_user_account.account_type}`,
         login_type: `${end_user_account.login_type}`,
         language: `${current_language_state.language}`,
-        region: `${current_language_state.region}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch((error) => {
+        region: `${current_language_state.region}`
+    })).catch((error) => {
 
         return new Promise((reject) => {
             error.id = `WebSocket-Approve-Chat-Failed`

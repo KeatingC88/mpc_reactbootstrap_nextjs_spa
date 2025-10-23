@@ -19,7 +19,7 @@ import {
     FloatingLabel
 } from 'react-bootstrap'
 
-import { Load_Profile_Viewer_Data } from '@Redux_Thunk/Actions/Community/Load'
+import { Load_Profile_Viewer_Data } from '@Redux_Thunk/Actions/Community/Users'
 
 import { useRouter, usePathname } from 'next/navigation'
 
@@ -49,7 +49,7 @@ import {
     Report_Hate_Content
 } from '@Redux_Thunk/Actions/User/Reported'
 
-import { Delay_Execution } from '@Redux_Thunk/Actions/Misc'
+import { Delay_Function_Execution } from '@JS/Delay_Function_Execution'
 
 import {
     Request_Friend,
@@ -156,7 +156,7 @@ const Profile_View = () => {
                 message: `${lbl.HasJoinedTheChat}`
             })).then((obj: any) => {
 
-                Delay_Execution(new Date().getTime() + 2000, (async () => {
+                Delay_Function_Execution(new Date().getTime() + 2000, (async () => {
 
                     switch (true) {
                         case obj.blocked === 1:

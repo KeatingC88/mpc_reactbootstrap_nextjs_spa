@@ -16,13 +16,15 @@ import {
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import type { AppDispatch } from '@Redux_Thunk/Provider'
 
+import { Get_Device_Information } from '@JS/End_User_Device_Information'
+
 import {
-    Get_Device_Information,
     Map_GUI_Values_For_Database_Storage,
     Update_Progress_Bar_Value
 } from '@Redux_Thunk/Actions/Misc'
 
 import axios from 'axios'
+import { DTO } from '../../../JS/Required_DTO_Properties'
 
 export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getState: () => Current_Redux_State): Promise<unknown> | undefined => {
     try {
@@ -86,34 +88,16 @@ export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getSt
                 dispatch(Update_Progress_Bar_Value(100))
             }, 20000)
 
-            axios.post(`/api/authentication/login/twitch_account`, {
+            axios.post(`/api/authentication/login/twitch_account`, DTO({
                 code: code,
                 language: `${current_language_state.current_language.split(`-`)[0]}`,
                 region: `${current_language_state.current_language.split(`-`)[1]}`,
-                client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-                location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
                 theme: `${collected_end_user_data.theme}`,
                 alignment: `${converted_to_numerical_values.alignment}`,
                 nav_lock: `${collected_end_user_data.nav_lock}`,
                 text_alignment: `${converted_to_numerical_values.text_alignment}`,
-                grid_type: `${collected_end_user_data.grid_type}`,
-                jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-                jwt_client_key: `${JWT_CLIENT_KEY}`,
-                jwt_client_address: `${CLIENT_ADDRESS}`,
-                user_agent: `${Get_Device_Information().userAgent}`,
-                orientation: `${Get_Device_Information().orientation_type}`,
-                screen_width: `${Get_Device_Information().screen_width}`,
-                screen_height: `${Get_Device_Information().screen_height}`,
-                color_depth: `${Get_Device_Information().color_depth}`,
-                pixel_depth: `${Get_Device_Information().pixel_depth}`,
-                window_width: `${Get_Device_Information().window_width}`,
-                window_height: `${Get_Device_Information().window_height}`,
-                connection_type: `${Get_Device_Information().effectiveType}`,
-                down_link: `${Get_Device_Information().downlink}`,
-                rtt: `${Get_Device_Information().rtt}`,
-                data_saver: `${Get_Device_Information().saveData}`,
-                device_ram_gb: `${Get_Device_Information().deviceMemory}`
-            }, {
+                grid_type: `${collected_end_user_data.grid_type}`
+            }), {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -255,30 +239,12 @@ export const Login_End_User_Twitch_Account = () => (dispatch: AppDispatch, getSt
                 dispatch(Update_Progress_Bar_Value(100))
             }, 8000)
 
-            axios.post(`/api/integrate/twitch`, {
+            axios.post(`/api/integrate/twitch`, DTO({
                 code: code,
                 language: `${current_language_state.current_language.split(`-`)[0]}`,
                 region: `${current_language_state.current_language.split(`-`)[1]}`,
-                client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-                location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-                login_type: current_end_user_state.login_type,
-                jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-                jwt_client_key: `${JWT_CLIENT_KEY}`,
-                jwt_client_address: `${CLIENT_ADDRESS}`,
-                user_agent: `${Get_Device_Information().userAgent}`,
-                orientation: `${Get_Device_Information().orientation_type}`,
-                screen_width: `${Get_Device_Information().screen_width}`,
-                screen_height: `${Get_Device_Information().screen_height}`,
-                color_depth: `${Get_Device_Information().color_depth}`,
-                pixel_depth: `${Get_Device_Information().pixel_depth}`,
-                window_width: `${Get_Device_Information().window_width}`,
-                window_height: `${Get_Device_Information().window_height}`,
-                connection_type: `${Get_Device_Information().effectiveType}`,
-                down_link: `${Get_Device_Information().downlink}`,
-                rtt: `${Get_Device_Information().rtt}`,
-                data_saver: `${Get_Device_Information().saveData}`,
-                device_ram_gb: `${Get_Device_Information().deviceMemory}`
-            }, {
+                login_type: current_end_user_state.login_type
+            }), {
                 headers: {
                     'Content-Type': 'application/json'
                 },

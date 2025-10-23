@@ -30,7 +30,7 @@ import {
     Update_Article_By_ID
 } from '@Redux_Thunk/Actions/Community/News'
 
-import { Get_Nation_Flag_Value } from '@Redux_Thunk/Actions/Misc'
+import { Get_Nation_Flag_Value } from '@JS/Get_Nation_Flag_Value'
 
 import { usePathname } from 'next/navigation'
 

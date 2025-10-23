@@ -10,8 +10,11 @@ import {
 } from 'react-bootstrap'
 
 import { useRouter } from 'next/navigation'
-
 import { useSelector } from 'react-redux'
+
+import { Get_Nation_Flag_Value } from '@JS/Get_Nation_Flag_Value'
+import { Delay_Function_Execution } from '@JS/Delay_Funtion_Execution'
+
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
 
@@ -26,14 +29,8 @@ import {
 } from '@Redux_Thunk/Actions/User/Selected'
 
 import { Renew_Session_Token } from '@Redux_Thunk/Actions/Authentication/Session_Token'
-
-import {
-    Logout_User_Database
-} from '@Redux_Thunk/Actions/Authentication/Logout'
-
-import {
-    Get_Nation_Flag_Value, Delay_Execution, Update_Mobile_Mode
-} from '@Redux_Thunk/Actions/Misc'
+import { Logout_User_Database } from '@Redux_Thunk/Actions/Authentication/Logout'
+import { Update_Mobile_Mode } from '@Redux_Thunk/Actions/Misc'
 
 let end_user_token_prompt_response = false
 
@@ -76,7 +73,7 @@ const Navigation_Menu = () => {
     const create_navbar_success_notification = (message: String) => {
         set_alert_color(`success`)
         set_alert_text(`${message}`)
-        Delay_Execution(new Date().getTime() + 2000, (async () => {
+        Delay_Function_Execution(new Date().getTime() + 2000, (async () => {
             set_alert_text(``)
             set_alert_color(``)
         }))

@@ -1,50 +1,31 @@
 import {
     UPDATE_NETWORK_ERROR_STATE,
-    JWT_ISSUER_KEY,
-    JWT_CLIENT_KEY,
-    CLIENT_ADDRESS,
     DEFAULT_HOST_ERROR_STATE,
     DEFAULT_NETWORK_ERROR_STATE,
     UPDATE_END_USER_FRIENDS_PERMISSION_STATE,
     UPDATE_END_USER_FRIENDS_RECEIVED_PERMISSION_STATE,
     UPDATE_END_USER_FRIENDS_APPROVED_PERMISSION_STATE
 } from '@Constants'
+
 import axios from 'axios'
 
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import type { AppDispatch } from '@Redux_Thunk/Provider'
-import { Get_Device_Information } from '@Redux_Thunk/Actions/Misc'
+
+import { DTO } from '../../../JS/Required_DTO_Properties'
 
 export const Load_End_User_Friends = (page_index?: number) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
     let current_language_state = state.Application_Language_State_Reducer
 
-    await axios.post(`/api/user/social/connection/friends/permissions`, {
-        end_user_id: `${end_user_account.id}`,
-        account_type: `${end_user_account.account_type}`,
-        login_type: `${end_user_account.login_type}`,
-        language: `${current_language_state.language}`,
-        region: `${current_language_state.region}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch( async (error) => {
+    await axios.post(`/api/user/social/connection/friends/permissions`, DTO({
+        end_user_id: end_user_account.id,
+        account_type: end_user_account.account_type,
+        login_type: end_user_account.login_type,
+        language: current_language_state.language,
+        region: current_language_state.region
+    })).catch( async (error) => {
         return await new Promise((reject) => {
             error.id = `Load-End-User-Permissions-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -186,31 +167,13 @@ export const Load_End_User_Friends = (page_index?: number) => async (dispatch: A
 
             for (let user_id of approved_user_ids) {
 
-                await axios.post(`/api/community/member`, {
+                await axios.post(`/api/community/member`, DTO({
                     user_id: user_id.toString(),
-                    account_type: `${end_user_account.account_type}`,
-                    login_type: `${end_user_account.login_type}`,
-                    language: `${current_language_state.language}`,
-                    region: `${current_language_state.region}`,
-                    client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-                    location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-                    jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-                    jwt_client_key: `${JWT_CLIENT_KEY}`,
-                    jwt_client_address: `${CLIENT_ADDRESS}`,
-                    user_agent: `${Get_Device_Information().userAgent}`,
-                    orientation: `${Get_Device_Information().orientation_type}`,
-                    screen_width: `${Get_Device_Information().screen_width}`,
-                    screen_height: `${Get_Device_Information().screen_height}`,
-                    color_depth: `${Get_Device_Information().color_depth}`,
-                    pixel_depth: `${Get_Device_Information().pixel_depth}`,
-                    window_width: `${Get_Device_Information().window_width}`,
-                    window_height: `${Get_Device_Information().window_height}`,
-                    connection_type: `${Get_Device_Information().effectiveType}`,
-                    down_link: `${Get_Device_Information().downlink}`,
-                    rtt: `${Get_Device_Information().rtt}`,
-                    data_saver: `${Get_Device_Information().saveData}`,
-                    device_ram_gb: `${Get_Device_Information().deviceMemory}`
-                }).then( async (response: any) => {
+                    account_type: end_user_account.account_type,
+                    login_type: end_user_account.login_type,
+                    language: current_language_state.language,
+                    region: current_language_state.region
+                })).then( async (response: any) => {
 
                     const user_id = String(response.data.user_data.id)
 
@@ -255,31 +218,13 @@ export const Load_End_User_Friends = (page_index?: number) => async (dispatch: A
 
             for (let user_id of blocking_user_ids) {
 
-                await axios.post(`/api/community/member`, {
+                await axios.post(`/api/community/member`, DTO({
                     user_id: user_id.toString(),
-                    account_type: `${end_user_account.account_type}`,
-                    login_type: `${end_user_account.login_type}`,
-                    language: `${current_language_state.language}`,
-                    region: `${current_language_state.region}`,
-                    client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-                    location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-                    jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-                    jwt_client_key: `${JWT_CLIENT_KEY}`,
-                    jwt_client_address: `${CLIENT_ADDRESS}`,
-                    user_agent: `${Get_Device_Information().userAgent}`,
-                    orientation: `${Get_Device_Information().orientation_type}`,
-                    screen_width: `${Get_Device_Information().screen_width}`,
-                    screen_height: `${Get_Device_Information().screen_height}`,
-                    color_depth: `${Get_Device_Information().color_depth}`,
-                    pixel_depth: `${Get_Device_Information().pixel_depth}`,
-                    window_width: `${Get_Device_Information().window_width}`,
-                    window_height: `${Get_Device_Information().window_height}`,
-                    connection_type: `${Get_Device_Information().effectiveType}`,
-                    down_link: `${Get_Device_Information().downlink}`,
-                    rtt: `${Get_Device_Information().rtt}`,
-                    data_saver: `${Get_Device_Information().saveData}`,
-                    device_ram_gb: `${Get_Device_Information().deviceMemory}`
-                }).then(async (response: any) => {
+                    account_type: end_user_account.account_type,
+                    login_type: end_user_account.login_type,
+                    language: current_language_state.language,
+                    region: current_language_state.region
+                })).then(async (response: any) => {
 
                     const user_id = String(response.data.user_data.id)
 
@@ -351,32 +296,14 @@ export const Approve_Friend = (participant_id: BigInt) => async (dispatch: AppDi
     let current_language_state = state.Application_Language_State_Reducer
     let current_friends = state.End_User_Friends_State_Reducer
 
-    await axios.put(`/api/user/social/connection/friend/approve`, {
-        end_user_id: `${end_user_account.id.toString()}`,
-        participant_id: `${participant_id.toString()}`,
-        account_type: `${end_user_account.account_type}`,
-        login_type: `${end_user_account.login_type}`,
-        language: `${current_language_state.language}`,
-        region: `${current_language_state.region}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch( async (error) => {
+    await axios.put(`/api/user/social/connection/friend/approve`, DTO({
+        end_user_id: end_user_account.id.toString(),
+        participant_id: participant_id.toString(),
+        account_type: end_user_account.account_type,
+        login_type: end_user_account.login_type,
+        language: current_language_state.language,
+        region: current_language_state.region
+    })).catch( async (error) => {
         return await new Promise((reject) => {
             error.id = `Approved-Friend-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -406,32 +333,14 @@ export const Unfriend = (participant_id: BigInt) => async (dispatch: AppDispatch
     let current_language_state = state.Application_Language_State_Reducer
     let current_friends = state.End_User_Friends_State_Reducer
 
-    await axios.put(`/api/user/social/connection/friend/unfriend`, {
-        end_user_id: `${end_user_account.id.toString()}`,
-        participant_id: `${participant_id.toString()}`,
-        account_type: `${end_user_account.account_type}`,
-        login_type: `${end_user_account.login_type}`,
-        language: `${current_language_state.language}`,
-        region: `${current_language_state.region}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch(async (error) => {
+    await axios.put(`/api/user/social/connection/friend/unfriend`, DTO({
+        end_user_id: end_user_account.id.toString(),
+        participant_id: participant_id.toString(),
+        account_type: end_user_account.account_type,
+        login_type: end_user_account.login_type,
+        language: current_language_state.language,
+        region: current_language_state.region
+    })).catch(async (error) => {
         return await new Promise((reject) => {
             error.id = `Approved-Friend-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -456,32 +365,14 @@ export const Block_Friend = (participant_id: BigInt) => async (dispatch: AppDisp
     let current_language_state = state.Application_Language_State_Reducer
     let current_friends = state.End_User_Friends_State_Reducer
 
-    await axios.put(`/api/user/social/connection/friend/block`, {
-        end_user_id: `${end_user_account.id.toString()}`,
-        participant_id: `${participant_id.toString()}`,
-        account_type: `${end_user_account.account_type}`,
-        login_type: `${end_user_account.login_type}`,
-        language: `${current_language_state.language}`,
-        region: `${current_language_state.region}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch( async (error) => {
+    await axios.put(`/api/user/social/connection/friend/block`, DTO({
+        end_user_id: end_user_account.id.toString(),
+        participant_id: participant_id.toString(),
+        account_type: end_user_account.account_type,
+        login_type: end_user_account.login_type,
+        language: current_language_state.language,
+        region: current_language_state.region
+    })).catch( async (error) => {
         return await new Promise((reject) => {
             error.id = `Block-Friend-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -517,32 +408,14 @@ export const Unblock_Friend = (participant_id: BigInt) => async (dispatch: AppDi
     let current_language_state = state.Application_Language_State_Reducer
     let current_friends = state.End_User_Friends_State_Reducer
 
-    await axios.put(`/api/user/social/connection/friend/unblock`, {
-        end_user_id: `${end_user_account.id.toString()}`,
-        participant_id: `${participant_id.toString()}`,
-        account_type: `${end_user_account.account_type}`,
-        login_type: `${end_user_account.login_type}`,
-        language: `${current_language_state.language}`,
-        region: `${current_language_state.region}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch(async (error) => {
+    await axios.put(`/api/user/social/connection/friend/unblock`, DTO({
+        end_user_id: end_user_account.id.toString(),
+        participant_id: participant_id.toString(),
+        account_type: end_user_account.account_type,
+        login_type: end_user_account.login_type,
+        language: current_language_state.language,
+        region: current_language_state.region
+    })).catch(async (error) => {
         return await new Promise((reject) => {
             error.id = `Block-Friend-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -578,32 +451,14 @@ export const Request_Friend = (value: BigInt) => async (dispatch: AppDispatch, g
     let current_language_state = state.Application_Language_State_Reducer
     let current_friends = state.End_User_Friends_State_Reducer
 
-    await axios.post(`/api/user/social/connection/friend/request`, {
+    await axios.post(`/api/user/social/connection/friend/request`, DTO({
         end_user_id: `${end_user_account.id.toString()}`,
         participant_id: `${value.toString()}`,
         account_type: `${end_user_account.account_type}`,
         login_type: `${end_user_account.login_type}`,
         language: `${current_language_state.language}`,
-        region: `${current_language_state.region}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch( async (error) => {
+        region: `${current_language_state.region}`
+    })).catch( async (error) => {
         return await new Promise((reject) => {
             error.id = `Request-Friend-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -630,32 +485,14 @@ export const Reject_Friend = (value: BigInt) => async (dispatch: AppDispatch, ge
     let current_language_state = state.Application_Language_State_Reducer
     let current_friends = state.End_User_Friends_State_Reducer
 
-    await axios.put(`/api/user/social/connection/friend/reject`, {
+    await axios.put(`/api/user/social/connection/friend/reject`, DTO({
         end_user_id: `${end_user_account.id.toString()}`,
         participant_id: `${value.toString()}`,
         account_type: `${end_user_account.account_type}`,
         login_type: `${end_user_account.login_type}`,
         language: `${current_language_state.language}`,
-        region: `${current_language_state.region}`,
-        client_time: `${new Date().getTime() + (new Date().getTimezoneOffset() * 60000)}`,
-        location: `${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        jwt_issuer_key: `${JWT_ISSUER_KEY}`,
-        jwt_client_key: `${JWT_CLIENT_KEY}`,
-        jwt_client_address: `${CLIENT_ADDRESS}`,
-        user_agent: `${Get_Device_Information().userAgent}`,
-        orientation: `${Get_Device_Information().orientation_type}`,
-        screen_width: `${Get_Device_Information().screen_width}`,
-        screen_height: `${Get_Device_Information().screen_height}`,
-        color_depth: `${Get_Device_Information().color_depth}`,
-        pixel_depth: `${Get_Device_Information().pixel_depth}`,
-        window_width: `${Get_Device_Information().window_width}`,
-        window_height: `${Get_Device_Information().window_height}`,
-        connection_type: `${Get_Device_Information().effectiveType}`,
-        down_link: `${Get_Device_Information().downlink}`,
-        rtt: `${Get_Device_Information().rtt}`,
-        data_saver: `${Get_Device_Information().saveData}`,
-        device_ram_gb: `${Get_Device_Information().deviceMemory}`,
-    }).catch( async (error) => {
+        region: `${current_language_state.region}`
+    })).catch( async (error) => {
         return await new Promise((reject) => {
             error.id = `Reject-Friend-Failed`
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })

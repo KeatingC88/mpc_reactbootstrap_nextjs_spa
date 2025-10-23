@@ -1,8 +1,5 @@
 import {
     UPDATE_NETWORK_ERROR_STATE,
-    JWT_CLIENT_KEY,
-    JWT_ISSUER_KEY,
-    CLIENT_ADDRESS,
     DEFAULT_HOST_ERROR_STATE,
     DEFAULT_NETWORK_ERROR_STATE,
 } from '@Constants'
@@ -11,7 +8,7 @@ import axios from 'axios'
 
 import type { AppDispatch } from '@Redux_Thunk/Provider'
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
-import { Get_Device_Information } from '@Redux_Thunk/Actions/Misc'
+import { DTO } from '@JS/Required_DTO_Properties'
 
 export const Renew_Session_Token = () => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
 
@@ -22,33 +19,15 @@ export const Renew_Session_Token = () => async (dispatch: AppDispatch, getState:
     if (current_end_user_account_state.id !== null) {
 
         await axios.get(`/api/authentication/remove_token`).then( async () => {
-            await axios.post(`/api/authentication/renew_token`, {
+            await axios.post(`/api/authentication/renew_token`, DTO({
                 id: current_end_user_account_state.id,
                 account_type: current_end_user_account_state.account_type,
                 groups: current_end_user_account_state.groups,
                 roles: current_end_user_account_state.roles,
                 login_type: current_end_user_account_state.login_type,
                 language: current_language_state.language,
-                region: current_language_state.region,
-                client_time: new Date().getTime() + (new Date().getTimezoneOffset() * 60000),
-                location: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                jwt_issuer_key: JWT_ISSUER_KEY,
-                jwt_client_key: JWT_CLIENT_KEY,
-                jwt_client_address: CLIENT_ADDRESS,
-                user_agent: Get_Device_Information().userAgent,
-                orientation: Get_Device_Information().orientation_type,
-                screen_width: Get_Device_Information().screen_width,
-                screen_height: Get_Device_Information().screen_height,
-                color_depth: Get_Device_Information().color_depth,
-                pixel_depth: Get_Device_Information().pixel_depth,
-                window_width: Get_Device_Information().window_width,
-                window_height: Get_Device_Information().window_height,
-                connection_type: Get_Device_Information().effectiveType,
-                down_link: Get_Device_Information().downlink,
-                rtt: Get_Device_Information().rtt,
-                data_saver: Get_Device_Information().saveData,
-                device_ram_gb: Get_Device_Information().deviceMemory
-            }).catch((error) => {
+                region: current_language_state.region
+            })).catch((error) => {
                 return new Promise(async (reject) => {
                     error.id = `Logout-Failed`
                     dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })

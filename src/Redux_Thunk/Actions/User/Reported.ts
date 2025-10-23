@@ -8,7 +8,7 @@ import {
     JWT_CLIENT_KEY
 } from '@Constants'
 
-import { Get_Device_Information } from '@Redux_Thunk/Actions/Misc'
+import { Get_Device_Information } from '@JS/End_User_Device_Information'
 import { Remove_Friend_Permissions_From_State_Reducer } from '@Redux_Thunk/Actions/User/Friends'
 
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'

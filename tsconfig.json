@@ -103,6 +103,7 @@
       "@AES/*": [ "src/AES/*" ],
       "@Image/*": [ "src/Image/*" ],
       "@CSS/*": [ "src/CSS/*" ],
+      "@JS/*": [ "src/JS/*" ],
       "@Language/*": [ "src/Language/*" ],
       "@Shared_Components/*": [ "src/Shared_Components/*" ],
       "@Constants": [ "src/Constants.ts" ],
