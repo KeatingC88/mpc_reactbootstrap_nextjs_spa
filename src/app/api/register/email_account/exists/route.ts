@@ -8,7 +8,7 @@ export const POST = async (req: NextRequest) => {
     try {
         const dto = await req.json()
 
-        let response: boolean = await axios.post(`${USERS_SERVER_ADDRESS}/Email/Exists`, {
+        let response: any = await axios.post(`${USERS_SERVER_ADDRESS}/Email/Exists`, {
             email_address: Encrypt(`${dto.email_address}`),
             account_type: Encrypt(`${dto.account_type}`),
             login_type: Encrypt(`${dto.login_type}`),
@@ -32,13 +32,14 @@ export const POST = async (req: NextRequest) => {
             rtt: Encrypt(`${dto.rtt}`),
             data_saver: Encrypt(`${dto.data_saver}`),
             device_ram_gb: Encrypt(`${dto.device_ram_gb}`)
+        }).catch((error) => {
+            return NextResponse.json(error.status)
         })
 
-        return NextResponse.json(response)
+        if (response.data)
+            return NextResponse.json(response)
+
     } catch (error: any) {
-        return NextResponse.json({
-            error: error,
-            status: 500
-        })
+        return NextResponse.json(error)
     }
 }

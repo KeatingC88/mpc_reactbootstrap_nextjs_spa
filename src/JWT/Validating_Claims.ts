@@ -17,8 +17,8 @@ export const Validating_Claims = (data: {
         groups: string
     }
 }): boolean => {
-    let jwt_data = JWT_Decoder(data.token)
 
+    let jwt_data: any = JWT_Decoder(data.token)
     const fetch_key = Object.keys(jwt_data) as Array<keyof typeof jwt_data>
 
     switch (true) {

@@ -8,21 +8,16 @@ export const Securing_Cookie = async (
 ): Promise<string> => {
 
     if (!USERS_SERVER_COOKIE_NAME)
-        throw new Error("Constant Cookie Name is Undefined")
+        throw new Error("Constant file Cookie Name is Undefined")
 
     const verifying_cookie_with_constant_file = cookie_header[0].match(
         new RegExp(`${USERS_SERVER_COOKIE_NAME}=([^]+)`)
     )
 
     if (!verifying_cookie_with_constant_file) 
-        throw new Error("Cookie Mismatch")
+        throw new Error("Cookie Null")
     
     let jwt_token_from_cookie_header = verifying_cookie_with_constant_file[1].split(`;`)[0]
-
-    console.log(`jwt_token_from_cookie_header`)
-    console.log(jwt_token_from_cookie_header)
-    console.log(`cookie_header[0]`)
-    console.log(cookie_header[0])//return this instead?
 
     let cookie = await cookies()
 

@@ -130,7 +130,12 @@ const Login_Email_Address_Password = (): React.ReactElement => {
     }, [])
 
     useMemo(() => {
-        if (props.error.network.id)
+        if (
+            props.error.network.id === "Email-Password-Incorrect" ||
+            props.error.network.id === "Email-Password-Incorrect-Failed" ||
+            props.error.network.id === "Client-Mismatch-Error" ||
+            props.error.network.id === "Client-Mismatch-Error-Failed"
+        )
             create_error_alert(props.error.network.id)
         
     }, [props.error.network.id])

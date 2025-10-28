@@ -4,8 +4,6 @@
     <TypeScriptConfiguration Remove="src\Redux_Thunk\Reducers\End_User\Social_Media\**" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="src\app\api\node_mailer\notification\password\attempt\" />
-    <Folder Include="src\app\api\node_mailer\notification\password\reset\" />
     <Folder Include="src\app\api\user\social\events\" />
     <Folder Include="src\app\api\user\video_games\" />
     <Folder Include="src\app\api\websocket\notification\" />

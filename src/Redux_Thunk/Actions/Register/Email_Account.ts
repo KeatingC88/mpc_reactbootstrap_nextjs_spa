@@ -1,4 +1,4 @@
-import {
+﻿import {
     UPDATE_NETWORK_ERROR_STATE,
     UPDATE_END_USER_ACCOUNT_STATE,
     CLIENT_ADDRESS,
@@ -16,57 +16,47 @@ import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import type { AppDispatch } from '@Redux_Thunk/Provider'
 
 export const Attempt_To_Register_The_End_User_An_Email_Account = (email_address: string) => async (dispatch: AppDispatch, getState: ()=> Current_Redux_State) => {
-
     let state = getState()
+    let current_language_state = state.Application_Language_State_Reducer
 
-    if (!state.Network_Error_State_Reducer.id) {
+    await axios.post(`/api/register/email_account/confirmation/send`, {
+        email_address: email_address,
+        language: current_language_state.current_language.split(`-`)[0],
+        region: current_language_state.current_language.split(`-`)[1]
+    }).catch(async (error) => {
 
-        let current_language_state = state.Application_Language_State_Reducer
+        return await new Promise(async (reject) => {
+            error.id = `Send-Confirmation-Failed`
+            await dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
+            setTimeout(() => {
+                dispatch({ type: DEFAULT_HOST_ERROR_STATE })
+                dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
+            }, 8000)
+            reject(error)
+        })
 
-        await axios.post(`/api/register/email_account/confirmation/send`, {
+    }).then(async (response: any) => {
+
+        await axios.post(`/api/register/email_account/record`, DTO({
             email_address: email_address,
+            code: response.data.code,
             language: current_language_state.current_language.split(`-`)[0],
             region: current_language_state.current_language.split(`-`)[1]
-        }).catch( async (error) => {
+        })).catch(async (error) => {
 
-            return await new Promise( async (reject) => {
-                error.id = `Send-Confirmation-Failed`
+            return await new Promise(async (reject) => {
+                error.id = `Email-Registration-Failed`
                 await dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
                 setTimeout(() => {
                     dispatch({ type: DEFAULT_HOST_ERROR_STATE })
                     dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-                }, 8000)
+                }, 1)
                 reject(error)
             })
 
-        }).then( async (response: any) => {
-
-            await axios.post(`/api/register/email_account/record`, DTO({
-                email_address: email_address,
-                code: response.data.code,
-                language: current_language_state.current_language.split(`-`)[0],
-                region: current_language_state.current_language.split(`-`)[1]
-            })).catch( async (error) => {
-                
-                return await new Promise(async (reject) => {
-                    error.id = `Email-Registration-Failed`
-                    await dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
-                    setTimeout(() => {
-                        dispatch({ type: DEFAULT_HOST_ERROR_STATE })
-                        dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-                    }, 1)
-                    reject(error)
-                })
-
-            }).then( async () => {
-
-                return await new Promise(async (resolve) => {
-                    resolve(`Registration-Complete`)
-                })
-
-            })
         })
-    }
+    })
+    
 }
 
 export const Validate_Email_Confirmation_Code_With_Email_Server = (dto: {
@@ -130,42 +120,31 @@ export const Validate_Email_Confirmation_Code_With_User_Server = (dto: {
     }
 }
 
-export const Validate_Email_With_Users_Server = (email_address: string) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
+export const Validate_Email_With_Users_Server = (email_address: string) =>
+    async (dispatch: AppDispatch, getState: () => Current_Redux_State): Promise<boolean> => {
+        const state = getState()
+        const { current_language } = state.Application_Language_State_Reducer
 
-    dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-    dispatch({ type: DEFAULT_HOST_ERROR_STATE })
+        try {
+            await axios.post(`/api/register/email_account/exists`, DTO({
+                email_address,
+                language: current_language.split(`-`)[0],
+                region: current_language.split(`-`)[1]
+            }))
+            return true
 
-    let state = getState()
+        } catch (error: any) {
+            error.id = `Email-Already-Registered`
+            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
 
-    if (!state.Network_Error_State_Reducer.id) {
+            setTimeout(() => {
+                dispatch({ type: DEFAULT_HOST_ERROR_STATE })
+                dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
+            }, 8000)
 
-        let current_language_state = state.Application_Language_State_Reducer
-
-        await axios.post(`/api/register/email_account/exists`, DTO({
-            email_address: email_address,
-            language: current_language_state.current_language.split(`-`)[0],
-            region: current_language_state.current_language.split(`-`)[1]
-        })).catch( async (error) => {
-            return await new Promise((reject) => {
-
-                error.id = `Validate-With-Email-Server-Failed`
-                dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
-                
-                reject(error)
-
-                setTimeout(() => {
-                    dispatch({ type: DEFAULT_HOST_ERROR_STATE })
-                    dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-                }, 1000) 
-                
-            })
-        })
-
-        return await new Promise((resolve) => {
-            resolve(true)
-        })
+            return false
+        }
     }
-}
 
 export const Create_End_User_Email_Account = (dto: {
     email_address: string

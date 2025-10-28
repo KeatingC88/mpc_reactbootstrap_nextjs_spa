@@ -11,7 +11,7 @@ import {
 } from '@Redux_Thunk/Actions/Register/Email_Account'
 
 import {
-    Notify_Email_Owner_About_Unregistered_Login_Attempt
+    Notify_Email_Owner_About_Post_Registration
 } from '@Redux_Thunk/Actions/Node_Mailer/Notifications'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
@@ -22,6 +22,7 @@ import { usePathname } from 'next/navigation'
 const Email_Register = () => {
 
     const props = useSelector(Redux_Thunk_Core)
+
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -103,7 +104,7 @@ const Email_Register = () => {
         }
     }
     
-    const validating_create_email_account_form = (event: React.FormEvent<HTMLFormElement>) => {
+    const validating_create_email_account_form = async (event: React.FormEvent<HTMLFormElement>) => {
 
         event.preventDefault()
         set_lock_form_submit_button(true)
@@ -114,19 +115,22 @@ const Email_Register = () => {
 
         if (validating_email_address_input()) {
             try {
-                Dispatch(Validate_Email_With_Users_Server(email_address))
+                const result = await Dispatch(Validate_Email_With_Users_Server(email_address))
 
-                Dispatch(Attempt_To_Register_The_End_User_An_Email_Account(email_address)).then(() => {
-                    set_form_submit_complete(true)
-                    set_input_is_disabled(false)
-                    set_lock_form_submit_button(false)
-                    set_submit_button_text(lbl.Register)
-                    set_submit_button_color("primary")
-                    set_input_value(``)
-                })
+                if (result) {
+                    Dispatch(Attempt_To_Register_The_End_User_An_Email_Account(email_address)).then(() => {
+                        set_form_submit_complete(true)
+                        set_input_is_disabled(false)
+                        set_lock_form_submit_button(false)
+                        set_submit_button_text(lbl.Register)
+                        set_submit_button_color("primary")
+                        set_input_value(``)
+                    })
+                }
             } catch (error) {
                 console.error(error)
             }
+
         }
 
     }
@@ -136,8 +140,8 @@ const Email_Register = () => {
             create_error_alert(props.error.network.id)
         }
 
-        if (props.error.network.id === "Email-Account-Already-Registered") {
-            Dispatch(Notify_Email_Owner_About_Unregistered_Login_Attempt(email_address))
+        if (props.error.network.id === "Email-Already-Registered") {
+            Dispatch(Notify_Email_Owner_About_Post_Registration(email_address))
             create_error_alert(props.error.network.id)
         }
 

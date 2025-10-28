@@ -41,13 +41,13 @@ export const Notify_Email_Owner_About_Unregistered_Login_Attempt = (email_addres
     if (response) {
         dispatch({
             type: UPDATE_NETWORK_ERROR_STATE, payload: {
-                id: `Email-Account-Not-Registered`
+                id: `Email-Password-Incorrect`
             }
         })
     } else {
         dispatch({
             type: UPDATE_NETWORK_ERROR_STATE, payload: {
-                id: `Email-Account-Not-Registered-Failed`
+                id: `Email-Password-Incorrect-Failed`
             }
         })
     }
@@ -66,7 +66,7 @@ export const Notify_Webmaster_via_Email_Message_About_Conflict_Client = (suspici
         location: Intl.DateTimeFormat().resolvedOptions().timeZone,
         date: new Date().toLocaleDateString(),
         user_agent: account_state.user_agent
-    }).catch(async (error) => {
+    }).catch( async (error) => {
         return await new Promise((reject) => {
 
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -80,20 +80,6 @@ export const Notify_Webmaster_via_Email_Message_About_Conflict_Client = (suspici
 
         })
     })
-
-    if (response) {
-        dispatch({
-            type: UPDATE_NETWORK_ERROR_STATE, payload: {
-                id: `Email-Account-Not-Registered`
-            }
-        })
-    } else {
-        dispatch({
-            type: UPDATE_NETWORK_ERROR_STATE, payload: {
-                id: `Email-Account-Not-Registered-Failed`
-            }
-        })
-    }
 }
 
 export const Notify_Webmaster_via_Email_Message_About_Bad_Request_Client = (suspicious_email_address: string) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
@@ -109,7 +95,7 @@ export const Notify_Webmaster_via_Email_Message_About_Bad_Request_Client = (susp
         location: Intl.DateTimeFormat().resolvedOptions().timeZone,
         date: new Date().toLocaleDateString(),
         user_agent: account_state.user_agent
-    }).catch(async (error) => {
+    }).catch( async (error) => {
         return await new Promise((reject) => {
 
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
@@ -123,20 +109,6 @@ export const Notify_Webmaster_via_Email_Message_About_Bad_Request_Client = (susp
 
         })
     })
-
-    if (response) {
-        dispatch({
-            type: UPDATE_NETWORK_ERROR_STATE, payload: {
-                id: `Email-Account-Not-Registered`
-            }
-        })
-    } else {
-        dispatch({
-            type: UPDATE_NETWORK_ERROR_STATE, payload: {
-                id: `Email-Account-Not-Registered-Failed`
-            }
-        })
-    }
 }
 
 export const Notify_Email_Owner_About_Post_Registration = (email_address: string) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
@@ -144,7 +116,7 @@ export const Notify_Email_Owner_About_Post_Registration = (email_address: string
     let language_state = state.Application_Language_State_Reducer
     let account_state = state.End_User_Account_State_Reducer
 
-    let response: any = await axios.post(`/api/authentication/login/email_password_account/notification`, {
+    let response: any = await axios.post(`/api/node_mailer/notification/post_registration_email`, {
         email_address: email_address,
         language: language_state.current_language.split(`-`)[0],
         region: language_state.current_language.split(`-`)[1],
@@ -166,20 +138,6 @@ export const Notify_Email_Owner_About_Post_Registration = (email_address: string
 
         })
     })
-
-    if (response) {
-        dispatch({
-            type: UPDATE_NETWORK_ERROR_STATE, payload: {
-                id: `Email-Account-Not-Registered`
-            }
-        })
-    } else {
-        dispatch({
-            type: UPDATE_NETWORK_ERROR_STATE, payload: {
-                id: `Email-Account-Already-Registered-Verification-Failed.`
-            }
-        })
-    }
 }
 
 export const Notify_Email_Owner_About_Incorrect_Password_Attempt = (email_address: string) => async (dispatch: AppDispatch, getState: () => Current_Redux_State) => {
@@ -209,18 +167,4 @@ export const Notify_Email_Owner_About_Incorrect_Password_Attempt = (email_addres
 
         })
     })
-
-    if (response) {
-        dispatch({
-            type: UPDATE_NETWORK_ERROR_STATE, payload: {
-                id: `Email-Account-Not-Registered`
-            }
-        })
-    } else {
-        dispatch({
-            type: UPDATE_NETWORK_ERROR_STATE, payload: {
-                id: `Email-Account-Already-Registered-Verification-Failed.`
-            }
-        })
-    }
 }
