@@ -204,21 +204,21 @@ const Password_Register = () => {
                 code: code
             }
 
-            await Validate_Email_Confirmation_Code_With_Email_Server(obj)
-
-            await Validate_Email_Confirmation_Code_With_User_Server(obj)
-
-            setTimeout( async () => {
-
-                set_alert_color(`success`)
-                set_alert_text(`${lbl.Success}`)
-
-                await Dispatch(Create_End_User_Email_Account(obj)).then(() => {
-                    Navigate.push(`/`)
-                    Dispatch(Set_Navigation_Menu_Display(` `))
-                })
-
-            }, 8000)
+            Dispatch(Validate_Email_Confirmation_Code_With_Email_Server(obj)).then((resolve) => {
+                if (props.error.network.id === null && resolve) {
+                    Dispatch(Validate_Email_Confirmation_Code_With_User_Server(obj)).then((resolve) => {
+                        if (props.error.network.id === null && resolve) {
+                            set_alert_color(`success`)
+                            set_alert_text(`${lbl.Success}`)
+                            console.log(`building account now...`)
+                            Dispatch(Create_End_User_Email_Account(obj)).then(() => {
+                                Navigate.push(`/`)
+                                Dispatch(Set_Navigation_Menu_Display(` `))
+                            })
+                        }
+                    })
+                }
+            })
         }
     }
 

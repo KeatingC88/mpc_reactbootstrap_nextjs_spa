@@ -9,7 +9,7 @@ import {
 export const DTO = <T extends Record<string, any>>(dto: T) => {
     return {
         ...dto,
-        client_time: new Date().getTime() + (new Date().getTimezoneOffset() * 60000),
+        client_time: new Date().getTime(),
         location: Intl.DateTimeFormat().resolvedOptions().timeZone,
         jwt_issuer_key: JWT_ISSUER_KEY,
         jwt_client_key: JWT_CLIENT_KEY,

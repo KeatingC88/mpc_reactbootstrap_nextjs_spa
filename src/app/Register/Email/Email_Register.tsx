@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
 import { Row, Col, Card, Form, Button, Alert, Container } from 'react-bootstrap'
@@ -7,9 +7,12 @@ import Spinner from 'react-bootstrap/Spinner'
 
 import {
     Attempt_To_Register_The_End_User_An_Email_Account,
-    Notify_Attempted_Registration_To_Same_Email_Account_By_Email_Message,
     Validate_Email_With_Users_Server
 } from '@Redux_Thunk/Actions/Register/Email_Account'
+
+import {
+    Notify_Email_Owner_About_Unregistered_Login_Attempt
+} from '@Redux_Thunk/Actions/Node_Mailer/Notifications'
 
 import { Redux_Thunk_Core } from '@Redux_Thunk/Core'
 import { useAppDispatch } from '@Redux_Thunk/Provider'
@@ -34,8 +37,8 @@ const Email_Register = () => {
     const [form_submit_complete, set_form_submit_complete] = useState<boolean>(false)
     const [alert_text, set_alert_text] = useState<string>(``)
     const [alert_color, set_alert_color] = useState<string>(``)
-    const [submit_button_text, set_submit_button_text] = useState("Register")
-    const [email_address, set_email_address] = useState<string>(props.end_user.account.email_address ? props.end_user.account.email_address : "")
+    const [submit_button_text, set_submit_button_text] = useState(lbl.Register)
+    const [email_address, set_input_value] = useState<string>(props.end_user.account.email_address ? props.end_user.account.email_address : "")
 
     const create_success_alert = (value: string | null) => {
         set_lock_form_submit_button(true)
@@ -111,17 +114,16 @@ const Email_Register = () => {
 
         if (validating_email_address_input()) {
             try {
-                (async () => {
+                Dispatch(Validate_Email_With_Users_Server(email_address))
 
-                    await Dispatch(Validate_Email_With_Users_Server(email_address))
-
-                    await Dispatch(Attempt_To_Register_The_End_User_An_Email_Account(email_address)).then(() => {
-                        set_form_submit_complete(true)
-                        set_input_is_disabled(false)
-                        set_lock_form_submit_button(false)
-                    })
-
-                })()
+                Dispatch(Attempt_To_Register_The_End_User_An_Email_Account(email_address)).then(() => {
+                    set_form_submit_complete(true)
+                    set_input_is_disabled(false)
+                    set_lock_form_submit_button(false)
+                    set_submit_button_text(lbl.Register)
+                    set_submit_button_color("primary")
+                    set_input_value(``)
+                })
             } catch (error) {
                 console.error(error)
             }
@@ -129,35 +131,21 @@ const Email_Register = () => {
 
     }
 
-    (async () => {
-
+    useMemo(() => {
         if (props.error.network.id === "Validate-With-Email-Server-Failed") {
-
-            setTimeout(async () => {
-
-                if (props.error.network.id) {
-                    create_error_alert(props.error.network.id)
-                }
-                    
-            }, 1000)
-
+            create_error_alert(props.error.network.id)
         }
 
         if (props.error.network.id === "Email-Account-Already-Registered") {
-
+            Dispatch(Notify_Email_Owner_About_Unregistered_Login_Attempt(email_address))
             create_error_alert(props.error.network.id)
-            await Dispatch(Notify_Attempted_Registration_To_Same_Email_Account_By_Email_Message(email_address))
-
         }
 
         if (props.error.network.id === null && form_submit_complete) {
-
             create_success_alert(`${lbl.EmailSentSuccessfully}`)
             set_form_submit_complete(false)
-
         }
-
-    })()
+    }, [props.error.network.id])
 
     useEffect(() => {
         if (Path === `/`) {
@@ -245,7 +233,7 @@ const Email_Register = () => {
                                                             className="text-center mx-auto"
                                                             value={email_address}
                                                             disabled={input_is_disabled}
-                                                            onChange={(e) => set_email_address(e.target.value)}
+                                                            onChange={(e) => set_input_value(e.target.value)}
                                                         />
                                                     }
                                                 </Col>

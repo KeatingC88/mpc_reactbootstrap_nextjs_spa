@@ -31,7 +31,7 @@ body[data-theme="Night-Theme"] > header > nav > div > div > img:hover {
 }
 
 body[data-theme="Night-Theme"] > #Profile_View > div > div > div > div > div > div > div > div > div.list-group-item,
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > div > div,
+/*body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > div > div,*/
 body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > ul > li > span {
     background-color: transparent !important;
     color: #b6ffb6 !important;

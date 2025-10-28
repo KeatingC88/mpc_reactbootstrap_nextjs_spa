@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useSelector } from 'react-redux'
 import Spinner from 'react-bootstrap/Spinner'
@@ -13,7 +13,7 @@ import { Login_Email_Password_Account } from '@Redux_Thunk/Actions/Authenticatio
 const Login_Email_Address_Password = (): React.ReactElement => {
 
     const props = useSelector(Redux_Thunk_Core)
-    
+
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()
@@ -46,7 +46,7 @@ const Login_Email_Address_Password = (): React.ReactElement => {
         }, 8000)
     }
 
-    const anEmail = () => {
+    const an_email = () => {
         let localEmail = user_email_address.substring(0, user_email_address.indexOf(`@`))
         let domainEmail = user_email_address.substring(user_email_address.indexOf(`@`), user_email_address.length)
         switch (true) {
@@ -73,7 +73,7 @@ const Login_Email_Address_Password = (): React.ReactElement => {
         }
     }
 
-    const aPassword = () => {
+    const a_password = () => {
         switch (true) {
             case !user_password || user_password.length === 0:
                 create_error_alert(`${lbl.MissingPassword}`)
@@ -105,7 +105,8 @@ const Login_Email_Address_Password = (): React.ReactElement => {
         set_submit_button_text(`${lbl.ValidatingPleaseWait}`)
         set_alert_text(``)
 
-        if (anEmail() && aPassword()) {
+        if (an_email() && a_password()) {
+
             set_lock_form_submit_button(true)
             set_submit_button_color(`info`)
 
@@ -122,20 +123,17 @@ const Login_Email_Address_Password = (): React.ReactElement => {
         }
     }
 
-    (() => {
-        if (props.error.network.id === "Email-Login-Failed") {
-            setTimeout(() => {
-                if(props.error.network.id)
-                    create_error_alert(props.error.network.id)
-            }, 1000)
-        }
-    })()
-
     useEffect(() => {
         if (Path === `/`) {
             set_card_width(``)
         }
     }, [])
+
+    useMemo(() => {
+        if (props.error.network.id)
+            create_error_alert(props.error.network.id)
+        
+    }, [props.error.network.id])
 
     return (
         <Container fluid>

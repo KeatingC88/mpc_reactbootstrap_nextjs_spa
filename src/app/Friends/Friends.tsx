@@ -259,8 +259,6 @@ const End_User_Friends = () => {
             )
         }
 
-        console.log(props.end_user.people?.friends?.approved?.users_data)
-
         return (
             <ListGroup variant="flush">
                 {Object.values(props.end_user.people?.friends?.approved?.users_data).map((user: any, index: number) => (

@@ -167,7 +167,7 @@ export const Load_End_User_Friends = (page_index?: number) => async (dispatch: A
 
             for (let user_id of approved_user_ids) {
 
-                await axios.post(`/api/community/member`, DTO({
+                await axios.post(`/api/community/user`, DTO({
                     user_id: user_id.toString(),
                     account_type: end_user_account.account_type,
                     login_type: end_user_account.login_type,
@@ -218,7 +218,7 @@ export const Load_End_User_Friends = (page_index?: number) => async (dispatch: A
 
             for (let user_id of blocking_user_ids) {
 
-                await axios.post(`/api/community/member`, DTO({
+                await axios.post(`/api/community/user`, DTO({
                     user_id: user_id.toString(),
                     account_type: end_user_account.account_type,
                     login_type: end_user_account.login_type,

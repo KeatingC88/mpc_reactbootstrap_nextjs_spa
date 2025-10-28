@@ -23,15 +23,21 @@ import {
     UPDATE_APPLICATION_SETTINGS_NAV_LOCK,
     UPDATE_APPLICATION_SETTINGS_THEME,
     UPDATE_APPLICATION_SETTINGS_TEXT_ALIGNMENT,
-    DEFAULT_NETWORK_ERROR_STATE,
-    DEFAULT_HOST_ERROR_STATE,
     UPDATE_CSS_CUSTOM_DESIGN_STATE,
+    DEFAULT_HOST_ERROR_STATE,
+    DEFAULT_NETWORK_ERROR_STATE
 } from '@Constants'
 
 import type { Current_Redux_State } from '@Redux_Thunk/Combined_Reducers'
 import type { AppDispatch } from '@Redux_Thunk/Provider'
 
 import { DTO } from '@JS/Required_DTO_Properties'
+import {
+    Notify_Email_Owner_About_Unregistered_Login_Attempt,
+    Notify_Webmaster_via_Email_Message_About_Bad_Request_Client,
+    Notify_Webmaster_via_Email_Message_About_Conflict_Client,
+    Notify_Email_Owner_About_Incorrect_Password_Attempt
+} from '@Redux_Thunk/Actions/Node_Mailer/Notifications'
 
 export const Login_Email_Password_Account = (dto: {
     email_address: string
@@ -47,7 +53,7 @@ export const Login_Email_Password_Account = (dto: {
         text_alignment: current_setting.text_alignment,
     })
 
-    await axios.put(`/api/authentication/login/email_password_account`, DTO({
+    let response = await axios.put(`/api/authentication/login/email_password_account`, DTO({
         email_address: dto.email_address,
         password: dto.password,
         theme: current_setting.theme,
@@ -57,25 +63,42 @@ export const Login_Email_Password_Account = (dto: {
         locked: current_setting.nav_lock,
         language: current_language_state.current_language.split(`-`)[0],
         region: current_language_state.current_language.split(`-`)[1]
-    })).catch(async (error: any) => {
-        return await new Promise((reject) => {
-            error.id = `Email-Login-Failed`
-            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })
+    }))
+
+    if (response.data.error) {
+
+        return await new Promise(() => {
+            switch (true) {
+                case response.data.error.status === 400:
+                    dispatch(Notify_Webmaster_via_Email_Message_About_Bad_Request_Client(dto.email_address))
+                    break
+                case response.data.error.status === 401:
+                    dispatch(Notify_Email_Owner_About_Incorrect_Password_Attempt(dto.email_address))
+                    break
+                case response.data.error.status === 409:
+                    dispatch(Notify_Webmaster_via_Email_Message_About_Conflict_Client(dto.email_address))
+                    break
+                case response.data.error.status === 404:
+                    dispatch(Notify_Email_Owner_About_Unregistered_Login_Attempt(dto.email_address))
+                    break
+            }
+
+            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: response.data.error })
+
             setTimeout(() => {
                 dispatch({ type: DEFAULT_HOST_ERROR_STATE })
                 dispatch({ type: DEFAULT_NETWORK_ERROR_STATE })
-            }, 1)
+            }, 8000)
         })
-    }).then(async (response: any) => {
 
-        let response_data = response.data.user_data
+    } else if (response.data.user_data) {
 
         dispatch({ type: UPDATE_APPLICATION_SETTINGS_LOCAL_TIME })
         dispatch({ type: UPDATE_APPLICATION_SETTINGS_DATE })
         dispatch({ type: UPDATE_APPLICATION_SETTINGS_GLOBAL_TIME })
         dispatch({ type: UPDATE_APPLICATION_SETTINGS_LOCATION })
 
-        let current_language = response_data.current_language
+        let current_language = response.data.user_data.current_language
 
         dispatch({
             type: UPDATE_APPLICATION_LANGUAGE_CURRENT_VALUE, payload: {
@@ -83,107 +106,107 @@ export const Login_Email_Password_Account = (dto: {
             }
         })
 
-        let name_public_id = response_data.name.split(`#`)
+        let name_public_id = response.data.user_data.name.split(`#`)
 
         dispatch({
             type: UPDATE_END_USER_ACCOUNT_STATE, payload: {
-                account_type: response_data.account_type,
-                created_on: response_data.created_on,
-                email_address: response_data.email_address,
-                id: response_data.id,
-                login_on: response_data.login_on,
+                account_type: response.data.user_data.account_type,
+                created_on: response.data.user_data.created_on,
+                email_address: response.data.user_data.email_address,
+                id: response.data.user_data.id,
+                login_on: response.data.user_data.login_on,
                 name: name_public_id[0],
                 public_id: name_public_id[1],
-                roles: response_data.roles,
+                roles: response.data.user_data.roles,
                 client_address: CLIENT_ADDRESS,
-                groups: response_data.groups,
-                logout_on: response_data.logout_on,
-                avatar_url_path: response_data.avatar_url_path,
-                avatar_title: response_data.avatar_title,
-                custom_lbl: response_data.custom_lbl,
-                online_status: response_data.online_status,
+                groups: response.data.user_data.groups,
+                logout_on: response.data.user_data.logout_on,
+                avatar_url_path: response.data.user_data.avatar_url_path,
+                avatar_title: response.data.user_data.avatar_title,
+                custom_lbl: response.data.user_data.custom_lbl,
+                online_status: response.data.user_data.online_status,
                 login_type: `EMAIL`
             }
         })
 
-        let birth_month = parseInt(response_data.birth_month)
-        let birth_day = parseInt(response_data.birth_day)
-        let birth_year = parseInt(response_data.birth_year)
-        
+        let birth_month = parseInt(response.data.user_data.birth_month)
+        let birth_day = parseInt(response.data.user_data.birth_day)
+        let birth_year = parseInt(response.data.user_data.birth_year)
+
         dispatch({
             type: UPDATE_END_USER_PROFILE_ACCOUNT_STATE, payload: {
-                first_name: response_data.first_name,
-                last_name: response_data.last_name,
-                middle_name: response_data.middle_name,
-                maiden_name: response_data.maiden_name,
-                gender: response_data.gender,
+                first_name: response.data.user_data.first_name,
+                last_name: response.data.user_data.last_name,
+                middle_name: response.data.user_data.middle_name,
+                maiden_name: response.data.user_data.maiden_name,
+                gender: response.data.user_data.gender,
                 birth_month: birth_month,
                 birth_day: birth_day,
                 birth_year: birth_year,
-                ethnicity: response_data.ethnicity
+                ethnicity: response.data.user_data.ethnicity
             }
         })
 
         dispatch({
             type: UPDATE_APPLICATION_SETTINGS_MAX_BOOTSTRAP_GRID_COLUMNS, payload: {
-                grid_type: parseInt(response_data.grid_type)
+                grid_type: parseInt(response.data.user_data.grid_type)
             }
         })
- 
+
         dispatch({
             type: UPDATE_APPLICATION_SETTINGS_FLAG, payload: {
-                flag: Get_Nation_Flag_Value(response_data.current_language)
+                flag: Get_Nation_Flag_Value(response.data.user_data.current_language)
             }
         })
 
         dispatch({
             type: UPDATE_APPLICATION_SETTINGS_THEME, payload: {
-                theme: parseInt(response_data.theme)
+                theme: parseInt(response.data.user_data.theme)
             }
         })
 
         dispatch({
             type: UPDATE_APPLICATION_SETTINGS_NAV_LOCK, payload: {
-                nav_lock: response_data.nav_lock === 'True' ? true : false
+                nav_lock: response.data.user_data.nav_lock === 'True' ? true : false
             }
         })
 
         let dto = Map_Database_Values_For_ReactBootstrap({
-            alignment: parseInt(response_data.alignment),
-            text_alignment: parseInt(response_data.text_alignment)
+            alignment: parseInt(response.data.user_data.alignment),
+            text_alignment: parseInt(response.data.user_data.text_alignment)
         })
-  
+
         dispatch({
             type: UPDATE_APPLICATION_SETTINGS_ALIGNMENT, payload: {
                 alignment: dto.alignment
             }
         })
-      
+
         dispatch({
             type: UPDATE_APPLICATION_SETTINGS_TEXT_ALIGNMENT, payload: {
                 text_alignment: dto.text_alignment
             }
         })
- 
+
         dispatch({
             type: UPDATE_CSS_CUSTOM_DESIGN_STATE, payload: {
-                card_border_color: response_data.card_border_color,
-                card_header_font: response_data.card_header_font,
-                card_header_background_color: response_data.card_header_background_color,
-                card_header_font_color: response_data.card_header_font_color,
-                card_body_font: response_data.card_body_font,
-                card_body_background_color: response_data.card_body_background_color,
-                card_body_font_color: response_data.card_body_font_color,
-                card_footer_font: response_data.card_footer_font,
-                card_footer_background_color: response_data.card_footer_background_color,
-                card_footer_font_color: response_data.card_footer_font_color,
-                navigation_menu_background_color: response_data.navigation_menu_background_color,
-                navigation_menu_font_color: response_data.navigation_menu_font_color,
-                navigation_menu_font: response_data.navigation_menu_font,
-                button_background_color: response_data.button_background_color,
-                button_font_color: response_data.button_font_color,
-                button_font: response_data.button_font,
+                card_border_color: response.data.user_data.card_border_color,
+                card_header_font: response.data.user_data.card_header_font,
+                card_header_background_color: response.data.user_data.card_header_background_color,
+                card_header_font_color: response.data.user_data.card_header_font_color,
+                card_body_font: response.data.user_data.card_body_font,
+                card_body_background_color: response.data.user_data.card_body_background_color,
+                card_body_font_color: response.data.user_data.card_body_font_color,
+                card_footer_font: response.data.user_data.card_footer_font,
+                card_footer_background_color: response.data.user_data.card_footer_background_color,
+                card_footer_font_color: response.data.user_data.card_footer_font_color,
+                navigation_menu_background_color: response.data.user_data.navigation_menu_background_color,
+                navigation_menu_font_color: response.data.user_data.navigation_menu_font_color,
+                navigation_menu_font: response.data.user_data.navigation_menu_font,
+                button_background_color: response.data.user_data.button_background_color,
+                button_font_color: response.data.user_data.button_font_color,
+                button_font: response.data.user_data.button_font,
             }
         })
-    })
+    }
 }

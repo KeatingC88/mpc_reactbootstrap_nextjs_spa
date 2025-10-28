@@ -1,34 +1,35 @@
 import { NextRequest, NextResponse } from "next/server"
-import { cookies } from "next/headers"
-
 import axios from "axios"
+
 
 import { Encrypt } from '@AES/Encryptor'
 import { Decrypt } from '@AES/Decryptor'
 
 import {
     USERS_SERVER_ADDRESS,
+    USERS_SERVER_COOKIE_NAME,
     USERS_PROFILE_CACHE_SERVER_ADDRESS,
-    USERS_CACHE_SERVER_ADDRESS,
-    USERS_SERVER_COOKIE_NAME
+    USERS_CACHE_SERVER_ADDRESS
 } from '@Constants'
 
 import { Validating_Claims } from '@JWT/Validating_Claims'
 import { Securing_Cookie } from '@JWT/Securing_Cookie'
 
-export const PUT = async (req: NextRequest) => {
+export const POST = async (req: NextRequest) => {
     try {
         const dto = await req.json()
         let token = null
 
-        let response: any = await axios.put(`${USERS_SERVER_ADDRESS}/Email/Login`, {
+        let response: any = await axios.post(`${USERS_SERVER_ADDRESS}/Email/Submit`, {
             email_address: Encrypt(`${dto.email_address}`),
+            name: Encrypt(`${dto.name}`),
             password: Encrypt(`${dto.password}`),
+            code: `${dto.code}`,
             theme: Encrypt(`${dto.theme}`),
             alignment: Encrypt(`${dto.alignment}`),
+            nav_lock: Encrypt(`${dto.nav_lock}`),
             text_alignment: Encrypt(`${dto.text_alignment}`),
             grid_type: Encrypt(`${dto.grid_type}`),
-            locked: Encrypt(`${dto.locked}`),
             language: Encrypt(`${dto.language}`),
             region: Encrypt(`${dto.region}`),
             client_time: Encrypt(`${dto.client_time}`),
@@ -48,12 +49,12 @@ export const PUT = async (req: NextRequest) => {
             down_link: Encrypt(`${dto.down_link}`),
             rtt: Encrypt(`${dto.rtt}`),
             data_saver: Encrypt(`${dto.data_saver}`),
-            device_ram_gb: Encrypt(`${dto.device_ram_gb}`),
+            device_ram_gb: Encrypt(`${dto.device_ram_gb}`)
         }, {
             withCredentials: true
         })
 
-        response.data = JSON.parse(Decrypt(response.data)).user_data
+        response.data = JSON.parse(Decrypt(response.data)).account_creation_data
         Validating_Claims({ token: await Securing_Cookie(response.headers['set-cookie']), comparable_data: response.data })
         token = response.headers["set-cookie"][0].split(`${USERS_SERVER_COOKIE_NAME}=`)[1].split(`;`)[0]
 
@@ -91,8 +92,11 @@ export const PUT = async (req: NextRequest) => {
             gender: Encrypt(`${response.data.gender}`)
         })
 
-        return NextResponse.json({ user_data: response.data }, { status: 200 })
+        return NextResponse.json(response.data)
     } catch (error: any) {
-        return NextResponse.json({ error: error })
+        return NextResponse.json({
+            error: error,
+            status: 500
+        })
     }
 }

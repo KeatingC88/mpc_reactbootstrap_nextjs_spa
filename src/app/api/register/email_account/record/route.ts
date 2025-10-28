@@ -1,0 +1,50 @@
+import { NextRequest, NextResponse } from "next/server"
+import axios from "axios"
+
+import { Encrypt } from '@AES/Encryptor'
+import { USERS_SERVER_ADDRESS } from '@Constants'
+
+export const POST = async (req: NextRequest) => {
+    try {
+        const dto = await req.json()
+
+        let response = await axios.post(`${USERS_SERVER_ADDRESS}/Email/Register`, {
+            code: dto.code,
+            email_address: Encrypt(`${dto.email_address}`),
+            language: Encrypt(`${dto.language}`),
+            region: Encrypt(`${dto.region}`),
+            name: Encrypt(`${dto.name}`),
+            password: Encrypt(`${dto.password}`),
+            theme: Encrypt(`${dto.theme}`),
+            alignment: Encrypt(`${dto.alignment}`),
+            nav_lock: Encrypt(`${dto.nav_lock}`),
+            text_alignment: Encrypt(`${dto.text_alignment}`),
+            grid_type: Encrypt(`${dto.grid_type}`),
+            client_time: Encrypt(`${dto.client_time}`),
+            location: Encrypt(`${dto.location}`),
+            jwt_issuer_key: Encrypt(`${dto.jwt_issuer_key}`),
+            jwt_client_key: Encrypt(`${dto.jwt_client_key}`),
+            jwt_client_address: Encrypt(`${dto.jwt_client_address}`),
+            user_agent: Encrypt(`${dto.user_agent}`),
+            orientation: Encrypt(`${dto.orientation}`),
+            screen_width: Encrypt(`${dto.screen_width}`),
+            screen_height: Encrypt(`${dto.screen_height}`),
+            color_depth: Encrypt(`${dto.color_depth}`),
+            pixel_depth: Encrypt(`${dto.pixel_depth}`),
+            window_width: Encrypt(`${dto.window_width}`),
+            window_height: Encrypt(`${dto.window_height}`),
+            connection_type: Encrypt(`${dto.connection_type}`),
+            down_link: Encrypt(`${dto.down_link}`),
+            rtt: Encrypt(`${dto.rtt}`),
+            data_saver: Encrypt(`${dto.data_saver}`),
+            device_ram_gb: Encrypt(`${dto.device_ram_gb}`)
+        })
+        
+        return NextResponse.json({ status: response.data.status })
+    } catch (error: any) {
+        return NextResponse.json({
+            error: error,
+            status: 500
+        })
+    }
+}

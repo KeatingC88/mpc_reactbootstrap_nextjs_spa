@@ -225,7 +225,9 @@ export const Application_Settings_State_Reducer = (
         text_alignment: state.text_alignment ?? initial_state.text_alignment,
         alignment: state.alignment ?? initial_state.alignment,
         navbar_css_display_value: state.navbar_css_display_value ?? initial_state.navbar_css_display_value,
-        grid_type: state.grid_type ?? initial_state.grid_type
+        grid_type: state.grid_type ?? initial_state.grid_type,
+        gmt_time: state.gmt_time ?? initial_state.gmt_time,
+        local_time: state.local_time ?? initial_state.local_time
     }
 }
 
