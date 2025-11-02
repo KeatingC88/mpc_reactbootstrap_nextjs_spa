@@ -99,25 +99,22 @@ export const JWT_CLIENT_KEY = process.env.NEXT_PUBLIC_JWT_CLIENT_KEY
 export const META_TAG_CREATOR = process.env.NEXT_PUBLIC_META_TAG_CREATOR
 export const META_TAG_AUTHOR = process.env.NEXT_PUBLIC_META_TAG_AUTHOR
 
-//States
-export const HTML_State = "HTML_State"
-export const CSS_Structure_State = "CSS_Structure_State"
-export const CSS_Design_State = "CSS_Design_State"
-export const ReactBootstrap_State = "ReactBootstrap_State"
+//Error Handling States
 export const Host_Error_State = "Host_Error_State"
 export const Network_Error_State = "Network_Error_State"
+//Monitoring States
 export const Twitch_API_State = "Twitch_API_State"
 export const Discord_API_State = "Discord_API_State"
-
+//Application States
 export const Application_Settings_State = "Application_Settings_State"
 export const Application_Profile_Viewer_State = "Application_Profile_Viewer_State"
 export const Application_WebSocket_State = "Application_WebSocket_State"
 export const Application_Notification_State = "Application_Notification_State"
 export const Application_Language_State = "Application_Language_State"
-
-export const End_User_Account_State = "End_User_Account_State"
-export const End_User_Profile_State = "End_User_Profile_State"
 export const Application_Community_State = "Application_Community_State"
+//End User States
+export const End_User_Account_State = "End_User_Account_State"
+export const End_User_Profile_State = "End_User_Profile_State"  
 export const End_User_Discord_Account_State = "End_User_Discord_Account_State"
 export const End_User_Twitch_Account_State = "End_User_Twitch_Account_State"
 

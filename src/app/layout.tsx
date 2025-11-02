@@ -7,6 +7,7 @@ import '@CSS/Layout/App/LockNav.css'
 import '@CSS/Layout/Bootstrap/Card.css'
 import '@CSS/Layout/Bootstrap/Row.css'
 import '@CSS/Layout/Bootstrap/Navbar/Button.css'
+import '@CSS/Layout/Bootstrap/Navbar/Collapse.css'
 import '@CSS/Layout/Bootstrap/OffCanvas.css'
 import '@CSS/Layout/Bootstrap/Icons/Check_Circle.css'
 import '@CSS/Layout/Bootstrap/Icons/X_Octagon.css'
@@ -33,7 +34,6 @@ import '@CSS/Design/Bootstrap/Offcanvas/Night.css'
 import App from './App'
 
 import {
-    META_TAG_CREATOR,
     META_TAG_AUTHOR,
     CLIENT_ADDRESS
 } from '@Constants'

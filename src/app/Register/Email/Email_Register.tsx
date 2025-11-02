@@ -35,7 +35,7 @@ const Email_Register = () => {
     const [submit_button_color, set_submit_button_color] = useState<string>(`primary`)
     const [lock_form_submit_button, set_lock_form_submit_button] = useState<boolean>(false)
     const [input_is_disabled, set_input_is_disabled] = useState<boolean>(false)
-    const [form_submit_complete, set_form_submit_complete] = useState<boolean>(false)
+
     const [alert_text, set_alert_text] = useState<string>(``)
     const [alert_color, set_alert_color] = useState<string>(``)
     const [submit_button_text, set_submit_button_text] = useState(lbl.Register)
@@ -119,12 +119,15 @@ const Email_Register = () => {
 
                 if (result) {
                     Dispatch(Attempt_To_Register_The_End_User_An_Email_Account(email_address)).then(() => {
-                        set_form_submit_complete(true)
                         set_input_is_disabled(false)
                         set_lock_form_submit_button(false)
                         set_submit_button_text(lbl.Register)
                         set_submit_button_color("primary")
                         set_input_value(``)
+
+                        if (props.error.network.id === null) {
+                            create_success_alert(`${lbl.EmailSentSuccessfully}`)
+                        }
                     })
                 }
             } catch (error) {
@@ -143,11 +146,6 @@ const Email_Register = () => {
         if (props.error.network.id === "Email-Already-Registered") {
             Dispatch(Notify_Email_Owner_About_Post_Registration(email_address))
             create_error_alert(props.error.network.id)
-        }
-
-        if (props.error.network.id === null && form_submit_complete) {
-            create_success_alert(`${lbl.EmailSentSuccessfully}`)
-            set_form_submit_complete(false)
         }
     }, [props.error.network.id])
 

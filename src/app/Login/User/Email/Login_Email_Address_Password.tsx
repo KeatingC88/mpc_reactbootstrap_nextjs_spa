@@ -113,13 +113,18 @@ const Login_Email_Address_Password = (): React.ReactElement => {
             Dispatch(Login_Email_Password_Account({
                 email_address: user_email_address,
                 password: user_password
-            }))
-
-            setTimeout(() => {
+            })).then(() => {
                 set_alert_color(``)
                 set_alert_text(``)
                 Navigate.push(`/`)
-            }, 1000)
+            })
+
+            setTimeout(() => {
+                set_lock_form_submit_button(false)
+                set_submit_button_text(lbl.Login)
+                set_alert_text(``)
+                set_submit_button_color(`primary`)
+            }, 8000)
         }
     }
 
@@ -134,7 +139,9 @@ const Login_Email_Address_Password = (): React.ReactElement => {
             props.error.network.id === "Email-Password-Incorrect" ||
             props.error.network.id === "Email-Password-Incorrect-Failed" ||
             props.error.network.id === "Client-Mismatch-Error" ||
-            props.error.network.id === "Client-Mismatch-Error-Failed"
+            props.error.network.id === "Client-Mismatch-Error-Failed" ||
+            props.error.network.id === "Unregistered-Email-Account" ||
+            props.error.network.id === "Unregistered-Email-Accountr-Failed" 
         )
             create_error_alert(props.error.network.id)
         

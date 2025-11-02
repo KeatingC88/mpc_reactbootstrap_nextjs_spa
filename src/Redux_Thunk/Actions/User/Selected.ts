@@ -1163,7 +1163,7 @@ export const Get_Status_Label = (code: number) => (dispatch: AppDispatch, getSta
     let state = getState()
     let end_user_account = state.End_User_Account_State_Reducer
 
-    switch (code) {
+    switch (parseInt(`${code}`)) {
         case 0:
             return "Offline"
         case 1:

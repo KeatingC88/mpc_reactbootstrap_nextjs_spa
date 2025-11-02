@@ -100,24 +100,30 @@ const Community = () => {
 
     const build_community_user_tool_tip = (id: any) => {
 
-        let user_data = props.application.community.users.users_data[id]
-        let twitch_data = props.application.community.users.users_twitch_data[id]
+        let user_data = props.application.community.users?.users_data[id]
+        let twitch_data = props.application.community.users?.users_twitch_data[id]
+        let dateFromTimestamp = null
+        let formattedDate = null
 
-        const dateFromTimestamp = new Date(user_data.created_on * 1000)
-        const formattedDate = `${(dateFromTimestamp.getMonth() + 1).toString().padStart(2, '0')}/${dateFromTimestamp.getDate().toString().padStart(2, '0')}/${dateFromTimestamp.getFullYear()}`
+        if (typeof window !== "undefined") {
+            dateFromTimestamp = new Date(user_data?.created_on * 1000)
+            formattedDate = `${(dateFromTimestamp.getMonth() + 1).toString().padStart(2, '0')}/${dateFromTimestamp.getDate().toString().padStart(2, '0')}/${dateFromTimestamp.getFullYear()}`
+        }
+
+        if (!user_data) return <></>
 
         return (
             <Tooltip>
                 <Row className="text-start">
                     <Col>
-                        <strong>Name</strong>: {user_data.name} <br />
-                        <strong>Language</strong>: {user_data.language_code} <br />
-                        <strong>Region</strong>: {user_data.region_code} <br />
-                        <strong>Status</strong>: {Get_Status_Label(user_data.online_status)} <br />
-                        <strong>Created on</strong>: {formattedDate} <br />
+                        <strong>{lbl.Name}</strong>: {user_data.name} <br />
+                        <strong>{lbl.Language}</strong>: {user_data.language_code} <br />
+                        <strong>{lbl.Region}</strong>: {user_data.region_code} <br />
+                        <strong>{lbl.Status}</strong>: {Get_Status_Label(user_data.online_status)} <br />
+                        <strong>{lbl.CreatedOn}</strong>: {formattedDate} <br />
 
                         {twitch_data?.twitch_user_name &&
-                            <>  
+                            <>
                                 <strong>Twitch</strong>: twitch.tv/{twitch_data?.twitch_user_name}
                                 <br />
                             </>
@@ -150,13 +156,15 @@ const Community = () => {
     }
 
     const build_table_record_rows = () => {
-        return sorted_mpc_community_users.map((user: any) => (
+        return sorted_mpc_community_users?.map((user: any) => (
             <tr key={user.id} className="text-center">
                 <OverlayTrigger placement="top" overlay={build_community_user_tool_tip(user.id)}>
                     <td>
                         <Row>
                             <Col>
-                                {user.avatar_url_path && user.avatar_url_path !== "null" && user.avatar_url_path !== "undefined" ? (
+                                {user.avatar_url_path &&
+                                 user.avatar_url_path !== "null" &&
+                                 user.avatar_url_path !== "undefined" ? (
                                     <img
                                         src={user.avatar_url_path}
                                         width="84"

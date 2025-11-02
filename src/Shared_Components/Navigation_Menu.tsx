@@ -654,7 +654,7 @@ const Navigation_Menu = () => {
                                         {props.end_user.account.account_type === 1 &&
                                             <>
                                                 <Col className="text-center">
-                                                    <Nav.Link onClick={() => { Navigate.push(`/profile/mirror`) }}>
+                                                    <Nav.Link onClick={() => { Navigate.push(`/profile`) }}>
                                                         {props.application.settings.theme === 0 ? (
                                                             <>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-eye-fill d-inline-block align-top mt-2" viewBox="0 0 16 16">

@@ -34,7 +34,7 @@ import {
     Report_Hate_Content,
 } from '@Redux_Thunk/Actions/User/Reported'
 
-import { Delay_Function_Execution } from '@JS/Delay_Function_Execution'
+import { Delay_Function_Execution } from '@JS/Delay_Funtion_Execution'
 
 const WebSocket_Chat = () => {
 

@@ -66,24 +66,29 @@ export const Login_Email_Password_Account = (dto: {
     }))
 
     if (response.data.error) {
-
         return await new Promise(() => {
-            switch (true) {
-                case response.data.error.status === 400:
+            switch (response.data.error.status) {
+                case 400:
+                    response.data.error.id = `Client-Mismatch-Error`
+                    dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: response.data.error })
                     dispatch(Notify_Webmaster_via_Email_Message_About_Bad_Request_Client(dto.email_address))
                     break
-                case response.data.error.status === 401:
+                case 401:
+                    response.data.error.id = `Email-Password-Incorrect`
+                    dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: response.data.error})
                     dispatch(Notify_Email_Owner_About_Incorrect_Password_Attempt(dto.email_address))
                     break
-                case response.data.error.status === 409:
+                case 409:
+                    response.data.error.id = `Client-Mismatch-Error`
+                    dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: response.data.error })
                     dispatch(Notify_Webmaster_via_Email_Message_About_Conflict_Client(dto.email_address))
                     break
-                case response.data.error.status === 404:
+                case 404:
+                    response.data.error.id = `Unregister-Email-Account`
+                    dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: response.data.error })
                     dispatch(Notify_Email_Owner_About_Unregistered_Login_Attempt(dto.email_address))
                     break
             }
-
-            dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: response.data.error })
 
             setTimeout(() => {
                 dispatch({ type: DEFAULT_HOST_ERROR_STATE })

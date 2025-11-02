@@ -1,30 +1,36 @@
 
 body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > li.page-item > .page-link,
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > li.page-item > .page-link {
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > li.page-item > .page-link,
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > ul > li.page-item > .page-link {
     background-color: transparent !important;
     color: white;
 }
 
 body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > .page-item:active > .page-link,
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > .page-item:active > .page-link {
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > .page-item:active > .page-link,
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > ul > .page-item:active > .page-link
+{
     background-color: rgba(182, 255, 182, .9) !important;
     border-color: rgba(182, 255, 182, .9) !important;
 }
 
 body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > .active > .page-link,
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > .active > .page-link {
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > .active > .page-link, 
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > ul > .active > .page-link {
     background-color: rgba(182, 255, 182, .9) !important;
     color: rgba(182, 255, 182, .9) !important;
 }
 
 
 body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > .page-item:hover > .page-link,
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > .page-item:hover > .page-link {
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > .page-item:hover > .page-link, 
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > ul > .page-item:hover > .page-link {
     background-color: rgba(182, 255, 182, .9) !important;
     color: black !important;
 }
 
 body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > div > div > ul > li > span,
-body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > li > span {
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > div > div > div > ul > li > span,
+body[data-theme="Night-Theme"] > main > div > div > div > div > div > ul > li > span {
     border-color: rgba(182, 255, 182, .9) !important;
 }

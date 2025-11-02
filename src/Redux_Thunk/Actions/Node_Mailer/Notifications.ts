@@ -145,7 +145,7 @@ export const Notify_Email_Owner_About_Incorrect_Password_Attempt = (email_addres
     let language_state = state.Application_Language_State_Reducer
     let account_state = state.End_User_Account_State_Reducer
 
-    let response: any = await axios.post(`/api/authentication/login/email_password_account/notification`, {
+    let response: any = await axios.post(`/api/node_mailer/notification/invalid/end_user/password`, {
         email_address: email_address,
         language: language_state.current_language.split(`-`)[0],
         region: language_state.current_language.split(`-`)[1],
@@ -153,7 +153,7 @@ export const Notify_Email_Owner_About_Incorrect_Password_Attempt = (email_addres
         location: Intl.DateTimeFormat().resolvedOptions().timeZone,
         date: new Date().toLocaleDateString(),
         user_agent: account_state.user_agent
-    }).catch(async (error) => {
+    }).catch( async (error) => {
         return await new Promise((reject) => {
 
             dispatch({ type: UPDATE_NETWORK_ERROR_STATE, payload: error })

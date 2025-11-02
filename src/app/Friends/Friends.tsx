@@ -56,7 +56,7 @@ import {
 const End_User_Friends = () => {
 
     const props = useSelector(Redux_Thunk_Core)
-    console.log(props)
+
     const Navigate = useRouter()
     const Dispatch = useAppDispatch()
     const Path = usePathname()

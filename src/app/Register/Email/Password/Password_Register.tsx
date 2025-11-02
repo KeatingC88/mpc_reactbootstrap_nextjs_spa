@@ -49,6 +49,7 @@ const Password_Register = () => {
     const [alert_text, set_alert_text] = useState<string>(``)
     const [alert_color, set_alert_color] = useState<string>(``)
     const [submit_button_text, set_submit_button_text] = useState<string>(lbl.PasswordSubmit)
+    const [lock_input_controls, set_lock_input_controls] = useState<boolean>(false)
 
     const [password_min_len_color, set_password_min_len_color] = useState<string>(``)
     const [password_numericcase_color, set_password_numericcase_color] = useState<string>(``)
@@ -192,6 +193,7 @@ const Password_Register = () => {
         e.preventDefault()
 
         set_lock_form_submit_button(true)
+        set_lock_input_controls(true)
         set_submit_button_color(`info`)
         set_submit_button_text(`${lbl.ValidatingPleaseWait}`)
 
@@ -210,7 +212,6 @@ const Password_Register = () => {
                         if (props.error.network.id === null && resolve) {
                             set_alert_color(`success`)
                             set_alert_text(`${lbl.Success}`)
-                            console.log(`building account now...`)
                             Dispatch(Create_End_User_Email_Account(obj)).then(() => {
                                 Navigate.push(`/`)
                                 Dispatch(Set_Navigation_Menu_Display(` `))
@@ -340,6 +341,7 @@ const Password_Register = () => {
                                                                 className="text-center"
                                                                 onChange={(e) => set_name(e.target.value)}
                                                                 placeholder=""
+                                                                disabled={lock_input_controls}
                                                             />
                                                         </Form.Group>
                                                         <Form.Group className="mb-3" controlId="register_password">
@@ -352,6 +354,7 @@ const Password_Register = () => {
                                                                 onChange={(e) => set_password(e.target.value)}
                                                                 onKeyUp={() => { check_password() }}
                                                                 placeholder=""
+                                                                disabled={lock_input_controls}
                                                             />
                                                         </Form.Group>
                                                         <Button
